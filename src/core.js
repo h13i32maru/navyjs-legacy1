@@ -1,4 +1,4 @@
-var Navy = Navy || {};
+var Navy = {};
 
 /**
  * @constructor
@@ -9,8 +9,9 @@ Navy.Core.__constructor__ = Navy.Core;
 
 /**
  * 指定されたオブジェクトをプロトタイプに持つコンストラクタを返す。
- * @param {object} proto メソッド、プロパティを定義したオブジェクト。classnameプロパティが必須。
- * @return {function} コンストラクタ
+ * @param {Object} proto メソッド、プロパティを定義したオブジェクト。classnameプロパティが必須。
+ * @return {function(...)|undefined} コンストラクタ
+ * @this {Navy.Core}
  */
 Navy.Core.subclass = function(proto){
     if(!proto.classname){
@@ -19,6 +20,10 @@ Navy.Core.subclass = function(proto){
         return;
     }
 
+    /**
+     * サブクラスのコンストラクタ関数
+     * @constructor
+     */
     function constructor(){
         if(constructor.__ignoreinitialize__){
             return;
@@ -58,8 +63,9 @@ Navy.Core.subclass = function(proto){
 /**
  * コンストラクタではなく、直接インスタンスを返す。
  * 生成されたインスタンスは未初期化なため、wakeup()関数を呼び出して初期化を完了させる必要がある。
- * @param {object} proto メソッド、プロパティを定義したオブジェクト。classnameプロパティが必須。
- * @return {object} 未初期化インスタンス。
+ * @param {Object} proto メソッド、プロパティを定義したオブジェクト。classnameプロパティが必須。
+ * @return {Object} 未初期化インスタンス。
+ * @this {Navy.Core}
  */
 Navy.Core.instance = function(proto){
     //一度コンストラクタを生成。
@@ -85,17 +91,17 @@ Navy.Core.instance = function(proto){
 
 /**
  * 引数にスーパークラスの関数が渡されるように元の関数をラップして返す。
- * @param {object} __super__ スーパークラスのオブジェクト
+ * @param {Object} __super__ スーパークラスのオブジェクト
  * @param {string} funcname ラップする関数の名前
- * @param {function} func ラップする関数
- * @return {function} ラップした関数
+ * @param {function(...)} func ラップする関数
+ * @return {function(...)} ラップした関数
  * @private
  * @this {Navy.Core}
  */
 Navy.Core._makeWrapper = function(__super__, funcname, func){
     return function(){
         var _this = this;
-        $super = function(){
+        var $super = function(){
             if(!__super__[funcname]){
                 //TODO:exceptionにする
                 console.log("no function: " + funcname);
