@@ -1,3 +1,6 @@
+//goog.provide("Navy");
+//goog.provide("Navy.Core");
+
 var Navy = {};
 
 /**
@@ -5,6 +8,11 @@ var Navy = {};
  */
 Navy.Core = function(){};
 
+/**
+ * {@code Navy.Core.subclass}メソッドの中で動的にコンストラクタを取得するために保持しておく。
+ * @constructor
+ * @private
+ */
 Navy.Core.__constructor__ = Navy.Core;
 
 /**
@@ -21,14 +29,14 @@ Navy.Core.subclass = function(proto){
     }
 
     /**
-     * サブクラスのコンストラクタ関数
+     * サブクラスのコンストラクタ関数。この関数自体の戻り値となる。
      * @constructor
      */
     function constructor(){
         if(constructor.__ignoreinitialize__){
             return;
         }
-        this.initialize.apply(this, arguments)
+        this.initialize.apply(this, arguments);
     };
 
     //クラス作成ないでnewする場合、initizlie()を呼ばないようにする。
@@ -114,6 +122,6 @@ Navy.Core._makeWrapper = function(__super__, funcname, func){
 };
 
 Navy.Core.prototype = {
-    classname:"Navy.Core",
+    classname: "Navy.Core",
     initialize: function(){}
 };
