@@ -5,7 +5,8 @@ LEVEL	= --compilation_level SIMPLE_OPTIMIZATIONS
 WARNING	= --warning_level VERBOSE
 EXTERN	= --externs src/extern.js
 OUT		= --js_output_file navy.js
-JS		= --js src/core.js
+JS		= --js src/core.js \
+		  --js src/function.js
 
 all: compiler
 	java -jar $(CC) $(WARNING) $(EXTERN) $(OUT) $(LEVEL) $(JS)

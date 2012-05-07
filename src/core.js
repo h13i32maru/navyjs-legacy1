@@ -1,6 +1,3 @@
-//goog.provide("Navy");
-//goog.provide("Navy.Core");
-
 var Navy = {};
 
 /**
@@ -51,13 +48,13 @@ Navy.Core.subclass = function(proto){
 
     this.__ignoreinitialize__ = false;
 
+    var value;
     for(var p in proto){
-        if(typeof proto[p] === "function"){
-            constructor.prototype[p] = Navy.Core._makeWrapper(__super__, p, proto[p]);
+        value = proto[p];
+        if(typeof value === "function" && Navy.argumentName(value)[0] === "$super"){
+                value = Navy.Core._makeWrapper(__super__, p, value);
         }
-        else{
-            constructor.prototype[p] = proto[p];
-        }
+        constructor.prototype[p] = value;
     }
 
     //生成したコンストラクタにクラス継承の機能を持たせる
