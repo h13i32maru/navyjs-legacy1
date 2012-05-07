@@ -14,14 +14,14 @@ Navy.Core.__constructor__ = Navy.Core;
 
 /**
  * 指定されたオブジェクトをプロトタイプに持つコンストラクタを返す。
- * @param {Object} proto メソッド、プロパティを定義したオブジェクト。classnameプロパティが必須。
+ * @param {Object} proto メソッド、プロパティを定義したオブジェクト。CLASSプロパティが必須。
  * @return {function(...)|undefined} コンストラクタ
  * @this {Navy.Core}
  */
 Navy.Core.subclass = function(proto){
-    if(!proto.classname){
+    if(!proto.CLASS){
         //TODO:exceptionにする
-        console.log("classname is not set");
+        console.log("CLASS is not set");
         return;
     }
 
@@ -68,7 +68,7 @@ Navy.Core.subclass = function(proto){
 /**
  * コンストラクタではなく、直接インスタンスを返す。
  * 生成されたインスタンスは未初期化なため、wakeup()関数を呼び出して初期化を完了させる必要がある。
- * @param {Object} proto メソッド、プロパティを定義したオブジェクト。classnameプロパティが必須。
+ * @param {Object} proto メソッド、プロパティを定義したオブジェクト。CLASSプロパティが必須。
  * @return {Object} 未初期化インスタンス。
  * @this {Navy.Core}
  */
@@ -119,6 +119,6 @@ Navy.Core._makeWrapper = function(__super__, funcname, func){
 };
 
 Navy.Core.prototype = {
-    classname: "Navy.Core",
+    CLASS: "Navy.Core",
     initialize: function(){}
 };
