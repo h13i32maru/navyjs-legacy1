@@ -30,23 +30,23 @@ Navy.Core.subclass = function(proto){
      * @constructor
      */
     function constructor(){
-        if(constructor.__ignoreinitialize__){
-            return;
+        if(this.initialize && !constructor.__ignoreinitialize__){
+            this.initialize.apply(this, arguments);
         }
-        this.initialize.apply(this, arguments);
     };
 
-    //クラス作成ないでnewする場合、initizlie()を呼ばないようにする。
+    //クラス作成ないでnewする場合、initialize()を呼ばないようにする。
     //副作用があるinitialize()を呼んでしまうと誤作動を起こす可能性があるから。
     this.__ignoreinitialize__ = true;
 
     //スーパーオブジェクト
     var __super__ = new this.__constructor__();
 
-    //プロトタイプ
-    constructor.prototype = new this.__constructor__();
-
     this.__ignoreinitialize__ = false;
+
+    for(var p in __super__){
+        constructor.prototype[p] = __super__[p];
+    }
 
     var value;
     for(var p in proto){
