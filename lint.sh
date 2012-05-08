@@ -13,6 +13,7 @@ res=$(gjslint -r src \
 | grep -v 'E:0002: Missing space before "("' \
 | grep -v 'E:0240: @return descriptions must end with valid punctuation such as a period.' \
 | grep -v 'E:0240: @param descriptions must end with valid punctuation such as a period.' \
+| grep -v 'E:0240: @fileoverview descriptions must end with valid punctuation such as a period.' \
 | grep -v 'E:0131: Single-quoted string preferred over double-quoted string.' \
 | grep -v 'E:0110: Line too long' \
 | grep -v 'E:0222: Member ".*" must not have @private JsDoc')

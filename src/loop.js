@@ -19,7 +19,7 @@ Navy.Loop = Navy.Core.instance({
      * UI要素を更新したら描画ループで再描画する必要があるため、フラグを立てる。
      * @private
      */
-    _redrawFlag: true,
+    _requestDrawFlag: true,
 
     /**
      * 描画ループを開始する。
@@ -40,8 +40,29 @@ Navy.Loop = Navy.Core.instance({
      * @private
      */
     _looper: function(){
-        if(!this._redrawFlag){
+        if(!this._requestDrawFlag){
             return;
         }
+    },
+
+    /**
+     * 次の描画ループで再描画することを依頼する。
+     */
+    requestDraw: function(){
+        this._requestDrawFlag = true;
+    },
+
+    /**
+     * 次の描画ループで再描画することをキャンセルする。
+     */
+    cancelDraw: function(){
+        this._requestDrawFlag = false;
+    },
+
+    /**
+     * 次の描画ループで再描画を行うかどうかを取得する。
+     */
+    isRequestDraw: function(){
+        return this._requestDrawFlag;
     }
 });
