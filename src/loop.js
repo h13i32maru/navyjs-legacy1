@@ -2,6 +2,9 @@
  * 描画ループを管理するインスタンス
  */
 Navy.Loop = Navy.Core.instance({
+    /** @const */
+    CLASS: "Navy.Loop",
+
     /**
      * 描画間隔[msec]
      * @const
@@ -10,16 +13,32 @@ Navy.Loop = Navy.Core.instance({
 
     /**
      * setIntervalのタイマーID
-     * @private
      */
     _timerId: null,
 
     /**
      * 描画ループ内で再描画を行うかどうかのフラグ。
      * UI要素を更新したら描画ループで再描画する必要があるため、フラグを立てる。
-     * @private
      */
     _requestDrawFlag: true,
+
+    /**
+     * canvaエレメント
+     */
+    _canvas: null,
+
+    /**
+     * canvas 2dコンテキスト
+     */
+    _canvasContext: null
+
+    /**
+     * 描画ループの初期化処理
+     */
+    initialize: function(canvas){
+        this._canvas = canvas;
+        this._canvasContext = canvas.getContext("2d");
+    },
 
     /**
      * 描画ループを開始する。
@@ -37,7 +56,6 @@ Navy.Loop = Navy.Core.instance({
 
     /**
      * 描画ループで行う処理本体
-     * @private
      */
     _looper: function(){
         if(!this._requestDrawFlag){
