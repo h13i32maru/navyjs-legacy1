@@ -8,4 +8,4 @@ Navy.argumentName = function(func){
       .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
       .replace(/\s+/g, '').split(',');
     return names.length == 1 && !names[0] ? [] : names;
-}
+};
