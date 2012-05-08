@@ -18,7 +18,7 @@ Navy.Loop = Navy.Core.instance({
 
     /**
      * 描画ループ内で再描画を行うかどうかのフラグ。
-     * UI要素を更新したら描画ループで再描画する必要があるため、フラグを立てる。
+     * UI要素を更新したら描画ループで再描画する必要があるため、{@code Navy.Loop.requestDraw()}でフラグを立てる。
      */
     _requestDrawFlag: true,
 
@@ -30,7 +30,7 @@ Navy.Loop = Navy.Core.instance({
     /**
      * canvas 2dコンテキスト
      */
-    _canvasContext: null
+    _canvasContext: null,
 
     /**
      * 描画ループの初期化処理
@@ -60,6 +60,16 @@ Navy.Loop = Navy.Core.instance({
     _looper: function(){
         if(!this._requestDrawFlag){
             return;
+        }
+
+        var context = this._canvasContext;
+
+        context.fillStyle = "#000000";
+        context.fillRect(0, 0, this._canvas.width, this._canvas.height);
+
+        var views = Navy.Root.getChildren();
+        for(var i = 0, l = views.length; i < l; i++){
+            views[i].draw(context);
         }
     },
 

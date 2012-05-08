@@ -6,11 +6,15 @@ LEVEL	= --compilation_level SIMPLE_OPTIMIZATIONS
 WARNING	= --warning_level DEFAULT
 EXTERN	= --externs src/extern.js
 OUT		= --js_output_file navy.js
-JS		= --js src/patch.js \
+JS		= --js src/navy.js \
+		  --js src/patch.js \
 		  --js src/function.js \
 		  --js src/core.js \
 		  --js src/loop.js \
-		  --js src/app.js
+		  --js src/app.js \
+		  --js src/root.js \
+		  --js src/view/view.js \
+		  --js src/view/image.js
 
 all: compiler
 	java -jar $(CC) $(WARNING) $(EXTERN) $(OUT) $(LEVEL) $(JS)
