@@ -9,7 +9,8 @@ OUT		= --js_output_file navy.js
 JS		= --js src/patch.js \
 		  --js src/function.js \
 		  --js src/core.js \
-		  --js src/loop.js
+		  --js src/loop.js \
+		  --js src/app.js
 
 all: compiler
 	java -jar $(CC) $(WARNING) $(EXTERN) $(OUT) $(LEVEL) $(JS)
