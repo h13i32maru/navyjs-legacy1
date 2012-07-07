@@ -11,7 +11,7 @@ Navy.TouchHandler = Navy.Core.instance({
     _latestTouchEvent: null,
 
     initialize: function($super) {
-        this._latestTouchEvent = new Navy.TouchEvent('up', 0, 0, 0);
+        this._latestTouchEvent = new Navy.TouchEvent('end', 0, 0, 0);
         this._latestTouchEvent.id = 0;
     },
 
@@ -21,16 +21,16 @@ Navy.TouchHandler = Navy.Core.instance({
         var touchEvent = Navy.TouchEvent.create(event);
 
         switch (touchEvent.action) {
-            case 'down':
+            case 'start':
                 touchEvent.id = _latestTouchEvent.id + 1;
                 break;
             case 'move':
-                if (_latestTouchEvent.action === 'up') {
+                if (_latestTouchEvent.action === 'end') {
                     return;
                 }
                 touchEvent.id = _latestTouchEvent.id;
                 break;
-            case 'up':
+            case 'end':
                 touchEvent.id = _latestTouchEvent.id;
         }
 
@@ -44,13 +44,13 @@ Navy.TouchHandler = Navy.Core.instance({
         var listeners = null;
 
         switch (touchEvent.action) {
-        case 'down':
+        case 'start':
             listeners = this._getTouchDownListeners(touchEvent);
             break;
         case 'move':
             listeners = this._getTouchMoveListeners(touchEvent);
             break;
-        case 'up':
+        case 'end':
             listeners = this._getTouchUpListeners(touchEvent);
             break;
         }

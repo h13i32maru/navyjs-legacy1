@@ -27,13 +27,7 @@ Navy.TouchEvent.create = function(event) {
 
     switch (event.type) {
         case 'mousedown':
-            action = 'down';
-            x = event.layerX;
-            y = event.layerY;
-            time = event.timeStamp;
-            break;
-        case 'mouseup':
-            action = 'up';
+            action = 'start';
             x = event.layerX;
             y = event.layerY;
             time = event.timeStamp;
@@ -42,6 +36,30 @@ Navy.TouchEvent.create = function(event) {
             action = 'move';
             x = event.layerX;
             y = event.layerY;
+            time = event.timeStamp;
+            break;
+        case 'mouseup':
+            action = 'end';
+            x = event.layerX;
+            y = event.layerY;
+            time = event.timeStamp;
+            break;
+        case 'touchstart':
+            action = 'start';
+            x = event.touches[0].pageX;
+            y = event.touches[0].pageY;
+            time = event.timeStamp;
+            break;
+        case 'touchmove':
+            action = 'move';
+            x = event.touches[0].pageX;
+            y = event.touches[0].pageY;
+            time = event.timeStamp;
+            break;
+        case 'touchend':
+            action = 'end';
+            x = event.touches[0].pageX;
+            y = event.touches[0].pageY;
             time = event.timeStamp;
             break;
         default:

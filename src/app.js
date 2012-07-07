@@ -9,6 +9,8 @@ Navy.App = Navy.Core.instance({
      * Canvas、描画ループの初期化を行う
      */
     initialize: function(){
+        this._hideLocationBar();
+
         var canvas = this._createCanvas();
 
         Navy.Root.wakeup(canvas);
@@ -18,6 +20,13 @@ Navy.App = Navy.Core.instance({
 
         main();
     },
+
+    _hideLocationBar: function() {
+        setTimeout(function(){
+            scrollTo(0, 1);
+        }, 100);
+    },
+
     _createCanvas: function(){
         var wrap = document.createElement("div");
         wrap.style.position = "absolute";
@@ -25,6 +34,8 @@ Navy.App = Navy.Core.instance({
         wrap.style.left = 0;
 
         var canvas = document.createElement("canvas");
+        //TODO:外から指定できるようにする
+        //TODO:画面サイズに応じてスケールさせる
         canvas.width = 320;
         canvas.height = 480;
 

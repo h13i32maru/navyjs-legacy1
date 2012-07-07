@@ -33,9 +33,14 @@ Navy.Root = Navy.Core.instance({
         this._canvas.addEventListener('mousedown', this._onTouch.bind(this), false);
         this._canvas.addEventListener('mousemove', this._onTouch.bind(this), false);
         this._canvas.addEventListener('mouseup', this._onTouch.bind(this), false);
+
+        this._canvas.addEventListener('touchstart', this._onTouch.bind(this), false);
+        this._canvas.addEventListener('touchmove', this._onTouch.bind(this), false);
+        this._canvas.addEventListener('touchend', this._onTouch.bind(this), false);
     },
 
     _onTouch: function(event){
+        event.preventDefault();
         Navy.TouchHandler.process(event, this._touchListeners);
     }
 
