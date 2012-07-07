@@ -14,6 +14,7 @@ JS		= --js src/navy.js \
 		  --js src/app.js \
 		  --js src/root.js \
 		  --js src/touch_event.js \
+		  --js src/touch_handler.js \
 		  --js src/view/view.js \
 		  --js src/view/image.js
 
