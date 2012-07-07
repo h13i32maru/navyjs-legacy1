@@ -1,0 +1,10 @@
+build
+=====================
+1. install sphinx
+   pip install sphinx
+
+2. build sphinx document
+   make html
+
+3. open html
+   ls _build/html/index.html
