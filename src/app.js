@@ -11,7 +11,7 @@ Navy.App = Navy.Core.instance({
     initialize: function(){
         var canvas = this._createCanvas();
 
-        Navy.Root.wakeup();
+        Navy.Root.wakeup(canvas);
 
         Navy.Loop.wakeup(canvas);
         Navy.Loop.start();

@@ -13,6 +13,7 @@ JS		= --js src/navy.js \
 		  --js src/loop.js \
 		  --js src/app.js \
 		  --js src/root.js \
+		  --js src/touch_event.js \
 		  --js src/view/view.js \
 		  --js src/view/image.js
 
