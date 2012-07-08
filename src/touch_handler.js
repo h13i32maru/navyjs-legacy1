@@ -1,7 +1,7 @@
 /**
- * タッチイベントを処理するインスタンス
+ * タッチイベントを処理するクラス
  */
-Navy.TouchHandler = Navy.Core.instance({
+Navy.TouchHandler = Navy.Core.subclass({
     CLASS: 'Navy.TouchEventHandler',
 
     /** 全てのリスナー */
@@ -12,41 +12,51 @@ Navy.TouchHandler = Navy.Core.instance({
 
     _latestTouchEvent: null,
 
+    //現在イベントを処理中かどうか
+    //1つのイベントしか対応しない(マルチタッチ非対応)
+    _isEventProcessing: false,
+
     /**
      * @constructor
      */
     initialize: function($super) {
-        this._latestTouchEvent = new Navy.TouchEvent('end', 0, 0, 0);
-        this._latestTouchEvent.id = 0;
     },
 
     /**
      * タッチイベントを処理してリスナを実行する
      * @param {Event} event DOMのイベント.
-     * @param {Array.<{view: {Navy.View}, listener: {function({Navy.TouchEvent})}}>} touchListeners 登録されているイベントリスナ.
+     * @param {Array.<{view: Navy.View, listener: function(Navy.TouchEvent) }>} touchListeners 登録されているイベントリスナ.
      */
     process: function(event, touchListeners) {
         this._touchListeners = touchListeners;
-        var _latestTouchEvent = this._latestTouchEvent;
-        var touchEvent = Navy.TouchEvent.create(event);
+        var touchEvent = new Navy.TouchEvent(event);
 
         switch (touchEvent.action) {
-            case 'start':
-                touchEvent.id = _latestTouchEvent.id + 1;
-                break;
-            case 'move':
-                if (_latestTouchEvent.action === 'end') {
-                    return;
-                }
-                touchEvent.id = _latestTouchEvent.id;
-                break;
-            case 'end':
-                touchEvent.id = _latestTouchEvent.id;
+        case 'start':
+            if (this._isEventProcessing) {
+                return;
+            }
+            this._isEventProcessing = true;
+            break;
+        case 'move':
+            if (!this._isEventProcessing) {
+                return;
+            }
+            break;
+        case 'end':
+            if (!this._isEventProcessing) {
+                return;
+            }
+            break;
+        }
+
+        this._callTouchListener(touchEvent);
+
+        if (touchEvent.action === 'end') {
+            this._isEventProcessing = false;
         }
 
         this._latestTouchEvent = touchEvent;
-
-        this._callTouchListener(touchEvent);
     },
 
     /**
@@ -69,11 +79,21 @@ Navy.TouchHandler = Navy.Core.instance({
             break;
         }
 
+        //TODO:z順でソート必要あり
         var len = listeners.length;
         for (var i = 0; i < len; i++) {
-            //TODO:z順でソート必要あり
             //TODO:戻り値を見て、伝搬するかチェックする
-            listeners[i]['listener'](touchEvent);
+            var _touchEvent = new Navy.TouchEvent(touchEvent.rawEvent);
+
+            _touchEvent.target = listeners[i]['view'];
+
+            //endの時は指を離した位置を取得できないので、最後のイベントの位置を離した位置をする
+            if (touchEvent.action === 'end') {
+                _touchEvent.x = this._latestTouchEvent.x;
+                _touchEvent.y = this._latestTouchEvent.y;
+            }
+
+            listeners[i]['listener'](_touchEvent);
         }
     },
 
@@ -91,7 +111,7 @@ Navy.TouchHandler = Navy.Core.instance({
             var view = _touchListeners[i]['view'];
             var listener = _touchListeners[i]['listener'];
 
-            var pos = view.getPosition();
+            var pos = view.getAbsolutePosition();
             var x0 = pos[0];
             var y0 = pos[1];
 

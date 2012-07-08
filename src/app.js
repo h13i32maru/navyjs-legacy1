@@ -4,16 +4,24 @@
 Navy.App = Navy.Core.instance({
     CLASS: 'Navy.App',
 
+    //canvasのスケール値
+    scale: 1,
+
     /**
      * Canvas、描画ループの初期化を行う
      * @constructor
      */
     initialize: function() {
+        Navy.Network.wakeup();
+        Navy.Config.process(this._onConfig.bind(this));
+    },
+
+    _onConfig: function() {
         this._hideLocationBar();
 
         var canvas = this._createCanvas();
 
-        Navy.Root.wakeup(canvas);
+        Navy.Screen.wakeup(canvas);
 
         Navy.Loop.wakeup(canvas);
         Navy.Loop.start();
@@ -27,7 +35,7 @@ Navy.App = Navy.Core.instance({
     _hideLocationBar: function() {
         setTimeout(function() {
             scrollTo(0, 1);
-        }, 100);
+        }, 500);
     },
 
     /**
@@ -39,12 +47,34 @@ Navy.App = Navy.Core.instance({
         wrap.style.position = 'absolute';
         wrap.style.top = 0;
         wrap.style.left = 0;
+        wrap.style.width = (window.innerWidth + 100) + 'px';
+        wrap.style.height = (window.innerHeight + 100) + 'px';
 
+        var canvasWidth = Navy.Config.App.size[0];
+        var canvasHeight = Navy.Config.App.size[1];
         var canvas = document.createElement('canvas');
-        //TODO:外から指定できるようにする
-        //TODO:画面サイズに応じてスケールさせる
-        canvas.width = 320;
-        canvas.height = 480;
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        //拡縮の計算
+        var browserWidth = window.innerWidth;
+        var browserHeight = window.innerHeight;
+
+        var scaleWidth = browserWidth / canvasWidth;
+        var scaleHeight = browserHeight / canvasHeight;
+
+        if (scaleWidth < scaleHeight) {
+            canvas.style.width = browserWidth + 'px';
+            canvas.style.height = ~~(canvasHeight * scaleWidth) + 'px';
+            this.scale = ~~(scaleWidth * 100);
+            this.scale /= 100;
+        }
+        else {
+            canvas.style.width = ~~(canvasWidth * scaleHeight) + 'px';
+            canvas.style.height = browserHeight + 'px';
+            this.scale = ~~(scaleHeight * 100);
+            this.scale /= 100;
+        }
 
         wrap.appendChild(canvas);
         document.body.appendChild(wrap);
