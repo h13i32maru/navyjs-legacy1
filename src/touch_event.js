@@ -19,6 +19,11 @@ Navy.TouchEvent = Navy.Core.subclass({
     }
 });
 
+/**
+ * DOMのタッチイベントから{Navy.TouchEvent}に変換する
+ * @param {Event} event DOMのタッチイベント.
+ * @return {TouchEvent} Navyで使用するタッチイベント.
+ */
 Navy.TouchEvent.create = function(event) {
     var action = null;
     var x = null;
@@ -68,4 +73,4 @@ Navy.TouchEvent.create = function(event) {
     }
 
     return new Navy.TouchEvent(action, x, y, time);
-}
+};

@@ -4,9 +4,9 @@
 Navy.TouchHandler = Navy.Core.instance({
     CLASS: 'Navy.TouchEventHandler',
 
-    //全てのリスナー
+    /** 全てのリスナー */
     _touchListeners: null,
-    //直近に実行されたリスナー全て
+    /** 直近に実行されたリスナー全て */
     _latestTouchListeners: null,
     _latestTouchEvent: null,
 
@@ -16,7 +16,7 @@ Navy.TouchHandler = Navy.Core.instance({
     },
 
     process: function(event, touchListeners) {
-        this._touchListeners = touchListeners
+        this._touchListeners = touchListeners;
         var _latestTouchEvent = this._latestTouchEvent;
         var touchEvent = Navy.TouchEvent.create(event);
 
@@ -39,7 +39,7 @@ Navy.TouchHandler = Navy.Core.instance({
         this._callTouchListener(touchEvent);
     },
 
-    _callTouchListener: function(touchEvent){
+    _callTouchListener: function(touchEvent) {
         //イベントを取得するlisteners
         var listeners = null;
 
@@ -64,7 +64,7 @@ Navy.TouchHandler = Navy.Core.instance({
     },
 
     _getTouchDownListeners: function(touchEvent) {
-        var _touchListeners = this._touchListeners; 
+        var _touchListeners = this._touchListeners;
         var len = _touchListeners.length;
         var x = touchEvent.x;
         var y = touchEvent.y;
@@ -78,13 +78,13 @@ Navy.TouchHandler = Navy.Core.instance({
             var y0 = pos[1];
 
             var size = view.getSize();
-            var x1 = x0 + size[0]; 
+            var x1 = x0 + size[0];
             var y1 = y0 + size[1];
 
             if (!(x0 <= x && x <= x1 && y0 <= y && y <= y1)) {
                 continue;
             }
-            this._latestTouchListeners.push({view:view, listener:listener});
+            this._latestTouchListeners.push({view: view, listener: listener});
         }
 
         return this._latestTouchListeners;

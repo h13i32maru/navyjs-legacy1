@@ -1,5 +1,8 @@
+/**
+ * 表示要素の基底クラス
+ */
 Navy.View = Navy.Core.subclass({
-    CLASS: "Navy.View",
+    CLASS: 'Navy.View',
 
     _data: null,
     _x: 0,
@@ -26,7 +29,7 @@ Navy.View = Navy.Core.subclass({
         return this._data[key] || defaultValue;
     },
 
-    setPosition: function(x, y){
+    setPosition: function(x, y) {
         this._x = x;
         this._y = y;
 
@@ -41,19 +44,19 @@ Navy.View = Navy.Core.subclass({
         return [this._width, this._height];
     },
 
-    setRotation: function(rotation){
+    setRotation: function(rotation) {
         this._rotation = rotation;
         Navy.Loop.requestDraw();
     },
 
-    draw: function(context){
+    draw: function(context) {
     },
 
-    addTouchListener: function(listener){
+    addTouchListener: function(listener) {
         this._touchListeners.push(listener);
     },
 
-    _onTouch: function(touchEvent){
+    _onTouch: function(touchEvent) {
         for (var i = 0; i < this._touchListeners.length; i++) {
             this._touchListeners[i](touchEvent);
         }
