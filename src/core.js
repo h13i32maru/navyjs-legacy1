@@ -1,25 +1,23 @@
 /**
  * @constructor
  */
-Navy.Core = function(){};
+Navy.Core = function() {};
 
 /**
  * {@code Navy.Core.subclass}メソッドの中で動的にコンストラクタを取得するために保持しておく。
- * @constructor
- * @private
  */
 Navy.Core.__constructor__ = Navy.Core;
 
 /**
  * 指定されたオブジェクトをプロトタイプに持つコンストラクタを返す。
- * @param {Object} proto メソッド、プロパティを定義したオブジェクト。CLASSプロパティが必須。
- * @return {function(...)|undefined} コンストラクタ
+ * @param {Object} proto メソッド、プロパティを定義したオブジェクト。CLASSプロパティが必須.
+ * @return {function(...)|undefined} コンストラクタ.
  * @this {Navy.Core}
  */
-Navy.Core.subclass = function(proto){
-    if(!proto.CLASS){
+Navy.Core.subclass = function(proto) {
+    if (!proto.CLASS) {
         //TODO:exceptionにする
-        console.log("CLASS is not set");
+        console.log('CLASS is not set');
         return;
     }
 
@@ -27,8 +25,8 @@ Navy.Core.subclass = function(proto){
      * サブクラスのコンストラクタ関数。この関数自体の戻り値となる。
      * @constructor
      */
-    function constructor(){
-        if(this.initialize && !constructor.__ignoreinitialize__){
+    function constructor() {
+        if (this.initialize && !constructor.__ignoreinitialize__) {
             this.initialize.apply(this, arguments);
         }
     };
@@ -42,14 +40,14 @@ Navy.Core.subclass = function(proto){
 
     this.__ignoreinitialize__ = false;
 
-    for(var p in __super__){
+    for (var p in __super__) {
         constructor.prototype[p] = __super__[p];
     }
 
     var value;
-    for(var p in proto){
+    for (var p in proto) {
         value = proto[p];
-        if(typeof value === "function" && Navy.argumentName(value)[0] === "$super"){
+        if (typeof value === 'function' && Navy.argumentName(value)[0] === '$super') {
                 value = Navy.Core._makeWrapper(__super__, p, value);
         }
         constructor.prototype[p] = value;
@@ -64,13 +62,13 @@ Navy.Core.subclass = function(proto){
 };
 
 /**
- * コンストラクタではなく、直接インスタンスを返す。
- * 生成されたインスタンスは未初期化なため、wakeup()関数を呼び出して初期化を完了させる必要がある。
- * @param {Object} proto メソッド、プロパティを定義したオブジェクト。CLASSプロパティが必須。
- * @return {Object} 未初期化インスタンス。
+ * コンストラクタではなく、直接インスタンスを返す.
+ * 生成されたインスタンスは未初期化なため、wakeup()関数を呼び出して初期化を完了させる必要がある.
+ * @param {Object} proto メソッド、プロパティを定義したオブジェクト. CLASSプロパティが必須.
+ * @return {Object} 未初期化インスタンス.
  * @this {Navy.Core}
  */
-Navy.Core.instance = function(proto){
+Navy.Core.instance = function(proto) {
     //一度コンストラクタを生成。
     var constructor = this.subclass(proto);
 
@@ -80,7 +78,7 @@ Navy.Core.instance = function(proto){
     var instance = new constructor();
 
     //wakeup()を呼び出すことで任意のタイミングで初期化を完了させる。
-    instance.wakeup = function(){
+    instance.wakeup = function() {
         this.initialize.apply(this, arguments);
     }
 
@@ -94,20 +92,19 @@ Navy.Core.instance = function(proto){
 
 /**
  * 引数にスーパークラスの関数が渡されるように元の関数をラップして返す。
- * @param {Object} __super__ スーパークラスのオブジェクト
- * @param {string} funcname ラップする関数の名前
- * @param {function(...)} func ラップする関数
- * @return {function(...)} ラップした関数
- * @private
+ * @param {Object} __super__ スーパークラスのオブジェクト.
+ * @param {string} funcname ラップする関数の名前.
+ * @param {function(...)} func ラップする関数.
+ * @return {function(...)} ラップした関数.
  * @this {Navy.Core}
  */
-Navy.Core._makeWrapper = function(__super__, funcname, func){
-    return function(){
+Navy.Core._makeWrapper = function(__super__, funcname, func) {
+    return function() {
         var _this = this;
-        var $super = function(){
-            if(!__super__[funcname]){
+        var $super = function() {
+            if (!__super__[funcname]) {
                 //TODO:exceptionにする
-                console.log("no function: " + funcname);
+                console.log('no function: ' + funcname);
             }
             return __super__[funcname].apply(_this, arguments);
         }
@@ -117,6 +114,6 @@ Navy.Core._makeWrapper = function(__super__, funcname, func){
 };
 
 Navy.Core.prototype = {
-    CLASS: "Navy.Core",
-    initialize: function(){}
+    CLASS: 'Navy.Core',
+    initialize: function() {}
 };
