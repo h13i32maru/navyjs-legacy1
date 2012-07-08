@@ -89,7 +89,7 @@ Navy.View = Navy.Core.subclass({
 
     /**
      * タッチイベントを設定する
-     * @param {Navy.TouchListener} listener タッチイベントのリスナ.
+     * @param { {view: Navy.View, listener: function(Navy.TouchEvent)} } listener タッチイベントのリスナ.
      */
     addTouchListener: function(listener) {
         this._touchListeners.push(listener);
