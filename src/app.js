@@ -9,11 +9,16 @@ Navy.App = Navy.Core.instance({
      * @constructor
      */
     initialize: function() {
+        Navy.Network.wakeup();
+        Navy.Config.process(this._onConfig.bind(this));
+    },
+
+    _onConfig: function() {
         this._hideLocationBar();
 
         var canvas = this._createCanvas();
 
-        Navy.Root.wakeup(canvas);
+        Navy.Screen.wakeup(canvas);
 
         Navy.Loop.wakeup(canvas);
         Navy.Loop.start();
