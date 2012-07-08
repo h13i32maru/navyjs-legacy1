@@ -1,13 +1,13 @@
 /**
  * 描画のルート要素
  */
-Navy.Root = Navy.Core.instance({
+Navy.Root = Navy.View.ViewGroup.instance({
     CLASS: 'Navy.Root',
 
     _canvas: null,
 
     /** 保持している子要素 */
-    _children: null,
+    _pages: null,
 
     /** 登録されているリスナー全て */
     _touchListeners: null,
@@ -16,30 +16,68 @@ Navy.Root = Navy.Core.instance({
      * @constructor
      * @param {Canvas} canvas ルートとして使用するcanvas要素.
      */
-    initialize: function(canvas) {
+    initialize: function($super, canvas) {
         this._canvas = canvas;
-        this._children = [];
+        this._pages = [];
         this._touchListeners = [];
 
         this._setOnTouch();
+
+        this.setParent(null);
+    },
+
+    getAbsolutePosition: function(){
+        return [0, 0];
+    },
+
+    getActivePages: function() {
+        var pageNum = this._pages.length;
+        var page = this._pages[pageNum - 1];
+
+        var _pages = this._pages;
+        var activePages = [];
+        for (var i = 0; i < _pages.length; i++) {
+            if (!_pages[i].isActive()) {
+                continue;
+            }
+
+            activePages.push(_pages[i]);
+        }
+
+        return activePages; 
+    },
+
+    pushPage: function(page) {
+        this._pages.push(page);
+        page.setParent(this);
+        page.attachedRoot(true);
+    },
+
+    popPage: function() {
+        var page = this._pages.pop();
+        page.setParent(null);
+        page.attachedRoot(false);
     },
 
     /**
-     * 子要素を追加する
-     * @param {Navy.View} child 追加する子要素.
+     * スタックの上を0としてページを取得する. 現在のページを取得するにはindex = 0, 一つ前はindex = 1となる.
      */
-    addChild: function(child) {
-        this._children.push(child);
+    getPage: function(index) {
+        var _pages = this._pages;
+        if (_pages.length <= index) {
+            //TODO:例外にする
+            console.log('out of index');
+            return;
+        }
+
+        return _pages[ _pages.length - 1 - index];
     },
 
-    /**
-     * 全ての子要素を取得する
-     * @return {Array.<Navy.View>} 子要素の配列.
-     */
-    getChildren: function() {
-        //TODO:新しい配列を作ってそれに内容をコピーしたほうがいい？
-        //例えば [].concat(this._chidlren)的な。
-        return this._children;
+    draw: function($super, context) {
+        var pages = this.getActivePages();
+        for (var i = 0; i < pages.length; i++) {
+            pages[i].draw(context);
+        }
     },
 
     /**
@@ -55,7 +93,6 @@ Navy.Root = Navy.Core.instance({
      * タッチイベントを取得するためのリスナを初期化する.
      */
     _setOnTouch: function() {
-        Navy.TouchHandler.wakeup();
         this._canvas.addEventListener('mousedown', this._onTouch.bind(this), false);
         this._canvas.addEventListener('mousemove', this._onTouch.bind(this), false);
         this._canvas.addEventListener('mouseup', this._onTouch.bind(this), false);
@@ -71,7 +108,9 @@ Navy.Root = Navy.Core.instance({
      */
     _onTouch: function(event) {
         event.preventDefault();
-        Navy.TouchHandler.process(event, this._touchListeners);
+        var pages = this.getActivePages();
+        for (var i = 0; i < pages.length; i++) {
+            pages[i].onTouch(event);
+        }
     }
-
 });

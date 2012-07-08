@@ -12,9 +12,16 @@ Navy.View.Image = Navy.View.subclass({
     /**
      * @constructor
      */
-    initialize: function($super) {
-        $super();
+    initialize: function($super, id, layout) {
         this._image = new Image();
+        $super(id, layout);
+    },
+
+    _setLayout: function($super, layout) {
+        $super(layout);
+
+        var src = layout.extra.src; 
+        this.setImage(src);
     },
 
     /**
@@ -50,7 +57,7 @@ Navy.View.Image = Navy.View.subclass({
     /**
      * 描画処理
      */
-    draw: function($super, context) {
+    _drawExtra: function($super, context) {
         $super(context);
 
         if (!this._loaded) {
@@ -63,6 +70,7 @@ Navy.View.Image = Navy.View.subclass({
         //context.rotate(this._rotation * Math.PI / 180);
         //context.drawImage(this._image, this._x - this._image.width / 2, this._y - this._image.height / 2);
         //context.restore();
-        context.drawImage(this._image, this._x, this._y);
+        var pos = this.getAbsolutePosition();
+        context.drawImage(this._image, pos[0], pos[1]);
     }
 });

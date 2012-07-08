@@ -42,6 +42,10 @@ Navy.Loop = Navy.Core.instance({
      * 描画ループを開始する.
      */
     start: function() {
+        if (this._timerId) {
+            return;
+        }
+
         this._timerId = setInterval(this._looper.bind(this), this.INTERVAL);
     },
 
@@ -50,6 +54,7 @@ Navy.Loop = Navy.Core.instance({
      */
     stop: function() {
         clearInterval(this._timerId);
+        this._timerId = null;
     },
 
     /**
@@ -57,6 +62,7 @@ Navy.Loop = Navy.Core.instance({
      */
     _looper: function() {
         if (!this._requestDrawFlag) {
+            this.stop();
             return;
         }
 
@@ -65,10 +71,9 @@ Navy.Loop = Navy.Core.instance({
         context.fillStyle = '#000000';
         context.fillRect(0, 0, this._canvas.width, this._canvas.height);
 
-        var views = Navy.Root.getChildren();
-        for (var i = 0, l = views.length; i < l; i++) {
-            views[i].draw(context);
-        }
+        Navy.Root.draw(context);
+
+        this._requestDrawFlag = false;
     },
 
     /**
@@ -76,6 +81,7 @@ Navy.Loop = Navy.Core.instance({
      */
     requestDraw: function() {
         this._requestDrawFlag = true;
+        this.start();
     },
 
     /**
