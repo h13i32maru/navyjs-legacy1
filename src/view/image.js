@@ -1,21 +1,37 @@
+/**
+ * 画像を表示するView
+ */
 Navy.View.Image = Navy.View.subclass({
-    CLASS: "Navy.View.Image",
+    CLASS: 'Navy.View.Image',
 
+    /** 画像が読み込まれているかどうかのフラグ */
     _loaded: false,
+
     _image: null,
 
-    initialize: function($super){
+    /**
+     * @constructor
+     */
+    initialize: function($super) {
         $super();
         this._image = new Image();
     },
 
-    setImage: function(src){
+    /**
+     * 画像をセットする
+     * @param {string} src 画像のパス.
+     */
+    setImage: function(src) {
         this._loaded = false;
-        this._image.addEventListener("load", this._onLoad.bind(this), false);
+        this._image.addEventListener('load', this._onLoad.bind(this), false);
         this._image.src = src;
     },
 
-    getSize: function($super){
+    /**
+     * 画像のサイズを取得する.
+     * @return {Array.<number>} 画像のサイズ[x, y].
+     */
+    getSize: function($super) {
         if (!this._loaded) {
             return [0, 0];
         }
@@ -23,15 +39,21 @@ Navy.View.Image = Navy.View.subclass({
         return [this._image.width, this._image.height];
     },
 
-    _onLoad: function(){
+    /**
+     * 画像が読み込まれた時のリスナ
+     */
+    _onLoad: function() {
         this._loaded = true;
         Navy.Loop.requestDraw();
     },
 
-    draw: function($super, context){
+    /**
+     * 描画処理
+     */
+    draw: function($super, context) {
         $super(context);
 
-        if(!this._loaded){
+        if (!this._loaded) {
             return;
         }
 
