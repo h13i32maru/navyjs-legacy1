@@ -2,7 +2,6 @@
  * アプリケーション全体の管理を行うインスタンス
  */
 Navy.App = Navy.Core.instance({
-    /** @const */
     CLASS: 'Navy.App',
 
     /**

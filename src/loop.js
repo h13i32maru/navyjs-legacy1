@@ -2,12 +2,10 @@
  * 描画ループを管理するインスタンス
  */
 Navy.Loop = Navy.Core.instance({
-    /** @const */
     CLASS: 'Navy.Loop',
 
     /**
      * 描画間隔[msec]
-     * @const
      */
     INTERVAL: 1 / 60 * 1000,
 

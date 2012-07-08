@@ -2,10 +2,12 @@
  * タッチイベントの情報を保持するクラス
  */
 Navy.TouchEvent = Navy.Core.subclass({
-    /** @const */
     CLASS: 'Navy.TouchEvent',
 
+    /** イベントのID */
     id: 0,
+
+    /** イベントの種類 start|move|end */
     action: '',
     x: 0,
     y: 0,

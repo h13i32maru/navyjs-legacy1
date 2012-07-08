@@ -5,7 +5,6 @@ Navy.Core = function() {};
 
 /**
  * {@code Navy.Core.subclass}メソッドの中で動的にコンストラクタを取得するために保持しておく。
- * @constructor
  */
 Navy.Core.__constructor__ = Navy.Core;
 
