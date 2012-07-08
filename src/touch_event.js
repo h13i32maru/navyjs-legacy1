@@ -68,9 +68,10 @@ Navy.TouchEvent = Navy.Core.subclass({
                 console.log('error touch event type');
         }
 
+        var scale = Navy.App.scale;
         this.action = action;
-        this.x = x;
-        this.y = y;
+        this.x = x ? ~~(x / scale) : x;
+        this.y = y ? ~~(y / scale) : y;
         this.time = time;
         this.rawEvent = event;
     }

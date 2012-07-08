@@ -57,6 +57,7 @@ Navy.Loop = Navy.Core.instance({
      */
     _looper: function() {
         if (!this._requestDrawFlag) {
+            this.stop();
             return;
         }
 
@@ -66,6 +67,8 @@ Navy.Loop = Navy.Core.instance({
         context.fillRect(0, 0, this._canvas.width, this._canvas.height);
 
         Navy.Root.draw(context);
+
+        this._requestDrawFlag = false;
     },
 
     /**
@@ -73,6 +76,7 @@ Navy.Loop = Navy.Core.instance({
      */
     requestDraw: function() {
         this._requestDrawFlag = true;
+        this.start();
     },
 
     /**
