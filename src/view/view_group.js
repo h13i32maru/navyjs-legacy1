@@ -22,6 +22,15 @@ Navy.View.ViewGroup = Navy.View.subclass({
         }
     },
 
+    setPage: function($super, page) {
+        $super(page);
+
+        var _views = this._views;
+        for (var viewId in _views) {
+            _views[viewId].setPage(page);
+        }
+    },
+
     attachedRoot: function($super, isAttached) {
         $super(isAttached);
 
@@ -29,19 +38,6 @@ Navy.View.ViewGroup = Navy.View.subclass({
         for (var viewId in _views) {
             _views[viewId].attachedRoot(isAttached);
         }
-    },
-
-    setPosition: function($super, x, y) {
-        var pos = this.getPosition();
-        var dx = x - pos.x;
-        var dy = y - pos.y;
-
-        var _views = this._views;
-        for (var viewId in _views) {
-            _views[viewId].addPosition(dx, dy);
-        }
-
-        $super(x, y);
     },
 
     addView: function(view) {

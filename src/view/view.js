@@ -6,6 +6,7 @@ Navy.View = Navy.Core.subclass({
 
     _isDestroy: false,
     _id: null,
+    _page: null,
     _parent: null,
     _layout: null,
     _data: null,
@@ -16,6 +17,9 @@ Navy.View = Navy.Core.subclass({
     _rotation: 0,
     _visible: true,
     _isAttachedRoot: false,
+    _background: null,
+    _link: null,
+    _isAddLinkListener: false,
 
     /**
      * @constructor
@@ -32,6 +36,21 @@ Navy.View = Navy.Core.subclass({
         this._data = {};
     },
 
+    setPage: function(page) {
+        this._page = page;
+
+        //linkが設定されているが、リスナが登録されていなければ登録する
+        if (page && this._link && !this._isAddLinkListener) {
+            page.addTapListener(this._id, this._linkListener.bind(this));
+            this._isAddLinkListener = true;
+        }
+    },
+
+    getPage: function() {
+        return this._page;
+    },
+
+    //TODO:setRoot()に名前を変更する
     attachedRoot: function(isAttached) {
         this._isAttachedRoot = isAttached;
     },
@@ -85,6 +104,37 @@ Navy.View = Navy.Core.subclass({
         if ('visible' in layout) {
             this.setVisible(layout.visible);
         }
+
+        if ('size' in layout) {
+            var size = layout.size;
+            this.setSize(size[0], size[1]);
+        }
+
+        if ('background' in layout) {
+            this.setBackground(layout.background);
+        }
+
+        if ('link' in layout) {
+            this.setLink(layout.link);
+        }
+    },
+
+    setLink: function(link) {
+        this._link = link;
+
+        //linkが設定されているが、リスナが登録されていなければ登録する
+        if (link && !this._isAddLinkListener && this._page) {
+            this._page.addTapListener(this._id, this._linkListener.bind(this));
+            this._isAddLinkListener = true;
+        }
+    },
+
+    _linkListener: function(touchEvent) {
+        Navy.Screen.next(this._link);
+    },
+
+    getLink: function() {
+        return this._link;
     },
 
     getLayout: function() {
@@ -159,12 +209,26 @@ Navy.View = Navy.Core.subclass({
         return [pos[0] + this._x, pos[1] + this._y];
     },
 
+    setBackground: function(background) {
+        this._background = background;
+    },
+
+    getBackground: function() {
+        //TODO:コピーして渡したほうがいい?
+        return this._background;
+    },
+
     setVisible: function(visible) {
         this._visible = visible;
     },
 
     getVisible: function(visible) {
         return this._visible;
+    },
+
+    setSize: function(width, height) {
+        this._width = width;
+        this._height = height;
     },
 
     /**
@@ -197,6 +261,13 @@ Navy.View = Navy.Core.subclass({
 
         if (!this._visible) {
             return;
+        }
+
+        if (this._background) {
+            if (this._background.color) {
+                context.fillStyle = this._background.color;
+                context.fillRect(this._x, this._y, this._width, this._height);
+            }
         }
 
         this._drawExtra(context);

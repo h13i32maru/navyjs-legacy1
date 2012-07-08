@@ -34,7 +34,17 @@ Navy.Root = Navy.View.ViewGroup.instance({
         var pageNum = this._pages.length;
         var page = this._pages[pageNum - 1];
 
-        return [page];
+        var _pages = this._pages;
+        var activePages = [];
+        for (var i = 0; i < _pages.length; i++) {
+            if (!_pages[i].isActive()) {
+                continue;
+            }
+
+            activePages.push(_pages[i]);
+        }
+
+        return activePages; 
     },
 
     pushPage: function(page) {
@@ -47,6 +57,20 @@ Navy.Root = Navy.View.ViewGroup.instance({
         var page = this._pages.pop();
         page.setParent(null);
         page.attachedRoot(false);
+    },
+
+    /**
+     * スタックの上を0としてページを取得する. 現在のページを取得するにはindex = 0, 一つ前はindex = 1となる.
+     */
+    getPage: function(index) {
+        var _pages = this._pages;
+        if (_pages.length <= index) {
+            //TODO:例外にする
+            console.log('out of index');
+            return;
+        }
+
+        return _pages[ _pages.length - 1 - index];
     },
 
     draw: function($super, context) {

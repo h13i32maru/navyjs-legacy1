@@ -42,6 +42,10 @@ Navy.Loop = Navy.Core.instance({
      * 描画ループを開始する.
      */
     start: function() {
+        if (this._timerId) {
+            return;
+        }
+
         this._timerId = setInterval(this._looper.bind(this), this.INTERVAL);
     },
 
@@ -50,6 +54,7 @@ Navy.Loop = Navy.Core.instance({
      */
     stop: function() {
         clearInterval(this._timerId);
+        this._timerId = null;
     },
 
     /**
