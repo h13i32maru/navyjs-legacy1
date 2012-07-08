@@ -136,6 +136,14 @@ Navy.View = Navy.Core.subclass({
         return [this._x, this._y];
     },
 
+    setAbsolutePosition: function(absX, absY) {
+        var pos = this.getParent().getAbsolutePosition();
+        var x = absX - pos[0];
+        var y = absY - pos[1];
+
+        this.setPosition(x, y);
+    },
+
     /**
      * 原点からの位置を取得する.
      * @return {Array.<number>} 要素の位置[x, y].

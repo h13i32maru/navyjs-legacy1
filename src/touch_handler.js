@@ -10,6 +10,8 @@ Navy.TouchHandler = Navy.Core.subclass({
     /** 直近に実行されたリスナー全て */
     _latestTouchListeners: null,
 
+    _latestTouchEvent: null,
+
     //現在イベントを処理中かどうか
     //1つのイベントしか対応しない(マルチタッチ非対応)
     _isEventProcessing: false,
@@ -53,6 +55,8 @@ Navy.TouchHandler = Navy.Core.subclass({
         if (touchEvent.action === 'end') {
             this._isEventProcessing = false;
         }
+
+        this._latestTouchEvent = touchEvent;
     },
 
     /**
@@ -75,12 +79,20 @@ Navy.TouchHandler = Navy.Core.subclass({
             break;
         }
 
+        //TODO:z順でソート必要あり
         var len = listeners.length;
         for (var i = 0; i < len; i++) {
-            //TODO:z順でソート必要あり
             //TODO:戻り値を見て、伝搬するかチェックする
             var _touchEvent = new Navy.TouchEvent(touchEvent.rawEvent);
+
             _touchEvent.target = listeners[i]['view'];
+
+            //endの時は指を離した位置を取得できないので、最後のイベントの位置を離した位置をする
+            if (touchEvent.action === 'end') {
+                _touchEvent.x = this._latestTouchEvent.x;
+                _touchEvent.y = this._latestTouchEvent.y;
+            }
+
             listeners[i]['listener'](_touchEvent);
         }
     },

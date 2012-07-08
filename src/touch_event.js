@@ -58,8 +58,9 @@ Navy.TouchEvent = Navy.Core.subclass({
                 break;
             case 'touchend':
                 action = 'end';
-                x = event.touches[0].pageX;
-                y = event.touches[0].pageY;
+                //touchendでは指を離した位置を取得できない
+                x = null;
+                y = null;
                 time = event.timeStamp;
                 break;
             default:
