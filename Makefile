@@ -13,17 +13,12 @@ JS	= --js src/navy.js \
 	  --js src/function.js \
 	  --js src/core.js \
 	  --js src/app.js \
+	  --js src/config/config.js \
 	  --js src/loop.js \
 	  --js src/timer.js \
 	  --js src/network.js \
 	  --js src/page_factory.js \
 	  --js src/screen.js
-
-#config
-JS += --js src/config/config.js \
-	  --js src/config/app.js \
-	  --js src/config/page.js \
-	  --js src/config/layout.js \
 
 #touch
 JS += --js src/touch_event.js \

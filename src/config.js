@@ -40,7 +40,7 @@ Navy.Config = Navy.Core.instance({
      */
     _onSuccess: function(data, option, req, xhr) {
         var json = JSON.parse(data);
-        Navy.Config[option.name].wakeup(json);
+        this[option.name] = json;
         this._tryCallback();
     },
 
