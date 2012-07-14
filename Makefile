@@ -29,6 +29,10 @@ JS += --js src/config.js \
 JS += --js src/touch_event.js \
 	  --js src/touch_handler.js
 
+#gesture
+JS += --js src/gesture/gesture.js \
+	  --js src/gesture/tap.js
+
 #transition
 JS += --js src/transition/transition.js \
 	  --js src/transition/slide.js
