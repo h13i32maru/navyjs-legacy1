@@ -20,7 +20,7 @@ JS	= --js src/navy.js \
 	  --js src/screen.js
 
 #config
-JS += --js src/config.js \
+JS += --js src/config/config.js \
 	  --js src/config/app.js \
 	  --js src/config/page.js \
 	  --js src/config/layout.js \

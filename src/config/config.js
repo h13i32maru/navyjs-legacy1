@@ -1,12 +1,22 @@
+/**
+ * アプリケーションの設定を読み込むインスタンス.
+ */
 Navy.Config = Navy.Core.instance({
     CLASS: 'Navy.Config',
 
+    /** 各種設定のURLを外部から入力される変数. */
     config: null,
 
+    /** 全ての読み込みが終わった時に実行されるコールバック */
     _callback: null,
 
-    _configNum: 0,
+    /** 読み込むべき設定の数 */
+    _configNum: null,
 
+    /**
+     * 設定を読み込む
+     * @param {function(void)} callback コールバック.
+     */
     process: function(callback) {
         this._callback = callback;
 
@@ -25,15 +35,24 @@ Navy.Config = Navy.Core.instance({
         }
     },
 
+    /**
+     * URLからの読み込みが成功したときに実行される.
+     */
     _onSuccess: function(data, option, req, xhr) {
         var json = JSON.parse(data);
         Navy.Config[option.name].wakeup(json);
         this._tryCallback();
     },
 
+    /**
+     * URLからの読み込みが失敗したときに実行される.
+     */
     _onFailure: function(data, option, req, xhr) {
     },
 
+    /**
+     * 全ての設定の読み込みが終わっていたらコールバックを実行する.
+     */
     _tryCallback: function() {
         this._configNum--;
 
