@@ -16,7 +16,7 @@ Navy.View = Navy.Core.subclass({
     _height: 0,
     _rotation: 0,
     _visible: true,
-    _isAttachedRoot: false,
+    _root: null,
     _background: null,
     _link: null,
     _isAddLinkListener: false,
@@ -36,6 +36,10 @@ Navy.View = Navy.Core.subclass({
         this._data = {};
     },
 
+    onChangeRoot: function(root) {
+        this._root = root;
+    },
+
     onChangePage: function(page) {
         this._page = page;
 
@@ -46,21 +50,16 @@ Navy.View = Navy.Core.subclass({
         }
     },
 
+    onChangeParent: function(parentView) {
+        this._parent = parentView;
+    },
+
+    getRoot: function() {
+        return this._root;
+    },
+
     getPage: function() {
         return this._page;
-    },
-
-    //TODO:setRoot()に名前を変更する
-    attachedRoot: function(isAttached) {
-        this._isAttachedRoot = isAttached;
-    },
-
-    isAttachedRoot: function() {
-        return this._isAttachedRoot;
-    },
-
-    setParent: function(parentView) {
-        this._parent = parentView;
     },
 
     getParent: function() {
@@ -78,7 +77,7 @@ Navy.View = Navy.Core.subclass({
             return null;
         }
 
-        if (!this._isAttachedRoot) {
+        if (!this._root) {
             //TODO:例外にする
             console.log('dont attached in root');
             return null;
@@ -288,7 +287,7 @@ Navy.View = Navy.Core.subclass({
         }
 
         this._parent = null;
-        this._isAttachedRoot = false;
+        this._root = null;
 
         this._isDestroy = true;
     }

@@ -23,7 +23,7 @@ Navy.Root = Navy.View.ViewGroup.instance({
 
         this._setOnTouch();
 
-        this.setParent(null);
+        this.onChangeParent(null);
 
         var size = Navy.Config.App.size;
         this.setSize(size[0], size[1]);
@@ -52,14 +52,14 @@ Navy.Root = Navy.View.ViewGroup.instance({
 
     pushPage: function(page) {
         this._pages.push(page);
-        page.setParent(this);
-        page.attachedRoot(true);
+        page.onChangeParent(this);
+        page.onChangeRoot(this);
     },
 
     popPage: function() {
         var page = this._pages.pop();
-        page.setParent(null);
-        page.attachedRoot(false);
+        page.onChangeParent(null);
+        page.onChangeRoot(null);
     },
 
     /**

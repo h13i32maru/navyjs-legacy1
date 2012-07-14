@@ -31,12 +31,12 @@ Navy.View.ViewGroup = Navy.View.subclass({
         }
     },
 
-    attachedRoot: function($super, isAttached) {
-        $super(isAttached);
+    onChangeRoot: function($super, root) {
+        $super(root);
 
         var _views = this._views;
         for (var viewId in _views) {
-            _views[viewId].attachedRoot(isAttached);
+            _views[viewId].onChangeRoot(root);
         }
     },
 
@@ -48,8 +48,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
             return;
         }
         this._views[viewId] = view;
-        view.setParent(this);
-        view.attachedRoot(this._isAttachedRoot);
+        view.onChangeParent(this);
+        view.onChangeRoot(this._root);
     },
 
     findView: function(viewId) {
@@ -85,8 +85,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
 
     removeView: function(viewId) {
         var view = this._views[viewId];
-        view.setParent(null);
-        view.attachedRoot(false);
+        view.onChangeParent(null);
+        view.onChangeRoot(null);
         delete this._views[viewId];
     },
 
