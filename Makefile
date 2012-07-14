@@ -17,8 +17,9 @@ JS	= --js src/patch.js \
 	  --js src/screen.js
 
 #touch
-JS += --js src/touch_event.js \
-	  --js src/touch_handler.js
+JS += --js src/touch/touch.js \
+	  --js src/touch/event.js \
+	  --js src/touch/handler.js
 
 #gesture
 JS += --js src/gesture/gesture.js \

@@ -8,7 +8,7 @@ Navy.Page = Navy.View.ViewGroup.subclass({
     _touchListeners: null,
 
     initialize: function($super, id, layout) {
-        this._touchHandler = new Navy.TouchHandler();
+        this._touchHandler = new Navy.Touch.Handler();
         this._touchListeners = [];
 
         $super(id, layout);

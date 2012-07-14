@@ -1,8 +1,8 @@
 /**
  * タッチイベントの情報を保持するクラス
  */
-Navy.TouchEvent = Navy.Core.subclass({
-    CLASS: 'Navy.TouchEvent',
+Navy.Touch.Event = Navy.Core.subclass({
+    CLASS: 'Navy.Touch.Event',
 
     /** イベントの種類 start|move|end */
     action: '',
@@ -16,7 +16,7 @@ Navy.TouchEvent = Navy.Core.subclass({
     },
 
     /**
-     * DOMのタッチイベントから{Navy.TouchEvent}に変換する
+     * DOMのタッチイベントから{Navy.Touch.Event}に変換する
      * @param {Event} event DOMのタッチイベント.
      */
     set: function(event) {

@@ -1,8 +1,8 @@
 /**
  * タッチイベントを処理するクラス
  */
-Navy.TouchHandler = Navy.Core.subclass({
-    CLASS: 'Navy.TouchEventHandler',
+Navy.Touch.Handler = Navy.Core.subclass({
+    CLASS: 'Navy.Touch.Handler',
 
     /** 全てのリスナー */
     _touchListeners: null,
@@ -25,11 +25,11 @@ Navy.TouchHandler = Navy.Core.subclass({
     /**
      * タッチイベントを処理してリスナを実行する
      * @param {Event} event DOMのイベント.
-     * @param {Array.<{view: Navy.View, listener: function(Navy.TouchEvent) }>} touchListeners 登録されているイベントリスナ.
+     * @param {Array.<{view: Navy.View, listener: function(Navy.Touch.Event) }>} touchListeners 登録されているイベントリスナ.
      */
     process: function(event, touchListeners) {
         this._touchListeners = touchListeners;
-        var touchEvent = new Navy.TouchEvent(event);
+        var touchEvent = new Navy.Touch.Event(event);
 
         switch (touchEvent.action) {
         case 'start':
@@ -61,7 +61,7 @@ Navy.TouchHandler = Navy.Core.subclass({
 
     /**
      * イベントリスナを実行する.
-     * @param {Navy.TouchEvent} touchEvent 取得したタッチイベント.
+     * @param {Navy.Touch.Event} touchEvent 取得したタッチイベント.
      */
     _callTouchListener: function(touchEvent) {
         //イベントを取得するlisteners
@@ -83,7 +83,7 @@ Navy.TouchHandler = Navy.Core.subclass({
         var len = listeners.length;
         for (var i = 0; i < len; i++) {
             //TODO:戻り値を見て、伝搬するかチェックする
-            var _touchEvent = new Navy.TouchEvent(touchEvent.rawEvent);
+            var _touchEvent = new Navy.Touch.Event(touchEvent.rawEvent);
 
             _touchEvent.target = listeners[i]['view'];
 
@@ -99,7 +99,7 @@ Navy.TouchHandler = Navy.Core.subclass({
 
     /**
      * タッチスタート時に呼び出すリスナを取得する.
-     * @param {Navy.TouchEvent} touchEvent タッチイベント.
+     * @param {Navy.Touch.Event} touchEvent タッチイベント.
      */
     _getTouchStartListeners: function(touchEvent) {
         var _touchListeners = this._touchListeners;
@@ -134,7 +134,7 @@ Navy.TouchHandler = Navy.Core.subclass({
 
     /**
      * タッチムーブ時に呼び出すリスナを取得する.
-     * @param {Navy.TouchEvent} touchEvent タッチイベント.
+     * @param {Navy.Touch.Event} touchEvent タッチイベント.
      */
     _getTouchMoveListeners: function(touchEvent) {
         return this._latestTouchListeners;
@@ -142,7 +142,7 @@ Navy.TouchHandler = Navy.Core.subclass({
 
     /**
      * タッチエンド時に呼び出すリスナを取得する.
-     * @param {Navy.TouchEvent} touchEvent タッチイベント.
+     * @param {Navy.Touch.Event} touchEvent タッチイベント.
      */
     _getTouchEndListeners: function(touchEvent) {
         return this._latestTouchListeners;

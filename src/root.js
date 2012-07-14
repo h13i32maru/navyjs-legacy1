@@ -86,7 +86,7 @@ Navy.Root = Navy.View.ViewGroup.instance({
     /**
      * タッチイベントを追加する
      * @param {View} view タッチイベントを取得する子要素.
-     * @param {function({Navy.TouchEvent})} listener イベントリスナ.
+     * @param {function({Navy.Touch.Event})} listener イベントリスナ.
      */
     addTouchListener: function(view, listener) {
         this._touchListeners.push({view: view, listener: listener});
