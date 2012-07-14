@@ -1,5 +1,5 @@
 /**
- * アプリケーション全体の管理を行うインスタンス
+ * アプリケーション全体の管理を行うインスタンス.
  */
 Navy.App = Navy.Core.instance({
     CLASS: 'Navy.App',
@@ -8,15 +8,18 @@ Navy.App = Navy.Core.instance({
     scale: 1,
 
     /**
-     * Canvas、描画ループの初期化を行う
+     * アプリケーションの初期化を行う.
      * @constructor
      */
     initialize: function() {
         this._wakeup();
 
-        Navy.Config.process(this._onConfig.bind(this));
+        Navy.Config.process(this._init.bind(this));
     },
 
+    /**
+     * 各種instanceの起動を行う.
+     */
     _wakeup: function() {
         Navy.Timer.wakeup();
         Navy.Config.wakeup();
@@ -24,7 +27,10 @@ Navy.App = Navy.Core.instance({
         Navy.PageFactory.wakeup();
     },
 
-    _onConfig: function() {
+    /**
+     * 描画を開始するための初期化を行う.
+     */
+    _init: function() {
         //this._hideLocationBar();
 
         var canvas = this._createCanvas();
@@ -41,7 +47,7 @@ Navy.App = Navy.Core.instance({
     },
 
     /**
-     * アドレスバーを非表示にするトリック
+     * アドレスバーを非表示にするトリック.
      */
     _hideLocationBar: function() {
         setTimeout(function() {
