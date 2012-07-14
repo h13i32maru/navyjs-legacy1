@@ -85,9 +85,20 @@ Navy.View.ViewGroup = Navy.View.subclass({
 
     removeView: function(viewId) {
         var view = this._views[viewId];
-        view.onChangeParent(null);
-        view.onChangeRoot(null);
-        delete this._views[viewId];
+        if (view) {
+            view.onChangeParent(null);
+            view.onChangeRoot(null);
+            delete this._views[viewId];
+        } else {
+            var view = this.findView(viewId);
+            if (!view) {
+                //TODO:例外にする
+                console.log('not found view');
+                return
+            }
+
+            view.removeFromParent();
+        }
     },
 
     getViews: function() {

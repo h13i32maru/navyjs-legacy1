@@ -10,7 +10,7 @@ Navy.Screen = Navy.Core.instance({
         var page = Navy.Page.create(mainPageId);
         Navy.Root.pushPage(page);
 
-        page.onEnter();
+        page.onCreate();
         page.onResumeStart();
         page.onResumeFinish();
 
@@ -23,7 +23,7 @@ Navy.Screen = Navy.Core.instance({
         var newPage = Navy.Page.create(pageId);
         Navy.Root.pushPage(newPage);
 
-        newPage.onEnter();
+        newPage.onCreate();
         newPage.onResumeStart();
         currentPage.onPauseStart();
 
@@ -54,7 +54,7 @@ Navy.Screen = Navy.Core.instance({
         var transition = stack.transition;
         transition.addBackCompleteListener(function(previousPage, currentPage) {
             currentPage.onPauseFinish();
-            currentPage.onExit();
+            currentPage.onDestroy();
 
             previousPage.onResumeFinish();
 

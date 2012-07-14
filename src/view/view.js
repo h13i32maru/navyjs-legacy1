@@ -253,6 +253,10 @@ Navy.View = Navy.Core.subclass({
         Navy.Loop.requestDraw();
     },
 
+    removeFromParent: function() {
+        this._parent.removeView(this._id);
+    },
+
     /**
      * 要素を描画する.
      * @param {Context} context コンテキスト要素.

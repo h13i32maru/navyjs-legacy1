@@ -82,7 +82,7 @@ Navy.Network = Navy.Core.instance({
         }
 
         this._processRequest();
-    }, 
+    },
 
     /**
      * クエリパラメータを構築する.
