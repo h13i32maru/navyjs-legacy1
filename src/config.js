@@ -38,7 +38,7 @@ Navy.Config = Navy.Core.instance({
     /**
      * URLからの読み込みが成功したときに実行される.
      */
-    _onSuccess: function(data, option, req, xhr) {
+    _onSuccess: function(data, option, xhr) {
         var json = JSON.parse(data);
         this[option.name] = json;
         this._tryCallback();
@@ -47,7 +47,7 @@ Navy.Config = Navy.Core.instance({
     /**
      * URLからの読み込みが失敗したときに実行される.
      */
-    _onFailure: function(data, option, req, xhr) {
+    _onFailure: function(data, option, xhr) {
     },
 
     /**
