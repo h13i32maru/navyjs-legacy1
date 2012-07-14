@@ -7,7 +7,7 @@ Navy.Screen = Navy.Core.instance({
     initialize: function($super, canvas) {
         var mainPageId = Navy.Config.App.mainPageId;
         
-        var page = Navy.PageFactory.create(mainPageId);
+        var page = Navy.Page.create(mainPageId);
         Navy.Root.pushPage(page);
 
         page.onEnter();
@@ -20,7 +20,7 @@ Navy.Screen = Navy.Core.instance({
     next: function(pageId) {
         var currentPage = Navy.Root.getPage(0);
 
-        var newPage = Navy.PageFactory.create(pageId);
+        var newPage = Navy.Page.create(pageId);
         Navy.Root.pushPage(newPage);
 
         newPage.onEnter();

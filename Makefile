@@ -14,7 +14,6 @@ JS	= --js src/patch.js \
 	  --js src/loop.js \
 	  --js src/timer.js \
 	  --js src/network.js \
-	  --js src/page_factory.js \
 	  --js src/screen.js
 
 #touch

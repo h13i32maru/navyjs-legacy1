@@ -24,7 +24,6 @@ Navy.App = Navy.Core.instance({
         Navy.Timer.wakeup();
         Navy.Config.wakeup();
         Navy.Network.wakeup();
-        Navy.PageFactory.wakeup();
     },
 
     /**
