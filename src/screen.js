@@ -1,74 +1,65 @@
 Navy.Screen = Navy.Core.instance({
     CLASS: 'Navy.Screen',
 
-    initialize: function($super, canvas) {
-        Navy.Root.wakeup(canvas);
+    //画面遷移の情報
+    _transitionStack: null,
 
+    initialize: function($super, canvas) {
         var mainPageId = Navy.Config.App.mainPageId;
         
-        Navy.PageFactory.wakeup();
         var page = Navy.PageFactory.create(mainPageId);
         Navy.Root.pushPage(page);
 
         page.onEnter();
         page.onResumeStart();
         page.onResumeFinish();
+
+        this._transitionStack = [];
     },
 
     next: function(pageId) {
-        if (pageId === '$back') {
-            this.back();
-            return;
-        }
-
         var currentPage = Navy.Root.getPage(0);
 
-        var page = Navy.PageFactory.create(pageId);
-        Navy.Root.pushPage(page);
+        var newPage = Navy.PageFactory.create(pageId);
+        Navy.Root.pushPage(newPage);
 
-
-
-        //画面遷移
-        page.onEnter();
-        page.onResumeStart();
+        newPage.onEnter();
+        newPage.onResumeStart();
         currentPage.onPauseStart();
 
-        var x = 0;
-        page.setPosition(640, 0);
-        var timerId = setInterval(function() {
-            currentPage.addPosition(-40, 0);
-            page.addPosition(-40, 0);
-            x+=40;
-            if (x >= 640) {
-                page.onResumeFinish();
-                currentPage.onPauseFinish();
-                clearInterval(timerId);
-            }
+        var transition = new Navy.Transition.Slide(currentPage, newPage);
+        transition.addStartCompleteListener(function(currentPage, newPage) {
+            currentPage.onPauseFinish();
+            newPage.onResumeFinish();
+        });
 
-        }, Navy.Loop.INTERVAL);
+        transition.start();
 
+        this._transitionStack.push({
+            transition: transition,
+            previousPage: currentPage,
+            currentPage: newPage
+        });
     },
 
     back: function() {
-        var currentPage = Navy.Root.getPage(0);
-        var prevPage = Navy.Root.getPage(1);
+        var stack = this._transitionStack.pop();
 
-        //画面遷移
+        var previousPage = stack.previousPage;
+        var currentPage = stack.currentPage;
+
+        previousPage.onResumeStart();
         currentPage.onPauseStart();
-        prevPage.onResumeStart();
-        var x = 0;
-        var timerId = setInterval(function() {
-            currentPage.addPosition(10, 0);
-            prevPage.addPosition(10, 0);
-            x+=10;
-            if (x === 640) {
-                currentPage.onPauseFinish();
-                currentPage.onExit();
-                prevPage.onResumeFinish();
-                clearInterval(timerId);
-                Navy.Root.popPage();
-            }
 
-        }, Navy.Loop.INTERVAL);
+        var transition = stack.transition;
+        transition.addBackCompleteListener(function(previousPage, currentPage) {
+            currentPage.onPauseFinish();
+            currentPage.onExit();
+
+            previousPage.onResumeFinish();
+
+            Navy.Root.popPage();
+        });
+        transition.back();
     }
 });

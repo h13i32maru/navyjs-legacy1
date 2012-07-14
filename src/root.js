@@ -24,6 +24,9 @@ Navy.Root = Navy.View.ViewGroup.instance({
         this._setOnTouch();
 
         this.setParent(null);
+
+        var size = Navy.Config.App.size;
+        this.setSize(size[0], size[1]);
     },
 
     getAbsolutePosition: function(){

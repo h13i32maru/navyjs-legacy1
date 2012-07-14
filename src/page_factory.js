@@ -10,7 +10,7 @@ Navy.PageFactory = Navy.Core.instance({
         var pageClass = pageConfig['class'];
         var layoutId = pageConfig['layout'];
 
-        var size = Navy.Config.App.size;
+        var size = Navy.Root.getSize();
         var layout = {
             pos: [0, 0],
             size: [size[0], size[1]],

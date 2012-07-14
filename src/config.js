@@ -1,26 +1,19 @@
 Navy.Config = Navy.Core.instance({
     CLASS: 'Navy.Config',
 
-    _config: null,
+    config: null,
 
     _callback: null,
 
     _configNum: 0,
 
-    initialize: function($super) {
-    },
-
-    set: function(config) {
-        this._config = config;
-    },
-
     process: function(callback) {
         this._callback = callback;
 
         var list = [
-            {name: 'App', url: this._config.app},
-            {name: 'Page', url: this._config.page},
-            {name: 'Layout', url: this._config.layout}
+            {name: 'App', url: this.config.app},
+            {name: 'Page', url: this.config.page},
+            {name: 'Layout', url: this.config.layout}
         ];
 
         this._configNum = list.length;
@@ -51,5 +44,3 @@ Navy.Config = Navy.Core.instance({
         this._callback();
     }
 });
-
-Navy.Config.wakeup();

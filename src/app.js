@@ -12,21 +12,32 @@ Navy.App = Navy.Core.instance({
      * @constructor
      */
     initialize: function() {
-        Navy.Network.wakeup();
+        this._wakeup();
+
         Navy.Config.process(this._onConfig.bind(this));
     },
 
+    _wakeup: function() {
+        Navy.Timer.wakeup();
+        Navy.Config.wakeup();
+        Navy.Network.wakeup();
+        Navy.PageFactory.wakeup();
+    },
+
     _onConfig: function() {
-        this._hideLocationBar();
+        //this._hideLocationBar();
 
         var canvas = this._createCanvas();
 
+        Navy.Root.wakeup(canvas);
         Navy.Screen.wakeup(canvas);
 
         Navy.Loop.wakeup(canvas);
         Navy.Loop.start();
 
-        main();
+        if (window.main) {
+            main();
+        }
     },
 
     /**

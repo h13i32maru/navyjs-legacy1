@@ -130,7 +130,13 @@ Navy.View = Navy.Core.subclass({
     },
 
     _linkListener: function(touchEvent) {
-        Navy.Screen.next(this._link);
+        var _link = this._link;
+        if (_link === '$back') {
+            Navy.Screen.back();
+        }
+        else {
+            Navy.Screen.next(this._link);
+        }
     },
 
     getLink: function() {

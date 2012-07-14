@@ -111,6 +111,10 @@ Navy.TouchHandler = Navy.Core.subclass({
             var view = _touchListeners[i]['view'];
             var listener = _touchListeners[i]['listener'];
 
+            if (!view.getVisible()) {
+                continue;
+            }
+
             var pos = view.getAbsolutePosition();
             var x0 = pos[0];
             var y0 = pos[1];
