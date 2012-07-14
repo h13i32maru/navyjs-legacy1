@@ -9,7 +9,6 @@ OUT		= --js_output_file navy.js
 #base
 JS	= --js src/navy.js \
 	  --js src/patch.js \
-	  --js src/function.js \
 	  --js src/core.js \
 	  --js src/app.js \
 	  --js src/config.js \

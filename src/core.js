@@ -47,7 +47,7 @@ Navy.Core.subclass = function(proto) {
     var value;
     for (var p in proto) {
         value = proto[p];
-        if (typeof value === 'function' && Navy.argumentName(value)[0] === '$super') {
+        if (typeof value === 'function' && Navy.Core._argumentName(value)[0] === '$super') {
                 value = Navy.Core._makeWrapper(__super__, p, value);
         }
         constructor.prototype[p] = value;
@@ -111,6 +111,18 @@ Navy.Core._makeWrapper = function(__super__, funcname, func) {
         var arg = [$super].concat(Array.prototype.slice.call(arguments, 0));
         return func.apply(this, arg);
     };
+};
+
+/**
+ * 関数の仮引数名のリストを取得する.
+ * @param {function(...)} func 対象とする関数.
+ * @return {Array.<string>} 仮引数名の配列.
+ */
+Navy.Core._argumentName = function(func) {
+    var names = func.toString().match(/^[\s\(]*function[^(]*\(([^)]*)\)/)[1]
+      .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
+      .replace(/\s+/g, '').split(',');
+    return names.length == 1 && !names[0] ? [] : names;
 };
 
 Navy.Core.prototype = {
