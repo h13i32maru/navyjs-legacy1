@@ -6,9 +6,15 @@ Navy.View = Navy.Core.subclass({
 
     _isDestroy: false,
     _id: null,
+    /** 親root */
+    _root: null,
+    /** 親page */
     _page: null,
+    /** 親view */
     _parent: null,
+    /** レイアウト情報のオブジェクト */
     _layout: null,
+    /** 外から注入される任意のデータ */
     _data: null,
     _x: 0,
     _y: 0,
@@ -16,9 +22,10 @@ Navy.View = Navy.Core.subclass({
     _height: 0,
     _rotation: 0,
     _visible: true,
-    _root: null,
     _background: null,
+    /** タップ時に遷移するページのid */
     _link: null,
+    /** リンクリスナーを登録したかどうか */
     _isAddLinkListener: false,
 
     /**
@@ -36,10 +43,16 @@ Navy.View = Navy.Core.subclass({
         this._data = {};
     },
 
+    /**
+     * 親rootが変更された時に実行される.
+     */
     onChangeRoot: function(root) {
         this._root = root;
     },
 
+    /**
+     * 親pageが変更された時に実行される.
+     */
     onChangePage: function(page) {
         this._page = page;
 
@@ -50,26 +63,49 @@ Navy.View = Navy.Core.subclass({
         }
     },
 
+    /**
+     * 親viewが変更された時に実行される.
+     */
     onChangeParent: function(parentView) {
         this._parent = parentView;
     },
 
+    /**
+     * rootを取得する.
+     * @return {Navy.Root} root.
+     */
     getRoot: function() {
         return this._root;
     },
 
+    /**
+     * pageを取得する.
+     * @return {Navy.Page} page.
+     */
     getPage: function() {
         return this._page;
     },
 
+    /**
+     * 親viewを取得する.
+     * @return {Navy.ViewGroup} viewgroup.
+     */
     getParent: function() {
         return this._parent;
     },
 
+    /**
+     * IDを取得する.
+     * @return {string} ID.
+     */
     getId: function() {
         return this._id;
     },
 
+    /**
+     * rootからの絶対IDを取得する.
+     * @return {string} 絶対ID.
+     */
     getAbsoluteId: function() {
         if (!this._parent) {
             //TODO:例外にする
@@ -92,6 +128,11 @@ Navy.View = Navy.Core.subclass({
         }
     },
 
+    /**
+     * レイアウトを設定する.
+     * 各viewはオーバーライドして独自の処理を実装すること.
+     * @param {Object} layout レイアウト情報.
+     */
     _setLayout: function(layout) {
         this._layout = layout;
 
@@ -118,6 +159,10 @@ Navy.View = Navy.Core.subclass({
         }
     },
 
+    /**
+     * タップ時の遷移先を設定する.
+     * @param {string} link ページID.
+     */
     setLink: function(link) {
         this._link = link;
 
@@ -128,6 +173,11 @@ Navy.View = Navy.Core.subclass({
         }
     },
 
+    /**
+     * 指定されたページに遷移する.
+     * タップ時に実行される.
+     * @param {Navy.Touch.Event} touchEvent タッチイベント.
+     */
     _linkListener: function(touchEvent) {
         var _link = this._link;
         if (_link === '$back') {
@@ -138,10 +188,18 @@ Navy.View = Navy.Core.subclass({
         }
     },
 
+    /**
+     * リンクを取得する.
+     * @return {string} リンク.
+     */
     getLink: function() {
         return this._link;
     },
 
+    /*
+     * レイアウトを取得する.
+     * @return {Object} レイアウト情報.
+     */
     getLayout: function() {
         return this._layout;
     },
@@ -177,6 +235,11 @@ Navy.View = Navy.Core.subclass({
         Navy.Loop.requestDraw();
     },
 
+    /**
+     * 要素の位置を増減する.
+     * @param {number} dx 増減量.
+     * @param {number} dy 増減量.
+     */
     addPosition: function(dx, dy) {
         var x = this._x + dx;
         var y = this._y + dy;
@@ -191,6 +254,10 @@ Navy.View = Navy.Core.subclass({
         return [this._x, this._y];
     },
 
+    /**
+     * 要素の絶対位置を設定する.
+     * @return {Array.<number>} 要素の位置[x, y].
+     */
     setAbsolutePosition: function(absX, absY) {
         var pos = this.getParent().getAbsolutePosition();
         var x = absX - pos[0];
@@ -214,23 +281,58 @@ Navy.View = Navy.Core.subclass({
         return [pos[0] + this._x, pos[1] + this._y];
     },
 
+    /**
+     * 背景を設定する.
+     * @param {color: string} background 背景情報.colorは#ffffff形式.
+     */
     setBackground: function(background) {
         this._background = background;
+        Navy.Loop.requestDraw();
     },
 
+    /**
+     * 背景情報を取得する.
+     * @param {color: string} background 背景情報. colorは#ffffff形式.
+     */
     getBackground: function() {
         //TODO:コピーして渡したほうがいい?
         return this._background;
     },
 
+    /**
+     * 表示するかどうかを設定する.
+     * @param {boolean} visible 表示非表示.
+     */
     setVisible: function(visible) {
         this._visible = visible;
+        Navy.Loop.requestDraw();
     },
 
+    /**
+     * 表示非表示を取得する.
+     * @return {boolean} 表示非表示.
+     */
     getVisible: function(visible) {
         return this._visible;
     },
 
+    /**
+     * 親をさかのぼって表示非表示を取得する.
+     */
+    getAbsoluteVisible: function() {
+        if (this._visible) {
+            return this._parent.getDeepVisible();
+        }
+        else {
+            return false;
+        }
+    },
+
+    /**
+     * サイズを設定する.
+     * @param {number} width 横幅px.
+     * @param {number} height 縦幅px.
+     */
     setSize: function(width, height) {
         this._width = width;
         this._height = height;
@@ -253,6 +355,9 @@ Navy.View = Navy.Core.subclass({
         Navy.Loop.requestDraw();
     },
 
+    /**
+     * 親要素から自身を削除する.
+     */
     removeFromParent: function() {
         this._parent.removeView(this._id);
     },
@@ -282,9 +387,15 @@ Navy.View = Navy.Core.subclass({
         this._drawExtra(context);
     },
 
+    /**
+     * 各view固有の描画をオーバーライドして実装する.
+     */
     _drawExtra: function(context) {
     },
 
+    /**
+     * 自身を破棄する.
+     */
     destroy: function() {
         if (this._parent) {
             this._parent.removeView(this._id);

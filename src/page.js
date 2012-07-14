@@ -17,6 +17,8 @@ Navy.Page = Navy.View.ViewGroup.subclass({
         this._touchHandler = new Navy.Touch.Handler();
         this._touchListeners = [];
 
+        this.setVisible(false);
+
         $super(id, layout);
     },
 
@@ -54,6 +56,7 @@ Navy.Page = Navy.View.ViewGroup.subclass({
      */
     onCreate: function(data) {
         this._isActive = true;
+        this.setVisible(true);
     },
 
     /**
@@ -63,6 +66,7 @@ Navy.Page = Navy.View.ViewGroup.subclass({
      */
     onResumeStart: function() {
         this._isActive = true;
+        this.setVisible(true);
     },
 
     /**
@@ -88,6 +92,7 @@ Navy.Page = Navy.View.ViewGroup.subclass({
      */
     onPauseFinish: function() {
         this._isActive = false;
+        this.setVisible(false);
     },
 
     /**

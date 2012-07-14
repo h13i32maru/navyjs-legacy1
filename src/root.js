@@ -27,6 +27,12 @@ Navy.Root = Navy.View.ViewGroup.instance({
 
         var size = Navy.Config.App.size;
         this.setSize(size[0], size[1]);
+
+        this.setVisible(true);
+    },
+
+    getAbsoluteVisible: function() {
+        return true;
     },
 
     /**

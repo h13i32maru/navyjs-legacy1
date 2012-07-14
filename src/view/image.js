@@ -20,7 +20,7 @@ Navy.View.Image = Navy.View.subclass({
     _setLayout: function($super, layout) {
         $super(layout);
 
-        var src = layout.extra.src; 
+        var src = layout.extra.src;
         this.setImage(src);
     },
 
