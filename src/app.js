@@ -7,11 +7,14 @@ Navy.App = Navy.Core.instance({
     //canvasのスケール値
     scale: 1,
 
+    offset: null,
+
     /**
      * アプリケーションの初期化を行う.
      * @constructor
      */
     initialize: function() {
+        this.offset = [0, 0];
         this._wakeup();
 
         Navy.Config.process(this._init.bind(this));
@@ -59,12 +62,13 @@ Navy.App = Navy.Core.instance({
      * @return {Canvas} 作成したキャンバス要素.
      */
     _createCanvas: function() {
+        document.body.style.margin = 0;
+        document.body.style.padding = 0;
+        document.body.style.backgroundColor = '#000000';
         var wrap = document.createElement('div');
         wrap.style.position = 'absolute';
         wrap.style.top = 0;
         wrap.style.left = 0;
-        wrap.style.width = (window.innerWidth + 100) + 'px';
-        wrap.style.height = (window.innerHeight + 100) + 'px';
 
         var canvasWidth = Navy.Config.App.size[0];
         var canvasHeight = Navy.Config.App.size[1];
@@ -81,15 +85,26 @@ Navy.App = Navy.Core.instance({
 
         if (scaleWidth < scaleHeight) {
             canvas.style.width = browserWidth + 'px';
-            canvas.style.height = ~~(canvasHeight * scaleWidth) + 'px';
+            var canvasStyleHeight = ~~(canvasHeight * scaleWidth);
+            canvas.style.height = canvasStyleHeight + 'px';
             this.scale = ~~(scaleWidth * 100);
             this.scale /= 100;
+
+            var offsetY = (browserHeight - canvasStyleHeight) / 2;
+            wrap.style.top = offsetY + 'px';
+
+            this.offset[1] = offsetY;
         }
         else {
-            canvas.style.width = ~~(canvasWidth * scaleHeight) + 'px';
+            var canvasStyleWidth = ~~(canvasWidth * scaleHeight);
+            canvas.style.width = canvasStyleWidth + 'px';
             canvas.style.height = browserHeight + 'px';
             this.scale = ~~(scaleHeight * 100);
             this.scale /= 100;
+
+            var offsetX = (browserWidth - canvasStyleWidth) / 2;
+            wrap.style.left = offsetX + 'px';
+            this.offset[0] = offsetX;
         }
 
         wrap.appendChild(canvas);

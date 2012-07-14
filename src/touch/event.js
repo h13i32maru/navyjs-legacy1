@@ -10,8 +10,12 @@ Navy.Touch.Event = Navy.Core.subclass({
     x: 0,
     y: 0,
     time: 0,
+    _offsetX: 0,
+    _offsetY: 0,
 
     initialize: function(event) {
+        this._offsetX = Navy.App.offset[0];
+        this._offsetY = Navy.App.offset[1];
         this.set(event);
     },
 
@@ -46,14 +50,14 @@ Navy.Touch.Event = Navy.Core.subclass({
                 break;
             case 'touchstart':
                 action = 'start';
-                x = event.touches[0].pageX;
-                y = event.touches[0].pageY;
+                x = event.touches[0].pageX - this._offsetX;
+                y = event.touches[0].pageY - this._offsetY;
                 time = event.timeStamp;
                 break;
             case 'touchmove':
                 action = 'move';
-                x = event.touches[0].pageX;
-                y = event.touches[0].pageY;
+                x = event.touches[0].pageX - this._offsetX;
+                y = event.touches[0].pageY - this._offsetY;
                 time = event.timeStamp;
                 break;
             case 'touchend':
