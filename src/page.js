@@ -20,12 +20,12 @@ Navy.Page = Navy.View.ViewGroup.subclass({
 
     addView: function($super, view) {
         $super(view);
-        view.setPage(this);
+        view.onChangePage(this);
     },
 
     removeView: function($super, view) {
         $super(view);
-        view.setPage(null);
+        view.onChangePage(null);
     },
 
     onEnter: function(data) {

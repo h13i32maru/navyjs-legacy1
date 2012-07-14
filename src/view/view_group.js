@@ -22,12 +22,12 @@ Navy.View.ViewGroup = Navy.View.subclass({
         }
     },
 
-    setPage: function($super, page) {
+    onChangePage: function($super, page) {
         $super(page);
 
         var _views = this._views;
         for (var viewId in _views) {
-            _views[viewId].setPage(page);
+            _views[viewId].onChangePage(page);
         }
     },
 

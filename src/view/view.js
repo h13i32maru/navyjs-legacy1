@@ -36,7 +36,7 @@ Navy.View = Navy.Core.subclass({
         this._data = {};
     },
 
-    setPage: function(page) {
+    onChangePage: function(page) {
         this._page = page;
 
         //linkが設定されているが、リスナが登録されていなければ登録する
