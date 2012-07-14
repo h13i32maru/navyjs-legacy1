@@ -4,6 +4,10 @@
 Navy.Gesture.Tap = Navy.Gesture.subclass({
     CLASS: 'Navy.Gesture.Tap',
 
+    /**
+     * タッチイベントをタップイベントに変換する.
+     * @override
+     */
     _onTouch: function($super, touchEvent) {
         $super(touchEvent);
 

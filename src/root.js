@@ -29,11 +29,18 @@ Navy.Root = Navy.View.ViewGroup.instance({
         this.setSize(size[0], size[1]);
     },
 
-    getAbsolutePosition: function(){
+    /**
+     * @override
+     */
+    getAbsolutePosition: function() {
         return [0, 0];
     },
 
-    getActivePages: function() {
+    /**
+     * アクティブなページを取得する.
+     * @return {Array.<Navy.Page>} アクティブなページのリスト.
+     */
+    _getActivePages: function() {
         var pageNum = this._pages.length;
         var page = this._pages[pageNum - 1];
 
@@ -47,15 +54,22 @@ Navy.Root = Navy.View.ViewGroup.instance({
             activePages.push(_pages[i]);
         }
 
-        return activePages; 
+        return activePages;
     },
 
+    /**
+     * ページをスタックの一番上に追加する.
+     * @param {Navy.Page} page 新しいページ.
+     */
     pushPage: function(page) {
         this._pages.push(page);
         page.onChangeParent(this);
         page.onChangeRoot(this);
     },
 
+    /**
+     * スタックの一番上のページを削除する.
+     */
     popPage: function() {
         var page = this._pages.pop();
         page.onChangeParent(null);
@@ -63,7 +77,30 @@ Navy.Root = Navy.View.ViewGroup.instance({
     },
 
     /**
+     * 使わせない.
+     */
+    addView: function() {
+        //TODO:例外にする
+        console.log('must not call');
+    },
+
+    /**
+     * 使わせない.
+     */
+    findView: function() {
+        //TODO:例外にする
+        console.log('must not call');
+    },
+
+    /**
+     * 何もしない.
+     */
+    removeView: function() {
+    },
+
+    /**
      * スタックの上を0としてページを取得する. 現在のページを取得するにはindex = 0, 一つ前はindex = 1となる.
+     * @param {number} index ページのスタック上のindex.
      */
     getPage: function(index) {
         var _pages = this._pages;
@@ -73,11 +110,15 @@ Navy.Root = Navy.View.ViewGroup.instance({
             return;
         }
 
-        return _pages[ _pages.length - 1 - index];
+        return _pages[_pages.length - 1 - index];
     },
 
+    /**
+     * アクティブなページだけを描画する.
+     * @override
+     */
     draw: function($super, context) {
-        var pages = this.getActivePages();
+        var pages = this._getActivePages();
         for (var i = 0; i < pages.length; i++) {
             pages[i].draw(context);
         }
@@ -111,7 +152,7 @@ Navy.Root = Navy.View.ViewGroup.instance({
      */
     _onTouch: function(event) {
         event.preventDefault();
-        var pages = this.getActivePages();
+        var pages = this._getActivePages();
         for (var i = 0; i < pages.length; i++) {
             pages[i].onTouch(event);
         }

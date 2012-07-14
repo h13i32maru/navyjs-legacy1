@@ -1,3 +1,6 @@
+/**
+ * 画面の管理を行うインスタンス.
+ */
 Navy.Screen = Navy.Core.instance({
     CLASS: 'Navy.Screen',
 
@@ -6,7 +9,7 @@ Navy.Screen = Navy.Core.instance({
 
     initialize: function($super, canvas) {
         var mainPageId = Navy.Config.App.mainPageId;
-        
+
         var page = Navy.Page.create(mainPageId);
         Navy.Root.pushPage(page);
 
@@ -17,6 +20,10 @@ Navy.Screen = Navy.Core.instance({
         this._transitionStack = [];
     },
 
+    /**
+     * 次のページに移動する.
+     * @param {string} pageId 次のページのIDをpage.jsonに設定されているものか指定する.
+     */
     next: function(pageId) {
         var currentPage = Navy.Root.getPage(0);
 
@@ -28,12 +35,12 @@ Navy.Screen = Navy.Core.instance({
         currentPage.onPauseStart();
 
         var transition = new Navy.Transition.Slide(currentPage, newPage);
-        transition.addStartCompleteListener(function(currentPage, newPage) {
+        transition.addNextCompleteListener(function(currentPage, newPage) {
             currentPage.onPauseFinish();
             newPage.onResumeFinish();
         });
 
-        transition.start();
+        transition.next();
 
         this._transitionStack.push({
             transition: transition,
@@ -42,6 +49,9 @@ Navy.Screen = Navy.Core.instance({
         });
     },
 
+    /**
+     * 前のページに戻る.
+     */
     back: function() {
         var stack = this._transitionStack.pop();
 
@@ -55,6 +65,7 @@ Navy.Screen = Navy.Core.instance({
         transition.addBackCompleteListener(function(previousPage, currentPage) {
             currentPage.onPauseFinish();
             currentPage.onDestroy();
+            currentPage.destroy();
 
             previousPage.onResumeFinish();
 

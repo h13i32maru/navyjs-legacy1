@@ -9,30 +9,35 @@ Navy.Transition.Slide = Navy.Transition.subclass({
 
     _timeCount: 0,
 
-    _forStart: null,
+    /** next時に使用するタイマーリスナー */
+    _forNext: null,
+
+    /** back時に使用するタイマーリスナー */
     _forBack: null,
 
-    start: function($super) {
+    /** @override */
+    next: function($super) {
         $super();
 
         var size = Navy.Root.getSize();
         this._newPage.setPosition(size[0], 0);
 
         this._timeCount = 0;
-        this._forStart = this._onUpdateForStart.bind(this);
-        Navy.Timer.addListener(this._forStart);
+        this._forNext = this._onUpdateForNext.bind(this);
+        Navy.Timer.addListener(this._forNext);
     },
 
-    _onUpdateForStart: function(delta) {
+    /** nextで使用するタイマーリスナー */
+    _onUpdateForNext: function(delta) {
         this._timeCount += delta;
 
         if (this.TIME <= this._timeCount) {
             var size = this._currentPage.getSize();
             this._currentPage.setPosition(-size[0], 0);
             this._newPage.setPosition(0, 0);
-            Navy.Timer.removeListener(this._forStart);
+            Navy.Timer.removeListener(this._forNext);
 
-            this._callStartCompleteListener();
+            this._callNextCompleteListener();
         }
         else {
             var dx = -this._getDeltaX(delta);
@@ -41,6 +46,7 @@ Navy.Transition.Slide = Navy.Transition.subclass({
         }
     },
 
+    /** @override */
     back: function($super) {
         $super();
 
@@ -49,6 +55,7 @@ Navy.Transition.Slide = Navy.Transition.subclass({
         Navy.Timer.addListener(this._forBack);
     },
 
+    /** backで使用するタイマーリスナー */
     _onUpdateForBack: function(delta) {
         this._timeCount += delta;
 
@@ -67,6 +74,10 @@ Navy.Transition.Slide = Navy.Transition.subclass({
         }
     },
 
+    /**
+     * ページの移動量を取得する.
+     * @return {number} 移動量px.
+     */
     _getDeltaX: function(deltaTime) {
         var size = Navy.Root.getSize();
         var speed = size[0] / this.TIME;

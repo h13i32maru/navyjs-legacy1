@@ -41,6 +41,7 @@ Navy.Page = Navy.View.ViewGroup.subclass({
      * @param {string} viewId 削除するviewのid.
      */
     removeView: function($super, viewId) {
+        var view = this.findView(viewId);
         $super(viewId);
         view.onChangePage(null);
     },
@@ -95,7 +96,6 @@ Navy.Page = Navy.View.ViewGroup.subclass({
      * オーバーライドした場合は必ず$superを実行すること.
      */
     onDestroy: function() {
-        this.destroy();
     },
 
     /**

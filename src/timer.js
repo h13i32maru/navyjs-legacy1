@@ -5,6 +5,8 @@ Navy.Timer = Navy.Core.instance({
     CLASS: 'Navy.Timer',
 
     _listeners: null,
+
+    /** 前回の時刻. */
     _old: 0,
 
     initialize: function() {
@@ -14,6 +16,9 @@ Navy.Timer = Navy.Core.instance({
         setInterval(this._onUpdate.bind(this), Navy.Loop.INTERVAL);
     },
 
+    /**
+     * 一定間隔で実行される.
+     */
     _onUpdate: function() {
         var now = (new Date()).getTime();
         var delta = now - this._old;
@@ -28,10 +33,18 @@ Navy.Timer = Navy.Core.instance({
         }
     },
 
+    /**
+     * リスナーを追加する.
+     * @param {function(number)} listener リスナー. numberは前回呼び出しからの差分時間msec.
+     */
     addListener: function(listener) {
         this._listeners.push(listener);
     },
 
+    /**
+     * リスナーを削除する.
+     * @param {function} listener リスナー.
+     */
     removeListener: function(listener) {
         var listeners = this._listeners;
         var len = listeners.length;
