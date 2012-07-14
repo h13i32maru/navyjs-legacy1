@@ -4,7 +4,6 @@ DEBUG	= --compilation_level WHITESPACE_ONLY --formatting pretty_print --formatti
 LEVEL	= --compilation_level SIMPLE_OPTIMIZATIONS
 #WARNING	= --warning_level VERBOSE
 WARNING	= --warning_level DEFAULT
-EXTERN	= --externs src/extern.js
 OUT		= --js_output_file navy.js
 
 #base
@@ -13,7 +12,7 @@ JS	= --js src/navy.js \
 	  --js src/function.js \
 	  --js src/core.js \
 	  --js src/app.js \
-	  --js src/config/config.js \
+	  --js src/config.js \
 	  --js src/loop.js \
 	  --js src/timer.js \
 	  --js src/network.js \
