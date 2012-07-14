@@ -7,8 +7,7 @@ WARNING	= --warning_level DEFAULT
 OUT		= --js_output_file navy.js
 
 #base
-JS	= --js src/navy.js \
-	  --js src/patch.js \
+JS	= --js src/patch.js \
 	  --js src/core.js \
 	  --js src/app.js \
 	  --js src/config.js \
