@@ -20,7 +20,7 @@ Navy.Transition.Slide = Navy.Transition.subclass({
         $super();
 
         var size = Navy.Root.getSize();
-        this._newPage.setPosition(size[0], 0);
+        this._nextPage.setPosition(size[0], 0);
 
         this._timeCount = 0;
         this._forNext = this._onUpdateForNext.bind(this);
@@ -34,7 +34,7 @@ Navy.Transition.Slide = Navy.Transition.subclass({
         if (this.TIME <= this._timeCount) {
             var size = this._currentPage.getSize();
             this._currentPage.setPosition(-size[0], 0);
-            this._newPage.setPosition(0, 0);
+            this._nextPage.setPosition(0, 0);
             Navy.Timer.removeListener(this._forNext);
 
             this._callNextCompleteListener();
@@ -42,7 +42,7 @@ Navy.Transition.Slide = Navy.Transition.subclass({
         else {
             var dx = -this._getDeltaX(delta);
             this._currentPage.addPosition(dx, 0);
-            this._newPage.addPosition(dx, 0);
+            this._nextPage.addPosition(dx, 0);
         }
     },
 
