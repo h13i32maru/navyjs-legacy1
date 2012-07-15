@@ -13,6 +13,7 @@ Navy.View.Text = Navy.View.subclass({
     _textMeasureWidth: null,
     _textBoxSize: null,
     _textPosition: null,
+    _textCutEnd: null,
 
     setText: function(text) {
         this._text = text;
@@ -70,6 +71,16 @@ Navy.View.Text = Navy.View.subclass({
         return this._textLineSpace;
     },
 
+    //行末の文字
+    setCutEnd: function(cutend) {
+        this._textCutEnd = cutend;
+        this._update();
+    },
+
+    getCutEnd: function() {
+        return this._textCutEnd;
+    },
+
     setSize: function($super, width, height) {
         $super(width, height);
         this._update();
@@ -95,6 +106,7 @@ Navy.View.Text = Navy.View.subclass({
         this._textVerticalAlign = layout.extra.valign || 'left';
         this._textHorizontalAlign = layout.extra.halign || 'top';
         this._textLineSpace = layout.extra.linespace || 0;
+        this._textCutEnd = layout.extra.cutend || '';
 
         $super(layout);
 
@@ -148,6 +160,7 @@ Navy.View.Text = Navy.View.subclass({
 
     _updateLines: function() {
         var width = this._width;
+        var height = this._height;
         var context = this._context;
 
         this._prepareContext(context);
@@ -201,6 +214,39 @@ Navy.View.Text = Navy.View.subclass({
         }
 
         this._textLines = lines;
+
+        //高さ固定の場合はカットする必要がある
+        var linesHeight = this._getLinesHeight();
+        if (height && height < linesHeight) {
+            var len = lines.length;
+            for (var i = 0; i < len; i++) {
+                linesHeight = this._getLinesHeight();
+                if (height < linesHeight) {
+                    lines.pop();
+                }
+                else {
+                    break;
+                }
+            }
+
+            //最後の行の末尾をcut endに置き換える
+            var lastLine = lines.pop().line;
+            var len = lastLine.length;
+            var cutEnd = this._textCutEnd;
+            var line;
+            var tmp = '';
+            for (var i = 0; i < len; i++) {
+                tmp += lastLine.charAt(i);
+                if (context.measureText(tmp + cutEnd).width <= width) {
+                    line = tmp;
+                }
+                else {
+                    break;
+                }
+            }
+            line += this._textCutEnd;
+            lines.push({line: line, width:context.measureText(line).width});
+        }
     },
 
     _updateSize: function() {
