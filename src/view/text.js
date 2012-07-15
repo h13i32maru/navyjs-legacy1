@@ -14,6 +14,7 @@ Navy.View.Text = Navy.View.subclass({
     _textBoxSize: null,
     _textPosition: null,
     _textCutEnd: null,
+    _textMultiLine: null,
 
     setText: function(text) {
         this._text = text;
@@ -81,6 +82,15 @@ Navy.View.Text = Navy.View.subclass({
         return this._textCutEnd;
     },
 
+    setMultiLine: function(flag) {
+        this._textMultiLine = flag;
+        this._update();
+    },
+
+    getMultiLine: function() {
+        return this._textMultiLine;
+    },
+
     setSize: function($super, width, height) {
         $super(width, height);
         this._update();
@@ -107,6 +117,7 @@ Navy.View.Text = Navy.View.subclass({
         this._textHorizontalAlign = layout.extra.halign || 'top';
         this._textLineSpace = layout.extra.linespace || 0;
         this._textCutEnd = layout.extra.cutend || '';
+        this._textMultiLine = ('multiline' in layout.extra ? layout.extra.multiline : true);
 
         $super(layout);
 
@@ -158,6 +169,7 @@ Navy.View.Text = Navy.View.subclass({
         this._textMeasureWidth = context.measureText(this._text).width;
     },
 
+    //TODO:リファクタ
     _updateLines: function() {
         var width = this._width;
         var height = this._height;
@@ -166,6 +178,7 @@ Navy.View.Text = Navy.View.subclass({
         this._prepareContext(context);
 
         //横幅可変なので、一行になる
+        //マルチラインがfalseの場合も一行になる
         if (!width) {
             var textWidth = context.measureText(this._text).width;
             this._textLines = [{line:this._text, width: textWidth}];
@@ -211,6 +224,27 @@ Navy.View.Text = Navy.View.subclass({
         else if (tmp !== '') {
             var textWidth = context.measureText(tmp).width;
             lines.push({line: tmp, width: textWidth});
+        }
+
+        //複数行禁止の場合、複数行あったらカットする必要がある
+        if (!this._textMultiLine && lines.length > 1) {
+            var firstLine = lines[0].line;
+            var len = firstLine.length;
+            var cutEnd = this._textCutEnd;
+            var line;
+            var tmp = '';
+            for (var i = 0; i < len; i++) {
+                tmp += firstLine.charAt(i);
+                if (context.measureText(tmp + cutEnd).width <= width) {
+                    line = tmp;
+                }
+                else {
+                    break;
+                }
+            }
+            line += this._textCutEnd;
+            lines = [{line: line, width:context.measureText(line).width}];
+
         }
 
         this._textLines = lines;
