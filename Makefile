@@ -16,6 +16,10 @@ JS	= --js src/patch.js \
 	  --js src/network.js \
 	  --js src/screen.js
 
+#util
+JS += --js src/util/util.js \
+	  --js src/util/string.js
+
 #touch
 JS += --js src/touch/touch.js \
 	  --js src/touch/event.js \

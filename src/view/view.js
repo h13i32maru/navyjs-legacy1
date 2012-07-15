@@ -350,6 +350,7 @@ Navy.View = Navy.Core.subclass({
     setSize: function(width, height) {
         this._width = width;
         this._height = height;
+        Navy.Loop.requestDraw();
     },
 
     /**
