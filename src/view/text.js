@@ -6,6 +6,7 @@ Navy.View.Text = Navy.View.subclass({
     _textFont: null,
     _textColor: null,
     _textSize: null,
+    _textLineSpace: null,
     _textVerticalAlign: null,
     _textHorizontalAlign: null,
     _textLines: null,
@@ -59,6 +60,16 @@ Navy.View.Text = Navy.View.subclass({
         return this._textHorizontalAlign;
     },
 
+    //行間
+    setLineSpace: function(space) {
+        this._textLineSpace = space;
+        this._update();
+    },
+
+    getLineSpace: function() {
+        return this._textLineSpace;
+    },
+
     setSize: function($super, width, height) {
         $super(width, height);
         this._update();
@@ -83,6 +94,7 @@ Navy.View.Text = Navy.View.subclass({
         this._textFont = layout.extra.font || 'sans-serif';
         this._textVerticalAlign = layout.extra.valign || 'left';
         this._textHorizontalAlign = layout.extra.halign || 'top';
+        this._textLineSpace = layout.extra.linespace || 0;
 
         $super(layout);
 
@@ -113,6 +125,11 @@ Navy.View.Text = Navy.View.subclass({
         context.fillStyle = this._textColor;
     },
 
+    _getLinesHeight: function() {
+        //一番上の行はline spaceを持たないので1つ引いておく
+        return (this._textLines.length * (this._textSize + this._textLineSpace)) - this._textLineSpace;
+    },
+
     _update: function(noDrawFlag) {
         this._updateMeasure();
         this._updateLines();
@@ -137,8 +154,8 @@ Navy.View.Text = Navy.View.subclass({
 
         //横幅可変なので、一行になる
         if (!width) {
-            var measureWidth = context.measureText(this._text).width;
-            this._textLines = [{line:this._text, width: measureWidth}];
+            var textWidth = context.measureText(this._text).width;
+            this._textLines = [{line:this._text, width: textWidth}];
             return;
         }
 
@@ -151,8 +168,8 @@ Navy.View.Text = Navy.View.subclass({
         //単語をつなぎあわせて、横幅を超えないところを一行としていく
         for (var i = 0; i < len; i++) {
             if (words[i] === '\n') {
-                var measureWidth = context.measureText(line).width;
-                lines.push({line: line, width: measureWidth});
+                var textWidth = context.measureText(line).width;
+                lines.push({line: line, width: textWidth});
                 line = '';
                 tmp = '';
                 continue;
@@ -164,8 +181,8 @@ Navy.View.Text = Navy.View.subclass({
                     line = tmp;
                 }
                 else {
-                    var measureWidth = context.measureText(line).width;
-                    lines.push({line: line, width: measureWidth});
+                    var textWidth = context.measureText(line).width;
+                    lines.push({line: line, width: textWidth});
                     line = '';
                     tmp = '';
                     i--;
@@ -175,12 +192,12 @@ Navy.View.Text = Navy.View.subclass({
 
         //最後の行
         if (words[len - 1] === '\n') {
-            var measureWidth = context.measureText('').width;
-            lines.push({line: '', width: measureWidth});
+            var textWidth = context.measureText('').width;
+            lines.push({line: '', width: textWidth});
         }
         else if (tmp !== '') {
-            var measureWidth = context.measureText(tmp).width;
-            lines.push({line: tmp, width: measureWidth});
+            var textWidth = context.measureText(tmp).width;
+            lines.push({line: tmp, width: textWidth});
         }
 
         this._textLines = lines;
@@ -198,8 +215,8 @@ Navy.View.Text = Navy.View.subclass({
             }
             //横固定、縦可変[width, null]
             else {
-                //TODO:line space考慮
-                this._textBoxSize = [width, this._textLines.length * this._textSize];
+                var textHeight = this._getLinesHeight();
+                this._textBoxSize = [width, textHeight];
                 return;
             }
         }
@@ -211,7 +228,8 @@ Navy.View.Text = Navy.View.subclass({
             }
             //横可変、横可変[null, null](テキストにちょうどのサイズ)
             else {
-                this._textBoxSize = [this._textMeasureWidth, this._textSize];
+                var textHeight = this._getLinesHeight();
+                this._textBoxSize = [this._textMeasureWidth, textHeight];
                 return;
             }
         }
@@ -222,6 +240,7 @@ Navy.View.Text = Navy.View.subclass({
         var valign = this._textVerticalAlign;
         var halign = this._textHorizontalAlign;
         var textSize = this._textSize;
+        var lineSpace = this._textLineSpace;
         var dx;
         var dy;
         var lines = this._textLines;
@@ -232,12 +251,10 @@ Navy.View.Text = Navy.View.subclass({
             dy = 0;
             break;
         case 'middle':
-            //TODO:linespace考慮
-            dy = (size[1] - (textSize * len)) / 2;
+            dy = (size[1] - this._getLinesHeight()) / 2;
             break;
         case 'bottom':
-            //TODO:linespace考慮
-            dy = (size[1] - (textSize * len));
+            dy = (size[1] - this._getLinesHeight());
             break;
         }
 
@@ -255,7 +272,7 @@ Navy.View.Text = Navy.View.subclass({
             }
 
             lines[i].dx = dx;
-            lines[i].dy = dy + (i * textSize);
+            lines[i].dy = dy + (i * (textSize + lineSpace));
         }
     }
 });
