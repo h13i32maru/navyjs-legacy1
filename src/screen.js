@@ -7,9 +7,7 @@ Navy.Screen = Navy.Core.instance({
     //画面遷移の情報
     _transitionStack: null,
 
-    initialize: function($super, canvas) {
-        var mainPageId = Navy.Config.App.mainPageId;
-
+    initialize: function($super, mainPageId) {
         var page = Navy.Page.create(mainPageId);
         Navy.Root.pushPage(page);
 

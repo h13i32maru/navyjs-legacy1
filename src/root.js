@@ -4,8 +4,6 @@
 Navy.Root = Navy.View.ViewGroup.instance({
     CLASS: 'Navy.Root',
 
-    _canvas: null,
-
     /** 保持している子要素 */
     _pages: null,
 
@@ -14,18 +12,13 @@ Navy.Root = Navy.View.ViewGroup.instance({
 
     /**
      * @constructor
-     * @param {Canvas} canvas ルートとして使用するcanvas要素.
      */
-    initialize: function($super, canvas) {
-        this._canvas = canvas;
+    initialize: function($super, size) {
         this._pages = [];
         this._touchListeners = [];
 
-        this._setOnTouch();
-
         this.onChangeParent(null);
 
-        var size = Navy.Config.App.size;
         this.setSize(size[0], size[1]);
 
         this.setVisible(true);
@@ -140,23 +133,11 @@ Navy.Root = Navy.View.ViewGroup.instance({
     },
 
     /**
-     * タッチイベントを取得するためのリスナを初期化する.
-     */
-    _setOnTouch: function() {
-        this._canvas.addEventListener('mousedown', this._onTouch.bind(this), false);
-        this._canvas.addEventListener('mousemove', this._onTouch.bind(this), false);
-        this._canvas.addEventListener('mouseup', this._onTouch.bind(this), false);
-
-        this._canvas.addEventListener('touchstart', this._onTouch.bind(this), false);
-        this._canvas.addEventListener('touchmove', this._onTouch.bind(this), false);
-        this._canvas.addEventListener('touchend', this._onTouch.bind(this), false);
-    },
-
-    /**
-     * タッチイベントのリスナ
+     * タッチイベントのリスナ. 
+     * Navy.Appから自動的に呼び出される.
      * @param {Event} event DOMのイベント.
      */
-    _onTouch: function(event) {
+    onTouch: function(event) {
         event.preventDefault();
         var pages = this._getActivePages();
         for (var i = 0; i < pages.length; i++) {
