@@ -9,24 +9,37 @@ Navy.App = Navy.Core.instance({
 
     offset: null,
 
+    _canvas: null,
+    _context: null,
+
     /**
      * アプリケーションの初期化を行う.
      * @constructor
      */
     initialize: function() {
         this.offset = [0, 0];
-        this._wakeup();
+
+        Navy.Timer.wakeup();
+        Navy.Config.wakeup();
+        Navy.Network.wakeup();
 
         Navy.Config.process(this._init.bind(this));
     },
 
     /**
-     * 各種instanceの起動を行う.
+     * コンテキストを取得する.
+     * @return {Context} コンテキスト.
      */
-    _wakeup: function() {
-        Navy.Timer.wakeup();
-        Navy.Config.wakeup();
-        Navy.Network.wakeup();
+    getContext: function() {
+        return this._context;
+    },
+
+    /**
+     * Canvasを取得する.
+     * @return {Canvas} Canvas.
+     */
+    getCanvas: function() {
+        return this._canvas;
     },
 
     /**
@@ -36,12 +49,16 @@ Navy.App = Navy.Core.instance({
         //this._hideLocationBar();
 
         var canvas = this._createCanvas();
+        var context = canvas.getContext('2d');
 
-        Navy.Root.wakeup(canvas);
-        Navy.Screen.wakeup(canvas);
+        this._canvas = canvas;
+        this._context = context;
 
-        Navy.Loop.wakeup(canvas);
-        Navy.Loop.start();
+        this._setOnTouch(canvas);
+
+        Navy.Root.wakeup(Navy.Config.App.size);
+        Navy.Screen.wakeup(Navy.Config.App.mainPageId);
+        Navy.Loop.wakeup(context);
 
         if (window.main) {
             main();
@@ -111,6 +128,20 @@ Navy.App = Navy.Core.instance({
         document.body.appendChild(wrap);
 
         return canvas;
+    },
+
+    _setOnTouch: function(canvas) {
+        canvas.addEventListener('mousedown', this._onTouch.bind(this), false);
+        canvas.addEventListener('mousemove', this._onTouch.bind(this), false);
+        canvas.addEventListener('mouseup', this._onTouch.bind(this), false);
+
+        canvas.addEventListener('touchstart', this._onTouch.bind(this), false);
+        canvas.addEventListener('touchmove', this._onTouch.bind(this), false);
+        canvas.addEventListener('touchend', this._onTouch.bind(this), false);
+    },
+
+    _onTouch: function(event) {
+        Navy.Root.onTouch(event);
     }
 });
 
