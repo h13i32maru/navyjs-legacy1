@@ -115,13 +115,11 @@ Navy.Touch.Handler = Navy.Core.subclass({
                 continue;
             }
 
-            var pos = view.getAbsolutePosition();
-            var x0 = pos[0];
-            var y0 = pos[1];
-
-            var size = view.getSize();
-            var x1 = x0 + size[0];
-            var y1 = y0 + size[1];
+            var rect = view.getAbsoluteRect();
+            var x0 = rect[0];
+            var y0 = rect[1];
+            var x1 = rect[2];
+            var y1 = rect[3];
 
             if (!(x0 <= x && x <= x1 && y0 <= y && y <= y1)) {
                 continue;

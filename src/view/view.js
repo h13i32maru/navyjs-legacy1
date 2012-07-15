@@ -24,6 +24,10 @@ Navy.View = Navy.Core.subclass({
     _visible: true,
     _background: null,
     _border: null,
+    _paddingTop: null,
+    _paddingRight: null,
+    _paddingBottom: null,
+    _paddingLeft: null,
     /** タップ時に遷移するページのid */
     _link: null,
     /** リンクリスナーを登録したかどうか */
@@ -162,12 +166,48 @@ Navy.View = Navy.Core.subclass({
         if ('link' in layout) {
             this.setLink(layout.link);
         }
+
+        if ('padding' in layout) {
+            if (layout.padding instanceof Array) {
+                this.setPaddingArray(layout.padding);
+            }
+            else {
+                this.setPaddingOne(layout.padding);
+            }
+        }
     },
 
+    //TODO:doc
+    setPaddingOne: function(padding) {
+        this.setPadding(padding, padding, padding, padding);
+    },
+
+    //TODO:doc
+    setPaddingArray: function(padding) {
+        this.setPadding(padding[0], padding[1], padding[2], padding[3]);
+    },
+
+    //TODO:doc
+    setPadding: function(top, right, bottom, left) {
+        this._paddingTop = top;
+        this._paddingRight = right;
+        this._paddingBottom = bottom;
+        this._paddingLeft = left;
+        Navy.Loop.requestDraw();
+    },
+
+    //TODO:doc
+    getPadding: function() {
+        return [this._paddingTop, this._paddingRight, this._paddingBottom, this._paddingLeft];
+    },
+
+    //TODO:doc
     setBorder: function(border) {
         this._border = border;
+        Navy.Loop.requestDraw();
     },
 
+    //TODO:doc
     getBorder: function() {
         //TODO:コピーして渡したほうが良い
         return this._border;
@@ -250,6 +290,14 @@ Navy.View = Navy.Core.subclass({
     },
 
     /**
+     * 要素の位置を設定する.
+     * @param {Array.<number>} pos [x, y].
+     */
+    setPositionArray: function(pos) {
+        this.setPosition(pos[0], pos[1]);
+    },
+
+    /**
      * 要素の位置を増減する.
      * @param {number} dx 増減量.
      * @param {number} dy 増減量.
@@ -258,6 +306,14 @@ Navy.View = Navy.Core.subclass({
         var x = this._x + dx;
         var y = this._y + dy;
         this.setPosition(x, y);
+    },
+
+    /**
+     * 要素の位置を増減する.
+     * @param {Array.<number>} delta [dx, dy].
+     */
+    addPositionArray: function(delta) {
+        this.addPosition(delta[0], delta[1]);
     },
 
     /**
@@ -270,7 +326,8 @@ Navy.View = Navy.Core.subclass({
 
     /**
      * 要素の絶対位置を設定する.
-     * @return {Array.<number>} 要素の位置[x, y].
+     * @param {number} absX x座標.
+     * @param {number} absY y座標.
      */
     setAbsolutePosition: function(absX, absY) {
         var pos = this.getParent().getAbsolutePosition();
@@ -278,6 +335,14 @@ Navy.View = Navy.Core.subclass({
         var y = absY - pos[1];
 
         this.setPosition(x, y);
+    },
+
+    /**
+     * 要素の絶対位置を設定する.
+     * @return {Array.<number>} 要素の位置[x, y].
+     */
+    setAbsolutePositionArray: function(abs) {
+        this.setAbsolutePosition(abs[0], abs[1]);
     },
 
     /**
@@ -293,6 +358,21 @@ Navy.View = Navy.Core.subclass({
 
         var pos = this._parent.getAbsolutePosition();
         return [pos[0] + this._x, pos[1] + this._y];
+    },
+
+    /**
+     * 要素の矩形頂点座標を取得する.
+     * @return {Array.<number>} [x0, y0, x1, y1].
+     */
+    getAbsoluteRect: function() {
+        var size = this.getSize();
+        var pos = this.getAbsolutePosition();
+        var x0 = pos[0] - this._paddingLeft;
+        var y0 = pos[1] - this._paddingTop;
+        var x1 = x0 + size[0] + this._paddingLeft + this._paddingRight;
+        var y1 = y0 + size[1] + this._paddingTop + this._paddingBottom;
+
+        return [x0, y0, x1, y1];
     },
 
     /**
@@ -354,6 +434,14 @@ Navy.View = Navy.Core.subclass({
     },
 
     /**
+     * サイズを設定する.
+     * @param {Array.<number>} size [width, height].
+     */
+    setSizeArray: function(size) {
+        this.setSize(size[0], size[1]);
+    },
+
+    /**
      * 要素のサイズを取得する.
      * @return {Array.<number>} 要素のサイズ[width, height].
      */
@@ -392,7 +480,7 @@ Navy.View = Navy.Core.subclass({
             return;
         }
 
-        var pos = this.getPosition();
+        var pos = this.getAbsolutePosition();
         var x = pos[0];
         var y = pos[1];
 
@@ -400,18 +488,22 @@ Navy.View = Navy.Core.subclass({
         var width = size[0];
         var height = size[1];
 
+        var px = x - this._paddingLeft;
+        var py = y - this._paddingTop;
+        var pwidth = width + this._paddingLeft + this._paddingRight;
+        var pheight = height + this._paddingTop + this._paddingBottom;
 
         if (this._background) {
             if (this._background.color) {
                 context.fillStyle = this._background.color;
-                context.fillRect(x, y, width, height);
+                context.fillRect(px, py, pwidth, pheight);
             }
         }
 
         if (this._border) {
             context.fillStyle = this._border.color;
             context.lineWidth = this._border.width;
-            context.strokeRect(x, y, width, height);
+            context.strokeRect(px, py, pwidth, pheight);
         }
 
         this._drawExtra(context);
