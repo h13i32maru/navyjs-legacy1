@@ -18,6 +18,7 @@ Navy.View = Navy.Core.subclass({
     _data: null,
     _x: 0,
     _y: 0,
+    _z: 0,
     _width: null,
     _height: null,
     _rotation: 0,
@@ -175,6 +176,22 @@ Navy.View = Navy.Core.subclass({
                 this.setPaddingOne(layout.padding);
             }
         }
+
+        if ('z' in layout) {
+            this.setZ(layout.z);
+        }
+        else {
+            this.setZ(0);
+        }
+    },
+
+    setZ: function(z) {
+        this._z = z;
+        Navy.Loop.requestDraw();
+    },
+
+    getZ: function() {
+        return this._z;
     },
 
     //TODO:doc

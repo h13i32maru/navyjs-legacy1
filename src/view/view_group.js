@@ -145,13 +145,25 @@ Navy.View.ViewGroup = Navy.View.subclass({
     _drawExtra: function($super, context) {
         $super(context);
 
-        var _views = this._views;
-        for (var viewId in _views) {
-            if (!_views[viewId].getVisible()) {
+        var sortedViews = [];
+        var views = this._views;
+        for (var viewId in views) {
+            sortedViews.push(views[viewId]);
+        }
+
+        sortedViews.sort(this._compareViewByZ);
+        var len = sortedViews.length;
+        for (var i = 0; i < len; i++) {
+            if (!sortedViews[i].getVisible()) {
                 continue;
             }
-            _views[viewId].draw(context);
+
+            sortedViews[i].draw(context);
         }
+    },
+
+    _compareViewByZ: function(view1, view2) {
+        return view1.getZ() - view2.getZ();
     },
 
     /**
