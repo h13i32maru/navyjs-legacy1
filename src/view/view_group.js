@@ -103,6 +103,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
 
         }
 
+        //TODO:例外にする
+        console.log('not found view');
         return null;
     },
 
