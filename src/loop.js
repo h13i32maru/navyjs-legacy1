@@ -21,21 +21,16 @@ Navy.Loop = Navy.Core.instance({
     _requestDrawFlag: true,
 
     /**
-     * canvaエレメント
-     */
-    _canvas: null,
-
-    /**
      * canvas 2dコンテキスト
      */
-    _canvasContext: null,
+    _context: null,
 
     /**
      * 描画ループの初期化処理.
      */
-    initialize: function(canvas) {
-        this._canvas = canvas;
-        this._canvasContext = canvas.getContext('2d');
+    initialize: function(context) {
+        this._context = context;
+        this.start();
     },
 
     /**
@@ -66,10 +61,11 @@ Navy.Loop = Navy.Core.instance({
             return;
         }
 
-        var context = this._canvasContext;
+        var context = this._context;
+        var size = Navy.Root.getSize();
 
         context.fillStyle = '#000000';
-        context.fillRect(0, 0, this._canvas.width, this._canvas.height);
+        context.fillRect(0, 0, size[0], size[1]);
 
         Navy.Root.draw(context);
 
