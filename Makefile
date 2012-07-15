@@ -32,6 +32,7 @@ JS += --js src/transition/transition.js \
 #view
 JS += --js src/view/view.js \
 	  --js src/view/image.js \
+	  --js src/view/text.js \
 	  --js src/view/view_group.js \
 	  --js src/root.js \
 	  --js src/page.js 

@@ -18,11 +18,12 @@ Navy.View = Navy.Core.subclass({
     _data: null,
     _x: 0,
     _y: 0,
-    _width: 0,
-    _height: 0,
+    _width: null,
+    _height: null,
     _rotation: 0,
     _visible: true,
     _background: null,
+    _border: null,
     /** タップ時に遷移するページのid */
     _link: null,
     /** リンクリスナーを登録したかどうか */
@@ -154,9 +155,22 @@ Navy.View = Navy.Core.subclass({
             this.setBackground(layout.background);
         }
 
+        if ('border' in layout) {
+            this.setBorder(layout.border);
+        }
+
         if ('link' in layout) {
             this.setLink(layout.link);
         }
+    },
+
+    setBorder: function(border) {
+        this._border = border;
+    },
+
+    getBorder: function() {
+        //TODO:コピーして渡したほうが良い
+        return this._border;
     },
 
     /**
@@ -377,11 +391,26 @@ Navy.View = Navy.Core.subclass({
             return;
         }
 
+        var pos = this.getPosition();
+        var x = pos[0];
+        var y = pos[1];
+
+        var size = this.getSize();
+        var width = size[0];
+        var height = size[1];
+
+
         if (this._background) {
             if (this._background.color) {
                 context.fillStyle = this._background.color;
-                context.fillRect(this._x, this._y, this._width, this._height);
+                context.fillRect(x, y, width, height);
             }
+        }
+
+        if (this._border) {
+            context.fillStyle = this._border.color;
+            context.lineWidth = this._border.width;
+            context.strokeRect(x, y, width, height);
         }
 
         this._drawExtra(context);
