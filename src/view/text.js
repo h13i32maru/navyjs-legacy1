@@ -16,23 +16,46 @@ Navy.View.Text = Navy.View.subclass({
     _textCutEnd: null,
     _textMultiLine: null,
 
+    /**
+     * テキストをセットする.
+     * @param {string} text テキスト.
+     */
     setText: function(text) {
         this._text = text;
         this._update();
     },
 
+    /**
+     * テキストを取得する.
+     * @return {string} テキスト.
+     */
     getText: function() {
         return this._text;
     },
 
+    /**
+     * テキストの色を設定する.
+     * TODO:setTextColorに変更する.
+     * @param {string} color #000000形式.
+     */
     setColor: function(color) {
         this._textColor = color;
     },
 
+    /**
+     * テキストの色を取得する.
+     * TODO:getTextColorに変更する.
+     * @return {string} #000000形式.
+     */
     getColor: function() {
         return this._textColor;
     },
 
+    /**
+     * テキストのフォントを設定する.
+     * TODO:getTextFontに変更する.
+     * @param {string} font フォント名.
+     */
     setFont: function(font) {
         this._textFont = font;
         this._update();
