@@ -130,6 +130,10 @@ Navy.App = Navy.Core.instance({
         return canvas;
     },
 
+    /**
+     * タッチイベントのリスナを設定する.
+     * @param {Canvas} canvas Canvasエレメント.
+     */
     _setOnTouch: function(canvas) {
         canvas.addEventListener('mousedown', this._onTouch.bind(this), false);
         canvas.addEventListener('mousemove', this._onTouch.bind(this), false);
@@ -140,6 +144,10 @@ Navy.App = Navy.Core.instance({
         canvas.addEventListener('touchend', this._onTouch.bind(this), false);
     },
 
+    /**
+     * タッチイベントのリスナ.
+     * @param {Event} event タッチイベント.
+     */
     _onTouch: function(event) {
         Navy.Root.onTouch(event);
     }
