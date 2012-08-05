@@ -68,7 +68,7 @@ Navy.View.Text = Navy.View.subclass({
 
     /**
      * テキストの垂直位置を設定する.
-     * @param {string} align left|center|rightを指定.
+     * @param {string} align top|middle|bottomを指定.
      */
     setTextVerticalAlign: function(align) {
         this._textVerticalAlign = align;
@@ -77,7 +77,7 @@ Navy.View.Text = Navy.View.subclass({
 
     /**
      * テキストの垂直位置を取得する.
-     * @return {string} left|center|rightを取得する.
+     * @return {string} top|middle|bottomを取得する.
      */
     getTextVerticalAlign: function() {
         return this._textVerticalAlign;
@@ -85,7 +85,7 @@ Navy.View.Text = Navy.View.subclass({
 
     /**
      * テキストの水平位置を設定する.
-     * @param {string} align top|middle|bottomを指定.
+     * @param {string} align left|center|rightを指定.
      */
     setTextHorizontalAlign: function(align) {
         this._textHorizontalAlign = align;
@@ -94,7 +94,7 @@ Navy.View.Text = Navy.View.subclass({
 
     /**
      * テキストの水平位置を取得する.
-     * @return {string} top|middle|bottomを取得する.
+     * @return {string} left|center|rightを取得する.
      */
     getTextHorizontalAlign: function() {
         return this._textHorizontalAlign;
