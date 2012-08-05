@@ -35,133 +35,119 @@ Navy.View.Text = Navy.View.subclass({
 
     /**
      * テキストの色を設定する.
-     * TODO:setTextColorに変更する.
      * @param {string} color #000000形式.
      */
-    setColor: function(color) {
+    setTextColor: function(color) {
         this._textColor = color;
     },
 
     /**
      * テキストの色を取得する.
-     * TODO:getTextColorに変更する.
      * @return {string} #000000形式.
      */
-    getColor: function() {
+    getTextColor: function() {
         return this._textColor;
     },
 
     /**
      * テキストのフォントを設定する.
-     * TODO:getTextFontに変更する.
      * @param {string} font フォント名.
      */
-    setFont: function(font) {
+    setTextFont: function(font) {
         this._textFont = font;
         this._update();
     },
 
     /**
      * テキストのフェントを取得する.
-     * TODO:getTextFontに変更する.
      * @return {string} font名.
      */
-    getFont: function() {
+    getTextFont: function() {
         return this._textFont;
     },
 
     /**
      * テキストの垂直位置を設定する.
-     * TODO: setTextVerticalAlignに変更する
      * @param {string} align left|center|rightを指定.
      */
-    setVerticalAlign: function(align) {
+    setTextVerticalAlign: function(align) {
         this._textVerticalAlign = align;
         this._update();
     },
 
     /**
      * テキストの垂直位置を取得する.
-     * TODO: setTextVerticalAlignに変更する.
      * @return {string} left|center|rightを取得する.
      */
-    getVerticalAlign: function() {
+    getTextVerticalAlign: function() {
         return this._textVerticalAlign;
     },
 
     /**
      * テキストの水平位置を設定する.
-     * TODO: setTextHorizontalAlignに変更する.
      * @param {string} align top|middle|bottomを指定.
      */
-    setHorizontalAlign: function(align) {
+    setTextHorizontalAlign: function(align) {
         this._textHorizontalAlign = align;
         this._update();
     },
 
     /**
      * テキストの水平位置を取得する.
-     * TODO: setTextHorizontalAlignに変更する.
      * @return {string} top|middle|bottomを取得する.
      */
-    getHorizontalAlign: function() {
+    getTextHorizontalAlign: function() {
         return this._textHorizontalAlign;
     },
 
     /**
      * テキストの行間を指定する.
-     * TODO: setTextLineSpaceに変更する.
      * @param {number} space 行間を指定.
      */
-    setLineSpace: function(space) {
+    setTextLineSpace: function(space) {
         this._textLineSpace = space;
         this._update();
     },
 
     /**
      * テキストの行間を取得する.
-     * TODO: getTextLineSpaceに変更する.
      * @return {number} 行間を取得.
      */
-    getLineSpace: function() {
+    getTextLineSpace: function() {
         return this._textLineSpace;
     },
 
     /**
      * 行がボックスに収まらなかった時の終端文字を設定する.
-     * TODO: setTextCutEndに変更する.
      * @param {string} cutend 終端文字を指定.
      */
-    setCutEnd: function(cutend) {
+    setTextCutEnd: function(cutend) {
         this._textCutEnd = cutend;
         this._update();
     },
 
     /**
      * 行がボックスに収まらなかった時の終端文字を取得する.
-     * TODO: getTextCutEndに変更する.
      * @return {string} 終端文字.
      */
-    getCutEnd: function() {
+    getTextCutEnd: function() {
         return this._textCutEnd;
     },
 
     /**
      * 行がボックスの横幅に収まらなかった時に折り返して表示するかどうかを設定する.
-     * TODO: setTextMultiLineに変更する.
      * @param {boolean} flag trueを指定すると折り返す.
      */
-    setMultiLine: function(flag) {
+    setTextMultiLine: function(flag) {
         this._textMultiLine = flag;
         this._update();
     },
 
     /**
      * 行がボックスの横幅に収まらなかった時に折り返して表示するかどうかを取得する.
-     * TODO: getTextMultiLineに変更する.
      * @return {boolean} 折り返す場合はtrueを取得する.
      */
-    getMultiLine: function() {
+    getTextMultiLine: function() {
         return this._textMultiLine;
     },
 
