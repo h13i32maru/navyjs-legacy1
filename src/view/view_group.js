@@ -7,9 +7,9 @@ Navy.View.ViewGroup = Navy.View.subclass({
     /** 子要素 */
     _views: null,
 
-    initialize: function($super, id, layout) {
+    initialize: function($super, layout) {
         this._views = {};
-        $super(id, layout);
+        $super(layout);
     },
 
     /**
@@ -21,10 +21,11 @@ Navy.View.ViewGroup = Navy.View.subclass({
 
         var ref = layout.extra.ref;
         var refLayout = Navy.Config.Layout[ref];
-        for (var viewId in refLayout) {
-            var viewLayout = refLayout[viewId];
+        var len = refLayout.length;
+        for (var i = 0; i < len; i++) {
+            var viewLayout = refLayout[i];
             var viewClass = viewLayout['class'];
-            var view = new Navy.View[viewClass](viewId, viewLayout);
+            var view = new Navy.View[viewClass](viewLayout);
             this.addView(view);
         }
     },
@@ -105,7 +106,7 @@ Navy.View.ViewGroup = Navy.View.subclass({
         }
 
         //TODO:例外にする
-        console.log('not found view');
+        console.log('not found view:' + viewId);
         return null;
     },
 

@@ -13,13 +13,13 @@ Navy.Page = Navy.View.ViewGroup.subclass({
     /** ページに登録されているタッチリスナー */
     _touchListeners: null,
 
-    initialize: function($super, id, layout) {
+    initialize: function($super, layout) {
         this._touchHandler = new Navy.Touch.Handler();
         this._touchListeners = [];
 
         this.setVisible(false);
 
-        $super(id, layout);
+        $super(layout);
     },
 
     /**
@@ -164,6 +164,7 @@ Navy.Page.create = function(pageId) {
 
     var size = Navy.Root.getSize();
     var layout = {
+        id: pageId,
         pos: [0, 0],
         size: [size[0], size[1]],
         extra: {
@@ -175,7 +176,7 @@ Navy.Page.create = function(pageId) {
         layout.background = pageConfig.background;
     }
 
-    var page = new window[pageClass](pageId, layout);
+    var page = new window[pageClass](layout);
 
     return page;
 };

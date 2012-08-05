@@ -12,9 +12,9 @@ Navy.View.Image = Navy.View.subclass({
     /**
      * @constructor
      */
-    initialize: function($super, id, layout) {
+    initialize: function($super, layout) {
         this._image = new Image();
-        $super(id, layout);
+        $super(layout);
     },
 
     /**
