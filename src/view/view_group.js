@@ -74,6 +74,7 @@ Navy.View.ViewGroup = Navy.View.subclass({
     /**
      * 子要素を探す.
      * @param {string} viewId 子要素のid.
+     * @return {Navy.View} viewIdをもつview.
      */
     findView: function(viewId) {
         var idchain = viewId.split('.');
@@ -132,6 +133,7 @@ Navy.View.ViewGroup = Navy.View.subclass({
 
     /**
      * 子要素を取得する.
+     * @return {{id:Navy.View}} viewのidをキーにしたviewの一覧を取得する.
      */
     getViews: function() {
         //TODO:コピーして渡すべき
@@ -162,6 +164,12 @@ Navy.View.ViewGroup = Navy.View.subclass({
         }
     },
 
+    /**
+     * viewのz順序をソートするために比較関数.
+     * @param {Navy.View} view1 比較対象のview.
+     * @param {Navy.View} view2 比較対象のview.
+     * @return {number} 負数ならview1はview2より下, 0ならview1とview2は同じ位置, 正数ならview1はview2より上.
+     */
     _compareViewByZ: function(view1, view2) {
         return view1.getZ() - view2.getZ();
     },

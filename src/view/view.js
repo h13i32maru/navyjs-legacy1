@@ -185,26 +185,46 @@ Navy.View = Navy.Core.subclass({
         }
     },
 
+    /*
+     * z方向の順序を設定する.
+     * @param {number} z z方向の順序.数値が大きいものほど上に表示される.
+     */
     setZ: function(z) {
         this._z = z;
         Navy.Loop.requestDraw();
     },
 
+    /**
+     * z方向の順序を取得する.
+     * @param {number} z方向の順序. 数値が大きいものほど上に表示される.
+     */
     getZ: function() {
         return this._z;
     },
 
-    //TODO:doc
+    /**
+     * 4辺全てのパディングを同じ値に設定する.
+     * @param {number} padding パッディングの値.
+     */
     setPaddingOne: function(padding) {
         this.setPadding(padding, padding, padding, padding);
     },
 
-    //TODO:doc
+    /**
+     * 4辺のパディングをそれぞれ配列で設定する.
+     * @param {Array<number>} padding padding[0]=上, padding[1]=右, padding[2]=下, padding[3]=左.
+     */
     setPaddingArray: function(padding) {
         this.setPadding(padding[0], padding[1], padding[2], padding[3]);
     },
 
-    //TODO:doc
+    /**
+     * 4辺のパディングを設定する.
+     * @param {number} top 上パッディング.
+     * @param {number} right 右パッディング.
+     * @param {number} bottom 下パッディング.
+     * @param {number} left 左パッディング.
+     */
     setPadding: function(top, right, bottom, left) {
         this._paddingTop = top;
         this._paddingRight = right;
@@ -213,18 +233,27 @@ Navy.View = Navy.Core.subclass({
         Navy.Loop.requestDraw();
     },
 
-    //TODO:doc
+    /**
+     * 4辺のパディングを配列で取得する.
+     * @return {Array<number>} padding[0]=上, padding[1]=右, padding[2]=下, padding[3]=左.
+     */
     getPadding: function() {
         return [this._paddingTop, this._paddingRight, this._paddingBottom, this._paddingLeft];
     },
 
-    //TODO:doc
+    /**
+     * 枠線を設定する.
+     * @param {{color: string, width: number}} border 枠線の設定. color=#001122形式, width=枠線の幅.
+     */
     setBorder: function(border) {
         this._border = border;
         Navy.Loop.requestDraw();
     },
 
-    //TODO:doc
+    /**
+     * 枠線を取得する.
+     * @return {{color: string, width: number}} 枠線の設定.
+     */
     getBorder: function() {
         //TODO:コピーして渡したほうが良い
         return this._border;
