@@ -436,7 +436,7 @@ Navy.View.Text = Navy.View.subclass({
         var lines = this._textLines;
         var len = lines.length;
 
-        switch (halign) {
+        switch (valign) {
         case 'top':
             dy = 0;
             break;
@@ -449,7 +449,7 @@ Navy.View.Text = Navy.View.subclass({
         }
 
         for (var i = 0; i < len; i++) {
-            switch (valign) {
+            switch (halign) {
             case 'center':
                 dx = (size[0] - lines[i].width) / 2;
                 break;
