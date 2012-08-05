@@ -16,96 +16,168 @@ Navy.View.Text = Navy.View.subclass({
     _textCutEnd: null,
     _textMultiLine: null,
 
+    /**
+     * テキストをセットする.
+     * @param {string} text テキスト.
+     */
     setText: function(text) {
         this._text = text;
         this._update();
     },
 
+    /**
+     * テキストを取得する.
+     * @return {string} テキスト.
+     */
     getText: function() {
         return this._text;
     },
 
-    setColor: function(color) {
+    /**
+     * テキストの色を設定する.
+     * @param {string} color #000000形式.
+     */
+    setTextColor: function(color) {
         this._textColor = color;
     },
 
-    getColor: function() {
+    /**
+     * テキストの色を取得する.
+     * @return {string} #000000形式.
+     */
+    getTextColor: function() {
         return this._textColor;
     },
 
-    setFont: function(font) {
+    /**
+     * テキストのフォントを設定する.
+     * @param {string} font フォント名.
+     */
+    setTextFont: function(font) {
         this._textFont = font;
         this._update();
     },
 
-    getFont: function() {
+    /**
+     * テキストのフェントを取得する.
+     * @return {string} font名.
+     */
+    getTextFont: function() {
         return this._textFont;
     },
 
-    //left, center, right
-    setVerticalAlign: function(align) {
+    /**
+     * テキストの垂直位置を設定する.
+     * @param {string} align top|middle|bottomを指定.
+     */
+    setTextVerticalAlign: function(align) {
         this._textVerticalAlign = align;
         this._update();
     },
 
-    getVerticalAlign: function() {
+    /**
+     * テキストの垂直位置を取得する.
+     * @return {string} top|middle|bottomを取得する.
+     */
+    getTextVerticalAlign: function() {
         return this._textVerticalAlign;
     },
 
-    //top, middle, bottom
-    setHorizontalAlign: function(align) {
+    /**
+     * テキストの水平位置を設定する.
+     * @param {string} align left|center|rightを指定.
+     */
+    setTextHorizontalAlign: function(align) {
         this._textHorizontalAlign = align;
         this._update();
     },
 
-    getHorizontalAlign: function() {
+    /**
+     * テキストの水平位置を取得する.
+     * @return {string} left|center|rightを取得する.
+     */
+    getTextHorizontalAlign: function() {
         return this._textHorizontalAlign;
     },
 
-    //行間
-    setLineSpace: function(space) {
+    /**
+     * テキストの行間を指定する.
+     * @param {number} space 行間を指定.
+     */
+    setTextLineSpace: function(space) {
         this._textLineSpace = space;
         this._update();
     },
 
-    getLineSpace: function() {
+    /**
+     * テキストの行間を取得する.
+     * @return {number} 行間を取得.
+     */
+    getTextLineSpace: function() {
         return this._textLineSpace;
     },
 
-    //行末の文字
-    setCutEnd: function(cutend) {
+    /**
+     * 行がボックスに収まらなかった時の終端文字を設定する.
+     * @param {string} cutend 終端文字を指定.
+     */
+    setTextCutEnd: function(cutend) {
         this._textCutEnd = cutend;
         this._update();
     },
 
-    getCutEnd: function() {
+    /**
+     * 行がボックスに収まらなかった時の終端文字を取得する.
+     * @return {string} 終端文字.
+     */
+    getTextCutEnd: function() {
         return this._textCutEnd;
     },
 
-    setMultiLine: function(flag) {
+    /**
+     * 行がボックスの横幅に収まらなかった時に折り返して表示するかどうかを設定する.
+     * @param {boolean} flag trueを指定すると折り返す.
+     */
+    setTextMultiLine: function(flag) {
         this._textMultiLine = flag;
         this._update();
     },
 
-    getMultiLine: function() {
+    /**
+     * 行がボックスの横幅に収まらなかった時に折り返して表示するかどうかを取得する.
+     * @return {boolean} 折り返す場合はtrueを取得する.
+     */
+    getTextMultiLine: function() {
         return this._textMultiLine;
     },
 
+    /**
+     * @override
+     */
     setSize: function($super, width, height) {
         $super(width, height);
         this._update();
     },
 
+    /**
+     * @override
+     */
     getSize: function() {
         //TODO:コピー
         return this._textBoxSize;
     },
 
+    /**
+     * @override
+     */
     setPosition: function($super, x, y) {
         $super(x, y);
         this._update();
     },
 
+    /**
+     * @override
+     */
     _setLayout: function($super, layout) {
         this._context = Navy.App.getContext();
 
@@ -124,6 +196,9 @@ Navy.View.Text = Navy.View.subclass({
         this._update(true);
     },
 
+    /**
+     * @override
+     */
     _drawExtra: function($super, context) {
         $super(context);
 
@@ -141,6 +216,10 @@ Navy.View.Text = Navy.View.subclass({
         }
     },
 
+    /**
+     * 描画コンテキストを設定する.
+     * @param {CanvasContext} context canvas 2dコンテキスト.
+     */
     _prepareContext: function(context) {
         context.textBaseline = 'top';
         context.textAlign = 'left';
@@ -148,11 +227,19 @@ Navy.View.Text = Navy.View.subclass({
         context.fillStyle = this._textColor;
     },
 
+    /**
+     * 行の表示高さを取得する.
+     * @return {number} 行の表示高さ.
+     */
     _getLinesHeight: function() {
         //一番上の行はline spaceを持たないので1つ引いておく
         return (this._textLines.length * (this._textSize + this._textLineSpace)) - this._textLineSpace;
     },
 
+    /**
+     * 表示を更新する.
+     * @param {boolean} noDrawFlag trueにした場合、内部の状態を更新するだけで、描画は行わない.
+     */
     _update: function(noDrawFlag) {
         this._updateMeasure();
         this._updateLines();
@@ -163,13 +250,18 @@ Navy.View.Text = Navy.View.subclass({
         }
     },
 
+    /**
+     * テキストの表示幅を更新する.
+     */
     _updateMeasure: function() {
         var context = Navy.App.getContext();
         this._prepareContext(context);
         this._textMeasureWidth = context.measureText(this._text).width;
     },
 
-    //TODO:リファクタ
+    /**
+     * テキストの折り返しを更新して、複数行を構成する.
+     */
     _updateLines: function() {
         var width = this._width;
         var height = this._height;
@@ -211,6 +303,7 @@ Navy.View.Text = Navy.View.subclass({
                     lines.push({line: line, width: textWidth});
                     line = '';
                     tmp = '';
+                    //一つ前の単語から捜査していく
                     i--;
                 }
             }
@@ -283,6 +376,9 @@ Navy.View.Text = Navy.View.subclass({
         }
     },
 
+    /**
+     * 指定されているwidth,heightとテキストにしたがって、ボックスの大きさを更新する.
+     */
     _updateSize: function() {
         var width = this._width;
         var height = this._height;
@@ -315,6 +411,9 @@ Navy.View.Text = Navy.View.subclass({
         }
     },
 
+    /**
+     * テキストの水平、垂直位置を更新する.
+     */
     _updatePosition: function() {
         var size = this.getSize();
         var valign = this._textVerticalAlign;
@@ -326,7 +425,7 @@ Navy.View.Text = Navy.View.subclass({
         var lines = this._textLines;
         var len = lines.length;
 
-        switch (halign) {
+        switch (valign) {
         case 'top':
             dy = 0;
             break;
@@ -339,7 +438,7 @@ Navy.View.Text = Navy.View.subclass({
         }
 
         for (var i = 0; i < len; i++) {
-            switch (valign) {
+            switch (halign) {
             case 'center':
                 dx = (size[0] - lines[i].width) / 2;
                 break;
