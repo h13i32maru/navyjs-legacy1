@@ -37,10 +37,14 @@ Navy.View = Navy.Core.subclass({
     /**
      * @constructor
      */
-    initialize: function($super, id, layout) {
+    initialize: function($super, layout) {
         $super();
 
-        this._id = id;
+        if (layout.id) {
+            this._id = layout.id;
+        } else {
+            this._id = Navy.View.createUniqueId();
+        }
 
         if (layout) {
             this._setLayout(layout);
@@ -575,3 +579,20 @@ Navy.View = Navy.Core.subclass({
         this._isDestroy = true;
     }
 });
+
+/**
+ * ユニークIDを生成する.
+ * @return {string} ユニークなID.
+ */
+Navy.View.createUniqueId = function() {
+    var seq;
+    if (this._idSequence) {
+        seq = this._idSequence;
+        this._idSequence++;
+    } else {
+        seq = 0;
+        this._idSequence = 1;
+    }
+
+    return 'id_' + seq;
+}
