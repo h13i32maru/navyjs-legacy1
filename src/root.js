@@ -24,6 +24,9 @@ Navy.Root = Navy.View.ViewGroup.instance({
         this.setVisible(true);
     },
 
+    /**
+     * @override
+     */
     getAbsoluteVisible: function() {
         return true;
     },
