@@ -61,74 +61,137 @@ Navy.View.Text = Navy.View.subclass({
         this._update();
     },
 
+    /**
+     * テキストのフェントを取得する.
+     * TODO:getTextFontに変更する.
+     * @return {string} font名.
+     */
     getFont: function() {
         return this._textFont;
     },
 
-    //left, center, right
+    /**
+     * テキストの垂直位置を設定する.
+     * TODO: setTextVerticalAlignに変更する
+     * @param {string} align left|center|rightを指定.
+     */
     setVerticalAlign: function(align) {
         this._textVerticalAlign = align;
         this._update();
     },
 
+    /**
+     * テキストの垂直位置を取得する.
+     * TODO: setTextVerticalAlignに変更する.
+     * @return {string} left|center|rightを取得する.
+     */
     getVerticalAlign: function() {
         return this._textVerticalAlign;
     },
 
-    //top, middle, bottom
+    /**
+     * テキストの水平位置を設定する.
+     * TODO: setTextHorizontalAlignに変更する.
+     * @param {string} align top|middle|bottomを指定.
+     */
     setHorizontalAlign: function(align) {
         this._textHorizontalAlign = align;
         this._update();
     },
 
+    /**
+     * テキストの水平位置を取得する.
+     * TODO: setTextHorizontalAlignに変更する.
+     * @return {string} top|middle|bottomを取得する.
+     */
     getHorizontalAlign: function() {
         return this._textHorizontalAlign;
     },
 
-    //行間
+    /**
+     * テキストの行間を指定する.
+     * TODO: setTextLineSpaceに変更する.
+     * @param {number} space 行間を指定.
+     */
     setLineSpace: function(space) {
         this._textLineSpace = space;
         this._update();
     },
 
+    /**
+     * テキストの行間を取得する.
+     * TODO: getTextLineSpaceに変更する.
+     * @return {number} 行間を取得.
+     */
     getLineSpace: function() {
         return this._textLineSpace;
     },
 
-    //行末の文字
+    /**
+     * 行がボックスに収まらなかった時の終端文字を設定する.
+     * TODO: setTextCutEndに変更する.
+     * @param {string} cutend 終端文字を指定.
+     */
     setCutEnd: function(cutend) {
         this._textCutEnd = cutend;
         this._update();
     },
 
+    /**
+     * 行がボックスに収まらなかった時の終端文字を取得する.
+     * TODO: getTextCutEndに変更する.
+     * @return {string} 終端文字.
+     */
     getCutEnd: function() {
         return this._textCutEnd;
     },
 
+    /**
+     * 行がボックスの横幅に収まらなかった時に折り返して表示するかどうかを設定する.
+     * TODO: setTextMultiLineに変更する.
+     * @param {boolean} flag trueを指定すると折り返す.
+     */
     setMultiLine: function(flag) {
         this._textMultiLine = flag;
         this._update();
     },
 
+    /**
+     * 行がボックスの横幅に収まらなかった時に折り返して表示するかどうかを取得する.
+     * TODO: getTextMultiLineに変更する.
+     * @return {boolean} 折り返す場合はtrueを取得する.
+     */
     getMultiLine: function() {
         return this._textMultiLine;
     },
 
+    /**
+     * @override
+     */
     setSize: function($super, width, height) {
         $super(width, height);
         this._update();
     },
 
+    /**
+     * @override
+     */
     getSize: function() {
         //TODO:コピー
         return this._textBoxSize;
     },
 
+    /**
+     * @override
+     */
     setPosition: function($super, x, y) {
         $super(x, y);
         this._update();
     },
 
+    /**
+     * @override
+     */
     _setLayout: function($super, layout) {
         this._context = Navy.App.getContext();
 
@@ -147,6 +210,9 @@ Navy.View.Text = Navy.View.subclass({
         this._update(true);
     },
 
+    /**
+     * @override
+     */
     _drawExtra: function($super, context) {
         $super(context);
 
@@ -164,6 +230,10 @@ Navy.View.Text = Navy.View.subclass({
         }
     },
 
+    /**
+     * 描画コンテキストを設定する.
+     * @param {CanvasContext} context canvas 2dコンテキスト.
+     */
     _prepareContext: function(context) {
         context.textBaseline = 'top';
         context.textAlign = 'left';
@@ -171,11 +241,19 @@ Navy.View.Text = Navy.View.subclass({
         context.fillStyle = this._textColor;
     },
 
+    /**
+     * 行の表示高さを取得する.
+     * @return {number} 行の表示高さ.
+     */
     _getLinesHeight: function() {
         //一番上の行はline spaceを持たないので1つ引いておく
         return (this._textLines.length * (this._textSize + this._textLineSpace)) - this._textLineSpace;
     },
 
+    /**
+     * 表示を更新する.
+     * @param {boolean} noDrawFlag trueにした場合、内部の状態を更新するだけで、描画は行わない.
+     */
     _update: function(noDrawFlag) {
         this._updateMeasure();
         this._updateLines();
@@ -186,6 +264,9 @@ Navy.View.Text = Navy.View.subclass({
         }
     },
 
+    /**
+     * テキストの表示幅を更新する.
+     */
     _updateMeasure: function() {
         var context = Navy.App.getContext();
         this._prepareContext(context);
@@ -306,6 +387,9 @@ Navy.View.Text = Navy.View.subclass({
         }
     },
 
+    /**
+     * 指定されているwidth,heightとテキストにしたがって、ボックスの大きさを更新する.
+     */
     _updateSize: function() {
         var width = this._width;
         var height = this._height;
@@ -338,6 +422,9 @@ Navy.View.Text = Navy.View.subclass({
         }
     },
 
+    /**
+     * テキストの水平、垂直位置を更新する.
+     */
     _updatePosition: function() {
         var size = this.getSize();
         var valign = this._textVerticalAlign;

@@ -17,6 +17,9 @@ Navy.View.Image = Navy.View.subclass({
         $super(id, layout);
     },
 
+    /**
+     * @override
+     */
     _setLayout: function($super, layout) {
         $super(layout);
 
