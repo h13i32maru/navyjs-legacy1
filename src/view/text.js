@@ -259,7 +259,9 @@ Navy.View.Text = Navy.View.subclass({
         this._textMeasureWidth = context.measureText(this._text).width;
     },
 
-    //TODO:リファクタ
+    /**
+     * テキストの折り返しを更新して、複数行を構成する.
+     */
     _updateLines: function() {
         var width = this._width;
         var height = this._height;
@@ -301,6 +303,7 @@ Navy.View.Text = Navy.View.subclass({
                     lines.push({line: line, width: textWidth});
                     line = '';
                     tmp = '';
+                    //一つ前の単語から捜査していく
                     i--;
                 }
             }
