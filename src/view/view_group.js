@@ -42,15 +42,30 @@ Navy.View.ViewGroup = Navy.View.subclass({
      * @param {Object} layout レイアウトJSON.
      */
     _setRefLayout: function(refLayout) {
+        var callback = function() {
+            num--;
+            if (num === 0) {
+                this._callbackOnSetLayout(this);
+            }
+        };
+
+        callback = callback.bind(this);
+
         var len = refLayout.length;
+        var num = len;
         for (var i = 0; i < len; i++) {
             var viewLayout = refLayout[i];
             var viewClass = viewLayout['class'];
-            var view = new Navy.View[viewClass](viewLayout);
+
+            //refがあるということは非同期でレイアウトを構成することになるので、callback渡す.
+            if (viewLayout.extra.ref) {
+                var view = new Navy.View[viewClass](viewLayout, callback);
+            } else {
+                var view = new Navy.View[viewClass](viewLayout);
+                callback();
+            }
             this.addView(view);
         }
-
-        this._callbackOnSetLayout(this);
     },
 
     /**
