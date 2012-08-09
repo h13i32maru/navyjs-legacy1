@@ -22,9 +22,9 @@ Navy.Screen = Navy.Core.instance({
     },
 
     _setPageOnCreatePage: function(newPage) {
-        Navy.Root.pushPage(newPage);
-
         var currentPage = Navy.Root.getPage(0);
+
+        Navy.Root.pushPage(newPage);
 
         newPage.onCreate();
         newPage.onResumeStart();
