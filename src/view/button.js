@@ -51,19 +51,38 @@ Navy.View.Button = Navy.View.subclass({
         switch (touchEvent.action) {
         case 'start':
             this._fireFlag = true;
+            this._changeStateToTapped();
             break;
         case 'move':
             //領域に出てしまったら、指が離された時にイベントを発火しない.
             if (!this.checkAbosluteRect(touchEvent.x, touchEvent.y)) {
+                this._changeStateToUnTapped();
                 this._fireFlag = false;
             }
             break;
         case 'end':
+            this._changeStateToUnTapped();
             if (!this._fireFlag) {
                 return;
             }
             this._callListeners(touchEvent);
             break;
+        }
+    },
+
+    _changeStateToTapped: function() {
+        var layout = this.getLayout();
+        if (this.p(layout, ['extra', 'tapped', 'background'])) {
+            this.setBackground(layout.extra.tapped.background);
+        }
+    },
+
+    _changeStateToUnTapped: function() {
+        var layout = this.getLayout();
+        if ('background' in layout) {
+            this.setBackground(layout.background);
+        } else {
+            //TODO:透明にする?
         }
     },
 

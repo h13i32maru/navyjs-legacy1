@@ -129,5 +129,24 @@ Navy.Core._argumentName = function(func) {
 
 Navy.Core.prototype = {
     CLASS: 'Navy.Core',
-    initialize: function() {}
+    initialize: function() {},
+
+    /**
+     * 指定されたオブジェクトにプロパティが存在するかチェックする.
+     * @param {Object} obj オブジェクト.
+     * @param {Array.<string>} properties チェックしたいプロパティ名の配列.
+     * @return {boolean} 存在する場合はtrue.
+     */
+    p: function(obj, properties) {
+        var len = properties.length;
+        for (var i = 0; i < len; i++) {
+            if (properties[i] in obj) {
+                obj = obj[properties[i]];
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
 };
