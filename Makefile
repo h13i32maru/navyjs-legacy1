@@ -37,9 +37,10 @@ JS += --js src/transition/transition.js \
 JS += --js src/view/view.js \
 	  --js src/view/image.js \
 	  --js src/view/text.js \
+	  --js src/view/button.js \
 	  --js src/view/view_group.js \
 	  --js src/root.js \
-	  --js src/page.js 
+	  --js src/page.js
 
 all: compiler
 	java -jar $(CC) $(WARNING) $(EXTERN) $(OUT) $(LEVEL) $(JS)
