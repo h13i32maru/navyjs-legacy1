@@ -8,7 +8,10 @@ Navy.Screen = Navy.Core.instance({
     _transitionStack: null,
 
     initialize: function($super, mainPageId) {
-        var page = Navy.Page.create(mainPageId);
+        Navy.Page.create(mainPageId, this._setMainPageOnCreatePage.bind(this));
+    },
+
+    _setMainPageOnCreatePage: function(page) {
         Navy.Root.pushPage(page);
 
         page.onCreate();
@@ -18,14 +21,9 @@ Navy.Screen = Navy.Core.instance({
         this._transitionStack = [];
     },
 
-    /**
-     * 次のページに移動する.
-     * @param {string} pageId 次のページのIDをpage.jsonに設定されているものか指定する.
-     */
-    next: function(pageId) {
+    _setPageOnCreatePage: function(newPage) {
         var currentPage = Navy.Root.getPage(0);
 
-        var newPage = Navy.Page.create(pageId);
         Navy.Root.pushPage(newPage);
 
         newPage.onCreate();
@@ -45,6 +43,15 @@ Navy.Screen = Navy.Core.instance({
             previousPage: currentPage,
             currentPage: newPage
         });
+    },
+
+
+    /**
+     * 次のページに移動する.
+     * @param {string} pageId 次のページのIDをpage.jsonに設定されているものか指定する.
+     */
+    next: function(pageId) {
+        Navy.Page.create(pageId, this._setPageOnCreatePage.bind(this));
     },
 
     /**
