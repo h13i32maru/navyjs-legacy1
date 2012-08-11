@@ -7,26 +7,65 @@ Navy.View.ViewGroup = Navy.View.subclass({
     /** 子要素 */
     _views: null,
 
-    initialize: function($super, layout) {
+    _callbackOnSetLayout: null,
+
+    /**
+     * @override
+     * @param {Object} layout layout.
+     * @param {function(viewGroup)} callback view groupの生成が終わったら実行されるコールバック.
+     */
+    initialize: function($super, layout, callback) {
         this._views = {};
+        this._callbackOnSetLayout = callback;
         $super(layout);
     },
 
     /**
      * 自身のレイアウトと子要素のレイアウトを行う.
      * @override
+     * @param {Object} layout layout.
+     * @param {function(viewGroup)} callback view groupの生成が終わったら実行されるコールバック.
      */
-    _setLayout: function($super, layout) {
+    _setLayout: function($super, layout, callback) {
         $super(layout);
 
+        if (callback) {
+            this._callbackOnSetLayout = callback;
+        }
+
         var ref = layout.extra.ref;
-        var refLayout = Navy.Config.Layout[ref];
+        Navy.LayoutHolder.download(ref, this._setRefLayout.bind(this));
+    },
+
+    /**
+     * refに指定されているレイアウトを元に、要素を構築する.
+     * @param {Object} layout レイアウトJSON.
+     */
+    _setRefLayout: function(refLayout) {
+        var callback = function(view) {
+            this.addView(view);
+            num--;
+            if (num === 0) {
+                this._callbackOnSetLayout(this);
+            }
+        };
+
+        callback = callback.bind(this);
+
         var len = refLayout.length;
+        var num = len;
         for (var i = 0; i < len; i++) {
             var viewLayout = refLayout[i];
             var viewClass = viewLayout['class'];
-            var view = new Navy.View[viewClass](viewLayout);
-            this.addView(view);
+
+            if (viewLayout.extra.ref) {
+                //refがあるということは非同期でレイアウトを構成することになるので、callback渡す.
+                var view = new Navy.View[viewClass](viewLayout, callback);
+            } else {
+                //refが無いので、非同期じゃないので、callbackはすぐに実行する.
+                var view = new Navy.View[viewClass](viewLayout);
+                callback(view);
+            }
         }
     },
 
