@@ -29,12 +29,17 @@ Navy.View.ViewGroup = Navy.View.subclass({
     _setLayout: function($super, layout, callback) {
         $super(layout);
 
-        if (callback) {
-            this._callbackOnSetLayout = callback;
-        }
-
         var ref = layout.extra.ref;
-        Navy.LayoutHolder.download(ref, this._setRefLayout.bind(this));
+        if (ref) {
+            if (callback) {
+                this._callbackOnSetLayout = callback;
+            }
+            Navy.LayoutHolder.download(ref, this._setRefLayout.bind(this));
+        } else {
+            if (callback) {
+                callback(this);
+            }
+        }
     },
 
     /**
