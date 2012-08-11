@@ -1,4 +1,4 @@
-Navy.View.Button = Navy.View.subclass({
+Navy.View.Button = Navy.View.Text.subclass({
     CLASS: 'Navy.View.Button',
 
     /** ボタンを離した時に実行されるイベントを発火するかどうかの */
