@@ -570,7 +570,7 @@ Navy.View = Navy.Core.subclass({
         }
 
         if (this._border) {
-            context.fillStyle = this._border.color;
+            context.strokeStyle = this._border.color;
             context.lineWidth = this._border.width;
             context.strokeRect(px, py, pwidth, pheight);
         }

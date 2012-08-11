@@ -75,12 +75,22 @@ Navy.View.Button = Navy.View.subclass({
         if (this.p(layout, ['extra', 'tapped', 'background'])) {
             this.setBackground(layout.extra.tapped.background);
         }
+
+        if (this.p(layout, ['extra', 'tapped', 'border'])) {
+            this.setBorder(layout.extra.tapped.border);
+        }
     },
 
     _changeStateToUnTapped: function() {
         var layout = this.getLayout();
         if ('background' in layout) {
             this.setBackground(layout.background);
+        } else {
+            //TODO:透明にする?
+        }
+
+        if ('border' in layout) {
+            this.setBorder(layout.border);
         } else {
             //TODO:透明にする?
         }
