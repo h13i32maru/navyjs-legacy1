@@ -426,6 +426,25 @@ Navy.View = Navy.Core.subclass({
     },
 
     /**
+     * 指定された座標がviewの領域内かチェックする.
+     * @param {number} x 絶対座標でのx.
+     * @param {number} y 絶対座標でのy.
+     * @return {boolean} 領域内の場合true.
+     */
+    checkAbosluteRect: function(x, y) {
+        var rect = this.getAbsoluteRect();
+        var x0 = rect[0];
+        var y0 = rect[1];
+        var x1 = rect[2];
+        var y1 = rect[3];
+
+        if (x0 <= x && x <= x1 && y0 <= y && y <= y1) {
+            return true;
+        }
+        return false;
+    },
+
+    /**
      * 背景を設定する.
      * @param {color: string} background 背景情報.colorは#ffffff形式.
      */
@@ -551,7 +570,7 @@ Navy.View = Navy.Core.subclass({
         }
 
         if (this._border) {
-            context.fillStyle = this._border.color;
+            context.strokeStyle = this._border.color;
             context.lineWidth = this._border.width;
             context.strokeRect(px, py, pwidth, pheight);
         }
