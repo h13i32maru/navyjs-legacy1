@@ -22,6 +22,7 @@ Navy.App = Navy.Core.instance({
         Navy.Timer.wakeup();
         Navy.Config.wakeup();
         Navy.Network.wakeup();
+        Navy.LayoutHolder.wakeup();
 
         Navy.Config.process(this._init.bind(this));
     },
@@ -57,12 +58,9 @@ Navy.App = Navy.Core.instance({
         this._setOnTouch(canvas);
 
         Navy.Root.wakeup(Navy.Config.App.size);
-        Navy.Screen.wakeup(Navy.Config.App.mainPageId);
         Navy.Loop.wakeup(context);
-
-        if (window.main) {
-            main();
-        }
+        //TODO:main()を実装したければ、コールバックをScreen.wakeupに渡せるように実装する.
+        Navy.Screen.wakeup(Navy.Config.App.mainPageId);
     },
 
     /**

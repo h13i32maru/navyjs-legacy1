@@ -22,8 +22,7 @@ Navy.Config = Navy.Core.instance({
 
         var list = [
             {name: 'App', url: this.config.app},
-            {name: 'Page', url: this.config.page},
-            {name: 'Layout', url: this.config.layout}
+            {name: 'Page', url: this.config.page}
         ];
 
         this._configNum = list.length;
