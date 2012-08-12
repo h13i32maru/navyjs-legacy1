@@ -44,11 +44,33 @@ Navy.App = Navy.Core.instance({
         return this._canvas;
     },
 
+    //TODO:jsdco
+    getDeviceType: function() {
+        var ua = navigator.userAgent;
+        if (ua.indexOf('iPhone') > 0) {
+            return 'iphone';
+        }
+
+        if (ua.indexOf('iPad') > 0) {
+            return 'ipad';
+        }
+
+        if (ua.indexOf('iPod') > 0) {
+            return 'ipod';
+        }
+
+        if (ua.indexOf('Android') > 0) {
+            return 'android';
+        }
+
+        return 'unknown';
+    },
+
     /**
      * 描画を開始するための初期化を行う.
      */
     _init: function() {
-        //this._hideLocationBar();
+        this._hideLocationBar();
 
         var canvas = this._createCanvas();
         var context = canvas.getContext('2d');
