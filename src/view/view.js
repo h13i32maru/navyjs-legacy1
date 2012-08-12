@@ -656,7 +656,6 @@ Navy.View = Navy.Core.subclass({
                 var gradient = gradients[i];
                 var direction = gradient.direction;
                 var gr = this._createLinearGradient(context, direction, rect);
-                //var gr = context.createLinearGradient(sx, sy, ex, ey);
                 var colorstop = gradient.colorstop;
                 var colorstoplen = colorstop.length;
                 for (var j = 0; j < colorstoplen; j++) {
@@ -674,31 +673,30 @@ Navy.View = Navy.Core.subclass({
             if (radiuses && radiuses[i]) {
                 context.lineCap = 'round';
                 context.lineJoin = 'round';
-                var r = radiuses[i];
                 switch (i) {
                 case 0: //top
-                    context.arc(sx + r, sy + r, r, (Math.PI/180) * (180 + 45), (Math.PI/180) * 270, false);
-                    context.moveTo(sx + r, sy);
-                    context.lineTo(ex - r, ey);
-                    context.arc(ex - r, ey + r, r, (Math.PI/180) * 270, (Math.PI/180) * (270 + 45), false);
+                    var r0 = radiuses[0];
+                    var r3 = radiuses[3];
+                    context.arc(sx + r3, sy + r3, r3, (Math.PI/180) * (180 + 45), (Math.PI/180) * 270, false);
+                    context.arc(ex - r0, ey + r0, r0, (Math.PI/180) * 270, (Math.PI/180) * (270 + 45), false);
                     break;
                 case 1: //right
-                    context.arc(sx - r, sy + r, r, (Math.PI/180) * -45, (Math.PI/180) * 0, false);
-                    context.moveTo(sx, sy + r);
-                    context.lineTo(ex, ey - r);
-                    context.arc(ex - r, ey - r, r, (Math.PI/180) * 0, (Math.PI/180) * 45, false);
+                    var r0 = radiuses[0];
+                    var r1 = radiuses[1];
+                    context.arc(sx - r0, sy + r0, r0, (Math.PI/180) * -45, (Math.PI/180) * 0, false);
+                    context.arc(ex - r1, ey - r1, r1, (Math.PI/180) * 0, (Math.PI/180) * 45, false);
                     break;
                 case 2: //bottom
-                    context.arc(sx - r, sy - r, r, (Math.PI/180) * 45, (Math.PI/180) * 90, false);
-                    context.moveTo(sx - r, sy);
-                    context.lineTo(ex + r, ey);
-                    context.arc(ex + r, ey - r, r, (Math.PI/180) * 90, (Math.PI/180) * (90 + 45), false);
+                    var r1 = radiuses[1];
+                    var r2 = radiuses[2];
+                    context.arc(sx - r1, sy - r1, r1, (Math.PI/180) * 45, (Math.PI/180) * 90, false);
+                    context.arc(ex + r2, ey - r2, r2, (Math.PI/180) * 90, (Math.PI/180) * (90 + 45), false);
                     break;
                 case 3: //left
-                    context.arc(sx + r, sy - r, r, (Math.PI/180) * (90 + 45), (Math.PI/180) * 180, false);
-                    context.moveTo(sx, sy - r);
-                    context.lineTo(ex, ey + r);
-                    context.arc(ex + r, ey + r, r, (Math.PI/180) * 180, (Math.PI/180) * (180 + 45), false);
+                    var r2 = radiuses[2];
+                    var r3 = radiuses[3];
+                    context.arc(sx + r2, sy - r2, r2, (Math.PI/180) * (90 + 45), (Math.PI/180) * 180, false);
+                    context.arc(ex + r3, ey + r3, r3, (Math.PI/180) * 180, (Math.PI/180) * (180 + 45), false);
                     break;
                 default:
                     //TODO:例外
