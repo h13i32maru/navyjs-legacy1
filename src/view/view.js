@@ -25,6 +25,7 @@ Navy.View = Navy.Core.subclass({
     _visible: true,
     _background: null,
     _border: null,
+    _shadow: null,
     _paddingTop: null,
     _paddingRight: null,
     _paddingBottom: null,
@@ -168,6 +169,10 @@ Navy.View = Navy.Core.subclass({
             this.setBorder(layout.border);
         }
 
+        if ('shadow' in layout) {
+            this.setShadow(layout.shadow);
+        }
+
         if ('link' in layout) {
             this.setLink(layout.link);
         }
@@ -261,6 +266,18 @@ Navy.View = Navy.Core.subclass({
     getBorder: function() {
         //TODO:コピーして渡したほうが良い
         return this._border;
+    },
+
+    //TODO:jsdoc
+    setShadow: function(shadow) {
+        this._shadow = shadow;
+        Navy.Loop.requestDraw();
+    },
+
+    //TODO:jsdoc
+    getShadow: function() {
+        //TODO:コピーしたほうが良い?
+        return this._shadow;
     },
 
     /**
@@ -549,15 +566,38 @@ Navy.View = Navy.Core.subclass({
             return;
         }
 
+        context.save();
+
         var rect = this.getAbsoluteRect();
+
+        var clearShadowFlag = true;
+        if (this._shadow) {
+            //影の描画は背景もしくは枠線と一緒に行われる.
+            //ただし、どちらかでしか行なってはいけない.
+            //なぜなら、影が二重に描画されてしまうため.
+            this._prepareShadow(context, this._shadow, rect);
+            clearShadowFlag = false;
+        }
+
         if (this._background) {
             this._drawBackground(context, this._background, rect);
+            this._clearShadow(context);
+            clearShadowFlag = true;
         }
 
         if (this._border) {
             this._drawBorder(context, this._border, rect);
+            this._clearShadow(context);
+            clearShadowFlag = true;
         }
 
+        //影が描画されずに残っている場合
+        if (!clearShadowFlag) {
+            context.strokeRect(rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1]);
+            this._clearShadow(context);
+        }
+
+        context.restore();
         this._drawExtra(context);
     },
 
@@ -711,6 +751,31 @@ Navy.View = Navy.Core.subclass({
         }
     },
 
+    //TODO:jsdco
+    _prepareShadow: function(context, shadow, rect) {
+        if (!rect) {
+            var rect = this.getAbsoluteRect();
+        }
+        var x = rect[0];
+        var y = rect[1];
+        var width = rect[2] - x;
+        var height = rect[3] - y;
+
+        context.shadowOffsetX = shadow.offset[0];
+        context.shadowOffsetY = shadow.offset[1];
+        context.shadowColor = this._convertColor(shadow.color);
+        context.shadowBlur = shadow.blur;
+    },
+
+    //TODO:jsdoc
+    _clearShadow: function(context) {
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.shadowColor = "rgba(0, 0, 0, 0)";
+        context.shadowBlur = 0;
+    },
+
+    //TODO:jsdco
     _createLinearGradient: function(context, direction, rect) {
         var x0 = rect[0];
         var y0 = rect[1];
