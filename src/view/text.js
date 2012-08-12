@@ -224,7 +224,7 @@ Navy.View.Text = Navy.View.subclass({
         context.textBaseline = 'top';
         context.textAlign = 'left';
         context.font = this._textSize + 'px' + ' ' + this._textFont;
-        context.fillStyle = this._textColor;
+        context.fillStyle = this._convertColor(this._textColor);
     },
 
     /**
