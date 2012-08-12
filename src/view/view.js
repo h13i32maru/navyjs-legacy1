@@ -549,50 +549,76 @@ Navy.View = Navy.Core.subclass({
             return;
         }
 
-        var pos = this.getAbsolutePosition();
-        var x = pos[0];
-        var y = pos[1];
-
-        var size = this.getSize();
-        var width = size[0];
-        var height = size[1];
-
-        var px = x - this._paddingLeft;
-        var py = y - this._paddingTop;
-        var pwidth = width + this._paddingLeft + this._paddingRight;
-        var pheight = height + this._paddingTop + this._paddingBottom;
-
-        //背景描画
+        var rect = this.getAbsoluteRect();
         if (this._background) {
-            if (this._background.alpha) {
-                context.globalAlpha = this._background.alpha;
-            }
-
-            if (this._background.color) {
-                context.fillStyle = this._background.color;
-                context.fillRect(px, py, pwidth, pheight);
-            }
-
-            if (this._background.image) {
-                //TODO:クロージャ使わないようにすべき
-                var backgroundImage = new Image();
-                backgroundImage.src = this._background.image;
-                backgroundImage.addEventListener('load', function(){
-                    context.drawImage(backgroundImage, px, py);
-                }, false);
-            }
-
-            context.globalAlpha = 1;
+            this._drawBackground(context, this._background, rect);
         }
 
-        //枠線描画
         if (this._border) {
-            context.strokeStyle = this._border.color;
-            context.lineWidth = this._border.width;
-            context.strokeRect(px, py, pwidth, pheight);
+            this._drawBorder(context, this._border, rect);
         }
 
         this._drawExtra(context);
+    },
+
+    //TODO:jsdoc
+    _drawBackground: function(context, background, rect) {
+        if (!rect) {
+            var rect = this.getAbsoluteRect();
+        }
+        var x = rect[0];
+        var y = rect[1];
+        var width = rect[2] - x;
+        var height = rect[3] - y;
+
+        if (background.alpha) {
+            var origAlpha = context.globalAlpha;
+            context.globalAlpha = background.alpha;
+        }
+
+        if (background.color) {
+            context.fillStyle = background.color;
+            context.fillRect(x, y, width, height);
+        }
+
+        if (background.image) {
+            Navy.ImageHolder.getImage(background.image, function(image) {
+                var origAlpha = context.globalAlpha;
+                context.globalAlpha = background.alpha;
+                context.drawImage(image, x, y);
+                context.globalAlpha = origAlpha;
+            });
+        }
+
+        context.globalAlpha = origAlpha;
+    },
+
+    //TODO:jsdoc
+    _drawBorder: function(context, border, rect) {
+        if (!rect) {
+            var rect = this.getAbsoluteRect();
+        }
+        var x = rect[0];
+        var y = rect[1];
+        var width = rect[2] - x;
+        var height = rect[3] - y;
+
+        if (border.alpha) {
+            var origAlpha = context.globalAlpha;
+            context.globalAlpha = border.alpha;
+        }
+
+        if (border.color) {
+            context.strokeStyle = border.color;
+        }
+
+        if (border.width) {
+            context.lineWidth = border.width;
+        }
+
+        context.strokeRect(x, y, width, height);
+
+        context.globalAlpha = origAlpha;
     },
 
     /**

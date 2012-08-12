@@ -1,3 +1,4 @@
+//TODO:jsdoc
 Navy.View.Button = Navy.View.Text.subclass({
     CLASS: 'Navy.View.Button',
 
@@ -6,10 +7,26 @@ Navy.View.Button = Navy.View.Text.subclass({
 
     _listeners: null,
 
+    _state: 'normal',
+    _stateNormalLayout: null,
+    _stateTappedLayout: null,
+
     initialize: function($super, layout) {
         $super(layout);
 
         this._listeners = [];
+    },
+
+    _setLayout: function($super, layout) {
+        $super(layout);
+
+        if (layout.extra.normal) {
+            this._stateNormalLayout = layout.extra.normal;
+        }
+
+        if (layout.extra.tapped) {
+            this._stateTappedLayout = layout.extra.tapped;
+        }
     },
 
     onChangeRoot: function($super, root) {
@@ -51,17 +68,20 @@ Navy.View.Button = Navy.View.Text.subclass({
         switch (touchEvent.action) {
         case 'start':
             this._fireFlag = true;
-            this._changeStateToTapped();
+            this._state = 'tapped';
+            Navy.Loop.requestDraw();
             break;
         case 'move':
             //領域に出てしまったら、指が離された時にイベントを発火しない.
             if (!this.checkAbosluteRect(touchEvent.x, touchEvent.y)) {
-                this._changeStateToUnTapped();
                 this._fireFlag = false;
+                this._state = 'normal';
             }
+            Navy.Loop.requestDraw();
             break;
         case 'end':
-            this._changeStateToUnTapped();
+            this._state = 'normal';
+            Navy.Loop.requestDraw();
             if (!this._fireFlag) {
                 return;
             }
@@ -70,37 +90,30 @@ Navy.View.Button = Navy.View.Text.subclass({
         }
     },
 
-    _changeStateToTapped: function() {
-        var layout = this.getLayout();
-        if (this.p(layout, ['extra', 'tapped', 'background'])) {
-            this.setBackground(layout.extra.tapped.background);
-        }
-
-        if (this.p(layout, ['extra', 'tapped', 'border'])) {
-            this.setBorder(layout.extra.tapped.border);
-        }
-    },
-
-    _changeStateToUnTapped: function() {
-        var layout = this.getLayout();
-        if ('background' in layout) {
-            this.setBackground(layout.background);
-        } else {
-            //TODO:透明にする?
-        }
-
-        if ('border' in layout) {
-            this.setBorder(layout.border);
-        } else {
-            //TODO:透明にする?
-        }
-    },
-
     _callListeners: function(touchEvent) {
         var listeners = this._listeners;
         var len = listeners.length;
         for (var i = 0; i < len; i++) {
             listeners[i](touchEvent);
+        }
+    },
+
+    _drawExtra: function($super, context) {
+        $super(context);
+
+        if (this._state === 'normal') {
+            var layout = this._stateNormalLayout;
+        } else if (this._state === 'tapped') {
+            var layout = this._stateTappedLayout;
+        } else {
+            //TODO:例外なげる
+        }
+
+        if (layout.background) {
+            this._drawBackground(context, layout.background);
+        }
+        if (layout.border) {
+            this._drawBorder(context, layout.border);
         }
     }
 });
