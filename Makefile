@@ -15,7 +15,8 @@ JS	= --js src/patch.js \
 	  --js src/timer.js \
 	  --js src/network.js \
 	  --js src/screen.js \
-	  --js src/layout_holder.js
+	  --js src/layout_holder.js \
+	  --js src/image_holder.js
 
 #util
 JS += --js src/util/util.js \

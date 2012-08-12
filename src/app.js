@@ -23,6 +23,7 @@ Navy.App = Navy.Core.instance({
         Navy.Config.wakeup();
         Navy.Network.wakeup();
         Navy.LayoutHolder.wakeup();
+        Navy.ImageHolder.wakeup();
 
         Navy.Config.process(this._init.bind(this));
     },
