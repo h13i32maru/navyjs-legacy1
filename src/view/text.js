@@ -5,6 +5,7 @@ Navy.View.Text = Navy.View.subclass({
     _text: null,
     _textFont: null,
     _textWeight: null,
+    _textStyle: null,
     _textColor: null,
     _textShadow: null,
     _textSize: null,
@@ -90,6 +91,17 @@ Navy.View.Text = Navy.View.subclass({
     //TODO:jsdoc
     getTextWeight: function() {
         return this._textWeight;
+    },
+
+    //TODO:jsdco
+    setTextStyle: function(style) {
+        this._textStyle = style;
+        this._update();
+    },
+
+    //TODO:jsdco
+    getTextStyle: function() {
+        return this._textStyle;
     },
 
     /**
@@ -213,6 +225,7 @@ Navy.View.Text = Navy.View.subclass({
         this._textSize = layout.extra.size || 24;
         this._textFont = layout.extra.font || 'sans-serif';
         this._textWeight = layout.extra.weight || 'normal';
+        this._textStyle = layout.extra.style || 'normal';
         this._textVerticalAlign = layout.extra.valign || 'left';
         this._textHorizontalAlign = layout.extra.halign || 'top';
         this._textLineSpace = layout.extra.linespace || 0;
@@ -253,7 +266,7 @@ Navy.View.Text = Navy.View.subclass({
     _prepareContext: function(context) {
         context.textBaseline = 'top';
         context.textAlign = 'left';
-        context.font = this._textWeight + ' ' + this._textSize + 'px' + ' ' + this._textFont;
+        context.font = this._textStyle + ' ' + this._textWeight + ' ' + this._textSize + 'px' + ' ' + this._textFont;
         context.fillStyle = this._convertColor(this._textColor);
         
         if (this._textShadow) {
