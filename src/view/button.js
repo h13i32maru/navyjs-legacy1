@@ -141,11 +141,21 @@ Navy.View.Button = Navy.View.Text.subclass({
             //TODO:例外なげる
         }
 
+        if (layout.alpha) {
+            var origAlpha = context.globalAlpha;
+            context.globalAlpha = layout.alpha;
+        }
+
         if (layout.background) {
             this._drawBackground(context, layout.background);
         }
+
         if (layout.border) {
             this._drawBorder(context, layout.border);
+        }
+
+        if(layout.alpha) {
+            context.globalAlpha = origAlpha;
         }
     }
 });
