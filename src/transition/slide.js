@@ -5,7 +5,10 @@ Navy.Transition.Slide = Navy.Transition.subclass({
     CLASS: 'Navy.Transition.Slide',
 
     //画面遷移に必要とする時間msec
-    TIME: 50,
+    TIME: 80,
+
+    //呼び出し間隔の最大しきい値
+    MAX_DELATA: 32,
 
     _timeCount: 0,
 
@@ -29,6 +32,11 @@ Navy.Transition.Slide = Navy.Transition.subclass({
 
     /** nextで使用するタイマーリスナー */
     _onUpdateForNext: function(delta) {
+        //もししきい値以上間隔が開いていた場合は、強制的にしきい値に書き換える.
+        if (delta >= this.MAX_DELATA) {
+            delta = this.MAX_DELATA;
+        }
+
         this._timeCount += delta;
 
         if (this.TIME <= this._timeCount) {
@@ -57,6 +65,11 @@ Navy.Transition.Slide = Navy.Transition.subclass({
 
     /** backで使用するタイマーリスナー */
     _onUpdateForBack: function(delta) {
+        //もししきい値以上間隔が開いていた場合は、強制的にしきい値に書き換える.
+        if (delta >= this.MAX_DELATA) {
+            delta = this.MAX_DELATA;
+        }
+
         this._timeCount += delta;
 
         if (this.TIME <= this._timeCount) {
