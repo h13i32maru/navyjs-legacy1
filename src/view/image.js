@@ -24,17 +24,22 @@ Navy.View.Image = Navy.View.subclass({
         $super(layout);
 
         var src = layout.extra.src;
-        this.setImage(src);
+        this.setImageSrc(src);
     },
 
     /**
      * 画像をセットする
      * @param {string} src 画像のパス.
      */
-    setImage: function(src) {
+    setImageSrc: function(src) {
         this._loaded = false;
         this._image.addEventListener('load', this._onLoad.bind(this), false);
         this._image.src = src;
+    },
+
+    //TODO:jsdco
+    getImageSrc: function() {
+        return this._image.src;
     },
 
     /**
