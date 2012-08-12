@@ -571,26 +571,19 @@ Navy.View = Navy.Core.subclass({
         var width = rect[2] - x;
         var height = rect[3] - y;
 
-        if (background.alpha) {
-            var origAlpha = context.globalAlpha;
-            context.globalAlpha = background.alpha;
-        }
-
         if (background.color) {
             context.fillStyle = this._convertColor(background.color);
             context.fillRect(x, y, width, height);
         }
 
-        if (background.image) {
-            Navy.ImageHolder.getImage(background.image, function(image) {
+        if (background.src) {
+            Navy.ImageHolder.getImage(background.src, function(image) {
                 var origAlpha = context.globalAlpha;
                 context.globalAlpha = background.alpha;
                 context.drawImage(image, x, y);
                 context.globalAlpha = origAlpha;
             });
         }
-
-        context.globalAlpha = origAlpha;
     },
 
     //TODO:jsdoc
