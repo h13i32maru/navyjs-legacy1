@@ -137,12 +137,12 @@ Navy.View.ViewGroup = Navy.View.subclass({
         }
 
         var _views = this._views;
-        for (var viewId in _views) {
-            if (!_views[viewId].findView) {
+        for (var _viewId in _views) {
+            if (!_views[_viewId].findView) {
                 continue;
             }
 
-            var view = _views[viewId].findView(viewId);
+            var view = _views[_viewId].findView(viewId);
             if (view) {
                 return view;
             }
@@ -150,6 +150,7 @@ Navy.View.ViewGroup = Navy.View.subclass({
         }
 
         //TODO:例外にする
+        console.log(this.CLASS);
         console.log('not found view:' + viewId);
         return null;
     },
