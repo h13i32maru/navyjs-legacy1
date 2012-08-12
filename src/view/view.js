@@ -566,22 +566,69 @@ Navy.View = Navy.Core.subclass({
         if (!rect) {
             var rect = this.getAbsoluteRect();
         }
-        var x = rect[0];
-        var y = rect[1];
-        var width = rect[2] - x;
-        var height = rect[3] - y;
+        var x0 = rect[0];
+        var y0 = rect[1];
+        var x1 = rect[2];
+        var y1 = rect[3];
+        var width = x1 - x0;
+        var height = y1 - y0;
 
-        if (background.color) {
+        //garidnet or color
+        if (background.gradient) {
+            var gradient = background.gradient;
+
+            var direction = gradient.direction;
+            switch (direction) {
+            case 'top':          var gr = context.createLinearGradient(x0, y0, x0, y1); break;
+            case 'right':        var gr = context.createLinearGradient(x1, y1, x0, y1); break;
+            case 'bottom':       var gr = context.createLinearGradient(x0, y1, x0, y0); break;
+            case 'left':         var gr = context.createLinearGradient(x0, y0, x1, y0); break;
+            case 'top-right':    //fall down
+            case 'right-top':    var gr = context.createLinearGradient(x1, y0, x0, y1); break;
+            case 'top-left':     //fall down
+            case 'left-top':     var gr = context.createLinearGradient(x0, y0, x1, y1); break;
+            case 'bottom-right': //fall down
+            case 'right-bottom': var gr = context.createLinearGradient(x1, y1, x0, y0); break;
+            case 'bottom-left':  //fall down
+            case 'left-bottom':  var gr = context.createLinearGradient(x0, y1, x1, y0); break;
+            default:
+                //TODO:例外
+                console.log('error');
+            }
+
+            var colorstop = gradient.colorstop;
+            var colorstoplen = colorstop.length;
+            for (var i = 0; i < colorstoplen; i++) {
+                gr.addColorStop(colorstop[i][0], this._convertColor(colorstop[i][1]));
+            }
+
+            context.fillStyle = gr;
+        } else if (background.color) {
             context.fillStyle = this._convertColor(background.color);
-            context.fillRect(x, y, width, height);
+        }
+
+        //round-angle or right-angle
+        var radiuses = this._parseBoxProperty(background, 'radiuses', 'radius');
+        if (radiuses) {
+            var r0 = radiuses[0];
+            var r1 = radiuses[1];
+            var r2 = radiuses[2];
+            var r3 = radiuses[3];
+            //top -> right -> bottom -> left
+            context.beginPath();
+            context.arc(x1 - r0, y0 + r0, r0, (Math.PI/180) * 270, 0, false);
+            context.arc(x1 - r1, y1 - r1, r1, 0, (Math.PI/180) * 90, false);
+            context.arc(x0 + r2, y1 - r2, r2, (Math.PI/180) * 90, (Math.PI/180) * 180, false);
+            context.arc(x0 + r3, y0 + r3, r3, (Math.PI/180) * 180, (Math.PI/180) * 270, false);
+            context.closePath();
+            context.fill();
+        } else {
+            context.fillRect(x0, y0, width, height);
         }
 
         if (background.src) {
             Navy.ImageHolder.getImage(background.src, function(image) {
-                var origAlpha = context.globalAlpha;
-                context.globalAlpha = background.alpha;
-                context.drawImage(image, x, y);
-                context.globalAlpha = origAlpha;
+                context.drawImage(image, x0, y0);
             });
         }
     },
