@@ -5,6 +5,7 @@ Navy.View.Text = Navy.View.subclass({
     _text: null,
     _textFont: null,
     _textColor: null,
+    _textShadow: null,
     _textSize: null,
     _textLineSpace: null,
     _textVerticalAlign: null,
@@ -39,6 +40,7 @@ Navy.View.Text = Navy.View.subclass({
      */
     setTextColor: function(color) {
         this._textColor = color;
+        Navy.Loop.requestDraw();
     },
 
     /**
@@ -47,6 +49,18 @@ Navy.View.Text = Navy.View.subclass({
      */
     getTextColor: function() {
         return this._textColor;
+    },
+
+    //TODO:jsdco
+    setTextShadow: function(shadow) {
+        this._textShadow = shadow;
+        Navy.Loop.requestDraw();
+    },
+
+    //TODO:jsdco
+    getTextShadow: function() {
+        //TODO:コピーしたほうが良い?
+        return this._textShadow;
     },
 
     /**
@@ -183,6 +197,7 @@ Navy.View.Text = Navy.View.subclass({
 
         this._text = layout.extra.text || '';
         this._textColor = layout.extra.color || '#000000';
+        this._textShadow = layout.extra.shadow;
         this._textSize = layout.extra.size || 24;
         this._textFont = layout.extra.font || 'sans-serif';
         this._textVerticalAlign = layout.extra.valign || 'left';
@@ -214,6 +229,8 @@ Navy.View.Text = Navy.View.subclass({
             var y = pos[1] + lines[i].dy;
             context.fillText(line, x, y);
         }
+
+        this._clearShadow(context);
     },
 
     /**
@@ -225,6 +242,10 @@ Navy.View.Text = Navy.View.subclass({
         context.textAlign = 'left';
         context.font = this._textSize + 'px' + ' ' + this._textFont;
         context.fillStyle = this._convertColor(this._textColor);
+        
+        if (this._textShadow) {
+            this._prepareShadow(context, this._textShadow);
+        }
     },
 
     /**

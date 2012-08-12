@@ -575,7 +575,7 @@ Navy.View = Navy.Core.subclass({
             //影の描画は背景もしくは枠線と一緒に行われる.
             //ただし、どちらかでしか行なってはいけない.
             //なぜなら、影が二重に描画されてしまうため.
-            this._prepareShadow(context, this._shadow, rect);
+            this._prepareShadow(context, this._shadow);
             clearShadowFlag = false;
         }
 
@@ -752,15 +752,7 @@ Navy.View = Navy.Core.subclass({
     },
 
     //TODO:jsdco
-    _prepareShadow: function(context, shadow, rect) {
-        if (!rect) {
-            var rect = this.getAbsoluteRect();
-        }
-        var x = rect[0];
-        var y = rect[1];
-        var width = rect[2] - x;
-        var height = rect[3] - y;
-
+    _prepareShadow: function(context, shadow) {
         context.shadowOffsetX = shadow.offset[0];
         context.shadowOffsetY = shadow.offset[1];
         context.shadowColor = this._convertColor(shadow.color);
