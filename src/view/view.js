@@ -577,7 +577,7 @@ Navy.View = Navy.Core.subclass({
         }
 
         if (background.color) {
-            context.fillStyle = background.color;
+            context.fillStyle = this._convertColor(background.color);
             context.fillRect(x, y, width, height);
         }
 
@@ -602,11 +602,6 @@ Navy.View = Navy.Core.subclass({
         var y = rect[1];
         var width = rect[2] - x;
         var height = rect[3] - y;
-
-        if (border.alpha) {
-            var origAlpha = context.globalAlpha;
-            context.globalAlpha = border.alpha;
-        }
 
         var x1 = rect[0];
         var y1 = rect[1];
@@ -636,23 +631,23 @@ Navy.View = Navy.Core.subclass({
             var ey = coordinates[next][1];
 
             //gradient or single-color
-            if (gradients[i]) {
+            if (gradients && gradients[i]) {
                 var gr = context.createLinearGradient(sx, sy, ex, ey);
                 var gradient = gradients[i];
                 var gradientlen = gradient.length;
                 for (var j = 0; j < gradientlen; j++) {
-                    gr.addColorStop(gradient[j][0], gradient[j][1]);
+                    gr.addColorStop(gradient[j][0], this._convertColor(gradient[j][1]));
                 }
                 context.strokeStyle = gr;
             } else if (colors[i]) {
-                context.strokeStyle = colors[i];
+                context.strokeStyle = this._convertColor(colors[i]);
             } else {
                 continue;
             }
 
             context.beginPath();
             //round-angle or right-angle
-            if (radiuses[i]) {
+            if (radiuses && radiuses[i]) {
                 context.lineCap = 'round';
                 context.lineJoin = 'round';
                 var r = radiuses[i];
@@ -692,8 +687,6 @@ Navy.View = Navy.Core.subclass({
             }
             context.stroke();
         }
-
-        context.globalAlpha = origAlpha;
     },
 
     //TODO: jsdoc
@@ -704,6 +697,31 @@ Navy.View = Navy.Core.subclass({
             return [obj[single], obj[single], obj[single], obj[single]];
         } else {
             return null;
+        }
+    },
+
+    //TODO:jsdoc
+    _convertColor: function(color) {
+        if (color.charAt(0) === '#') {
+            if (color.length === 7) {
+                //#aabbcc
+                return color;
+            } else if (color.length === 9) {
+                //#aabbccdd
+                var red = parseInt(color.substr(1, 2), 16);
+                var green = parseInt(color.substr(3, 2), 16);
+                var blue = parseInt(color.substr(5, 2), 16);
+                var alpha = Math.round(100 * parseInt(color.substr(7, 2), 16) / 255) / 100;
+                var rgba = 'rgba(' + red + ',' + green + ',' + blue + ',' + alpha + ')';
+                return rgba;
+            } else {
+                //TODO:例外
+                console.log('error');
+                return null;
+            }
+        } else {
+            //rgb() or rgba()
+            return color;
         }
     },
 
