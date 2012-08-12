@@ -11,14 +11,36 @@ Navy.View.Button = Navy.View.Text.subclass({
     _stateNormalLayout: null,
     _stateTappedLayout: null,
 
+    _link: null,
+
     initialize: function($super, layout) {
         $super(layout);
 
         this._listeners = [];
     },
 
+    /**
+     * タップ時の遷移先を設定する.
+     * @param {string} link ページID.
+     */
+    setLink: function(link) {
+        this._link = link;
+    },
+
+    /**
+     * リンクを取得する.
+     * @return {string} リンク.
+     */
+    getLink: function() {
+        return this._link;
+    },
+
     _setLayout: function($super, layout) {
         $super(layout);
+
+        if (layout.extra.link) {
+            this._link = layout.extra.link;
+        }
 
         if (layout.extra.normal) {
             this._stateNormalLayout = layout.extra.normal;
@@ -91,6 +113,16 @@ Navy.View.Button = Navy.View.Text.subclass({
     },
 
     _callListeners: function(touchEvent) {
+        if (this._link) {
+            var _link = this._link;
+            if (_link === '$back') {
+                Navy.Screen.back();
+            }
+            else {
+                Navy.Screen.next(this._link);
+            }
+        }
+
         var listeners = this._listeners;
         var len = listeners.length;
         for (var i = 0; i < len; i++) {

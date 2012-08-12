@@ -30,10 +30,6 @@ Navy.View = Navy.Core.subclass({
     _paddingRight: null,
     _paddingBottom: null,
     _paddingLeft: null,
-    /** タップ時に遷移するページのid */
-    _link: null,
-    /** リンクリスナーを登録したかどうか */
-    _isAddLinkListener: false,
 
     /**
      * @constructor
@@ -66,12 +62,6 @@ Navy.View = Navy.Core.subclass({
      */
     onChangePage: function(page) {
         this._page = page;
-
-        //linkが設定されているが、リスナが登録されていなければ登録する
-        if (page && this._link && !this._isAddLinkListener) {
-            page.addTapListener(this._id, this._linkListener.bind(this));
-            this._isAddLinkListener = true;
-        }
     },
 
     /**
@@ -171,10 +161,6 @@ Navy.View = Navy.Core.subclass({
 
         if ('shadow' in layout) {
             this.setShadow(layout.shadow);
-        }
-
-        if ('link' in layout) {
-            this.setLink(layout.link);
         }
 
         if ('padding' in layout) {
@@ -278,43 +264,6 @@ Navy.View = Navy.Core.subclass({
     getShadow: function() {
         //TODO:コピーしたほうが良い?
         return this._shadow;
-    },
-
-    /**
-     * タップ時の遷移先を設定する.
-     * @param {string} link ページID.
-     */
-    setLink: function(link) {
-        this._link = link;
-
-        //linkが設定されているが、リスナが登録されていなければ登録する
-        if (link && !this._isAddLinkListener && this._page) {
-            this._page.addTapListener(this._id, this._linkListener.bind(this));
-            this._isAddLinkListener = true;
-        }
-    },
-
-    /**
-     * 指定されたページに遷移する.
-     * タップ時に実行される.
-     * @param {Navy.Touch.Event} touchEvent タッチイベント.
-     */
-    _linkListener: function(touchEvent) {
-        var _link = this._link;
-        if (_link === '$back') {
-            Navy.Screen.back();
-        }
-        else {
-            Navy.Screen.next(this._link);
-        }
-    },
-
-    /**
-     * リンクを取得する.
-     * @return {string} リンク.
-     */
-    getLink: function() {
-        return this._link;
     },
 
     /*
