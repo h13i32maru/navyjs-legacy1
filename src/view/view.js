@@ -608,17 +608,103 @@ Navy.View = Navy.Core.subclass({
             context.globalAlpha = border.alpha;
         }
 
-        if (border.color) {
-            context.strokeStyle = border.color;
-        }
+        var x1 = rect[0];
+        var y1 = rect[1];
+        var x2 = rect[2];
+        var y2 = rect[3];
 
-        if (border.width) {
-            context.lineWidth = border.width;
-        }
+        //枠線のそれぞれの座標
+        var coordinates = [[x1, y1], [x2, y1], [x2, y2], [x1, y2]];
+        var colors = this._parseBoxProperty(border, 'colors', 'color');
+        var widths = this._parseBoxProperty(border, 'widths', 'width');
+        var radiuses = this._parseBoxProperty(border, 'radiuses', 'radius');
+        var gradients = this._parseBoxProperty(border, 'gradients', 'gradient');
 
-        context.strokeRect(x, y, width, height);
+        for (var i = 0; i < 4; i++) {
+            //width
+            if (widths[i]) {
+                context.lineWidth = widths[i];
+            } else {
+                continue;
+            }
+
+            var next = (i + 1) % 4;
+            //startx, starty, endx, endy
+            var sx = coordinates[i][0];
+            var sy = coordinates[i][1];
+            var ex = coordinates[next][0];
+            var ey = coordinates[next][1];
+
+            //gradient or single-color
+            if (gradients[i]) {
+                var gr = context.createLinearGradient(sx, sy, ex, ey);
+                var gradient = gradients[i];
+                var gradientlen = gradient.length;
+                for (var j = 0; j < gradientlen; j++) {
+                    gr.addColorStop(gradient[j][0], gradient[j][1]);
+                }
+                context.strokeStyle = gr;
+            } else if (colors[i]) {
+                context.strokeStyle = colors[i];
+            } else {
+                continue;
+            }
+
+            context.beginPath();
+            //round-angle or right-angle
+            if (radiuses[i]) {
+                context.lineCap = 'round';
+                context.lineJoin = 'round';
+                var r = radiuses[i];
+                switch (i) {
+                case 0: //top
+                    context.arc(sx + r, sy + r, r, (Math.PI/180) * (180 + 45), (Math.PI/180) * 270, false);
+                    context.moveTo(sx + r, sy);
+                    context.lineTo(ex - r, ey);
+                    context.arc(ex - r, ey + r, r, (Math.PI/180) * 270, (Math.PI/180) * (270 + 45), false);
+                    break;
+                case 1: //right
+                    context.arc(sx - r, sy + r, r, (Math.PI/180) * -45, (Math.PI/180) * 0, false);
+                    context.moveTo(sx, sy + r);
+                    context.lineTo(ex, ey - r);
+                    context.arc(ex - r, ey - r, r, (Math.PI/180) * 0, (Math.PI/180) * 45, false);
+                    break;
+                case 2: //bottom
+                    context.arc(sx - r, sy - r, r, (Math.PI/180) * 45, (Math.PI/180) * 90, false);
+                    context.moveTo(sx - r, sy);
+                    context.lineTo(ex + r, ey);
+                    context.arc(ex + r, ey - r, r, (Math.PI/180) * 90, (Math.PI/180) * (90 + 45), false);
+                    break;
+                case 3: //left
+                    context.arc(sx + r, sy - r, r, (Math.PI/180) * (90 + 45), (Math.PI/180) * 180, false);
+                    context.moveTo(sx, sy - r);
+                    context.lineTo(ex, ey + r);
+                    context.arc(ex + r, ey + r, r, (Math.PI/180) * 180, (Math.PI/180) * (180 + 45), false);
+                    break;
+                default:
+                    //TODO:例外
+                    console.log("error");
+                }
+            } else {
+                context.lineCap = 'square';
+                context.moveTo(sx, sy);
+                context.lineTo(ex, ey);
+            }
+            context.stroke();
+        }
 
         context.globalAlpha = origAlpha;
+    },
+
+    //TODO: jsdoc
+    _parseBoxProperty: function(obj, quadruple, single) {
+        if (quadruple in obj) {
+            return obj[quadruple];
+        } else if (single in obj) {
+            return [obj[single], obj[single], obj[single], obj[single]];
+        } else {
+            return null;
+        }
     },
 
     /**
