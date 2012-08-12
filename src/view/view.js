@@ -562,13 +562,30 @@ Navy.View = Navy.Core.subclass({
         var pwidth = width + this._paddingLeft + this._paddingRight;
         var pheight = height + this._paddingTop + this._paddingBottom;
 
+        //背景描画
         if (this._background) {
+            if (this._background.alpha) {
+                context.globalAlpha = this._background.alpha;
+            }
+
             if (this._background.color) {
                 context.fillStyle = this._background.color;
                 context.fillRect(px, py, pwidth, pheight);
             }
+
+            if (this._background.image) {
+                //TODO:クロージャ使わないようにすべき
+                var backgroundImage = new Image();
+                backgroundImage.src = this._background.image;
+                backgroundImage.addEventListener('load', function(){
+                    context.drawImage(backgroundImage, px, py);
+                }, false);
+            }
+
+            context.globalAlpha = 1;
         }
 
+        //枠線描画
         if (this._border) {
             context.strokeStyle = this._border.color;
             context.lineWidth = this._border.width;
