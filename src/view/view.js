@@ -576,32 +576,13 @@ Navy.View = Navy.Core.subclass({
         //garidnet or color
         if (background.gradient) {
             var gradient = background.gradient;
-
             var direction = gradient.direction;
-            switch (direction) {
-            case 'top':          var gr = context.createLinearGradient(x0, y0, x0, y1); break;
-            case 'right':        var gr = context.createLinearGradient(x1, y1, x0, y1); break;
-            case 'bottom':       var gr = context.createLinearGradient(x0, y1, x0, y0); break;
-            case 'left':         var gr = context.createLinearGradient(x0, y0, x1, y0); break;
-            case 'top-right':    //fall down
-            case 'right-top':    var gr = context.createLinearGradient(x1, y0, x0, y1); break;
-            case 'top-left':     //fall down
-            case 'left-top':     var gr = context.createLinearGradient(x0, y0, x1, y1); break;
-            case 'bottom-right': //fall down
-            case 'right-bottom': var gr = context.createLinearGradient(x1, y1, x0, y0); break;
-            case 'bottom-left':  //fall down
-            case 'left-bottom':  var gr = context.createLinearGradient(x0, y1, x1, y0); break;
-            default:
-                //TODO:例外
-                console.log('error');
-            }
-
+            var gr = this._createLinearGradient(context, direction, rect);
             var colorstop = gradient.colorstop;
             var colorstoplen = colorstop.length;
             for (var i = 0; i < colorstoplen; i++) {
                 gr.addColorStop(colorstop[i][0], this._convertColor(colorstop[i][1]));
             }
-
             context.fillStyle = gr;
         } else if (background.color) {
             context.fillStyle = this._convertColor(background.color);
@@ -672,11 +653,14 @@ Navy.View = Navy.Core.subclass({
 
             //gradient or single-color
             if (gradients && gradients[i]) {
-                var gr = context.createLinearGradient(sx, sy, ex, ey);
                 var gradient = gradients[i];
-                var gradientlen = gradient.length;
-                for (var j = 0; j < gradientlen; j++) {
-                    gr.addColorStop(gradient[j][0], this._convertColor(gradient[j][1]));
+                var direction = gradient.direction;
+                var gr = this._createLinearGradient(context, direction, rect);
+                //var gr = context.createLinearGradient(sx, sy, ex, ey);
+                var colorstop = gradient.colorstop;
+                var colorstoplen = colorstop.length;
+                for (var j = 0; j < colorstoplen; j++) {
+                    gr.addColorStop(colorstop[j][0], this._convertColor(colorstop[j][1]));
                 }
                 context.strokeStyle = gr;
             } else if (colors[i]) {
@@ -727,6 +711,32 @@ Navy.View = Navy.Core.subclass({
             }
             context.stroke();
         }
+    },
+
+    _createLinearGradient: function(context, direction, rect) {
+        var x0 = rect[0];
+        var y0 = rect[1];
+        var x1 = rect[2];
+        var y1 = rect[3];
+        switch (direction) {
+        case 'top':          var gr = context.createLinearGradient(x0, y0, x0, y1); break;
+        case 'right':        var gr = context.createLinearGradient(x1, y1, x0, y1); break;
+        case 'bottom':       var gr = context.createLinearGradient(x0, y1, x0, y0); break;
+        case 'left':         var gr = context.createLinearGradient(x0, y0, x1, y0); break;
+        case 'top-right':    //fall down
+        case 'right-top':    var gr = context.createLinearGradient(x1, y0, x0, y1); break;
+        case 'top-left':     //fall down
+        case 'left-top':     var gr = context.createLinearGradient(x0, y0, x1, y1); break;
+        case 'bottom-right': //fall down
+        case 'right-bottom': var gr = context.createLinearGradient(x1, y1, x0, y0); break;
+        case 'bottom-left':  //fall down
+        case 'left-bottom':  var gr = context.createLinearGradient(x0, y1, x1, y0); break;
+        default:
+            //TODO:例外
+            console.log('error');
+        }
+
+        return gr;
     },
 
     //TODO: jsdoc
