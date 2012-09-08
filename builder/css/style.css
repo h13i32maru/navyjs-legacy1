@@ -1,0 +1,76 @@
+/* override twitter bootstrap */
+.tabbable {
+  display:-webkit-box;
+  display:-moz-box;
+  display:-webkit-flexbox;
+  display:-moz-flexbox;
+  display:flexbox;
+  width:100%;
+}
+
+.tabs-left > .nav-tabs {
+  float:none;
+  margin:0;
+}
+
+.tab-content {
+  border: solid 1px #ddd;
+  border-left:none;
+  padding: 10px;
+}
+
+.well {
+  padding:0;
+}
+
+.nav-list {
+  padding:0;
+}
+
+.nav-list > li > a, .nav-list .nav-header {
+  margin:0;
+}
+
+/* common */
+.bs-flex {
+  display:-webkit-box;
+  display:-moz-box;
+  display:-webkit-flexbox;
+  display:-moz-flexbox;
+  display:flexbox;
+}
+
+.bs-flex [class*="span"] {
+  display:block;
+  float:none;
+  height:100%;
+  box-sizing:border-box;
+}
+
+.bs-file-list li{
+  border-bottom: solid 1px #ddd;
+  padding:5px;
+}
+
+/* size and position */
+html {
+  height:100%;
+  margin:0;
+  padding:0;
+}
+body {
+  padding:10px 20px;
+}
+
+.bs-file-list {
+  margin:0;
+  margin-right:10px;
+}
+
+.bs-edit-area .navbar {
+  margin-bottom:10px;
+}
+
+.bs-edit-area textarea {
+  margin:0;
+}

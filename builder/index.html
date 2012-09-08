@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="utf-8"/>
+<title>BS Builder</title>
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+
+<body class="fill-y">
+
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <button class="btn span2"><i class="icon-play"></i>Play</button>
+      <div class="nav-collapse">
+        <ul class="nav pull-right">
+          <li>
+            <div class="btn-group">
+              <button class="btn span3" data-toggle="dropdown">Project</button>
+              <button class="btn dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu span3">
+                <li class="active"><a href="#">project1</a></li>
+                <li><a href="#">project2</a></li>
+                <li><a href="#">project3</a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <button class="btn span2"><i class="icon-plus"></i>New</button>
+          </li>
+          <li>
+            <button class="btn span2"><i class="icon-trash"></i>Delete</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tabbable tabs-left fill-y">
+
+  <ul class="nav nav-tabs bs-fit-size-content-menu">
+    <li class="active"><a href="#">Conf</a></li>
+    <li><a href="#">Layout</a></li>
+    <li><a href="#">Code</a></li>
+    <li><a href="#">Image</a></li>
+  </ul>
+
+  <div class="tab-content bs-flex fill-x fill-y">
+
+    <div class="well span3 bs-file-list">
+      <ul class="nav nav-list">
+        <li><a href="#">app.json</a></li>
+        <li><a href="#">page.json</a></li>
+      </ul>
+    </div>
+
+    <div class="bs-edit-area fill-x">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <ul class="nav">
+            <li><button class="btn">Save</button></li>
+          </ul>
+        </div>
+      </div>
+        
+      <textarea class="fill-y fill-x"></textarea>
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+<script src="jquery/jquery-1.8.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="js/fitsize.js"></script>
+</body>
+
+</html>
