@@ -2,4 +2,5 @@ navy.js
 doc/_build
 doc/_static
 doc/_templates
-builder/js/builder.js
+builder/www/js/builder.js
+builder/data/*
