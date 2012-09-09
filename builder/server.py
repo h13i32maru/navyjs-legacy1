@@ -4,9 +4,9 @@ from http.server import BaseHTTPRequestHandler
 from http.server import SimpleHTTPRequestHandler
 from urllib import parse as urlparse
 
-#from handler.handler import Handler
 from handler.projects_handler import ProjectsHandler
 from handler.file_handler import FileHandler
+from handler.list_handler import ListHandler
 
 class Router(SimpleHTTPRequestHandler):
     def routing(self, path):

@@ -19,7 +19,7 @@ var ConfFileListView = Backbone.View.extend({
         var template = $('#file-list').html();
         for (var i = 0; i < collection.length; i++) {
             model = collection.at(i);
-            this.$el.append(_.template(template, {name: model.get('file')}));
+            this.$el.append(_.template(template, {name: model.get('name')}));
         }
     },
     selectFile: function(e) {

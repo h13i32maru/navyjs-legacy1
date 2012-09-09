@@ -26,6 +26,8 @@ var mockServer = new (Backbone.Model.extend({
     }
 }))();
 
+/*
 Backbone.sync = function(method, model, options) {
     mockServer.sync(method, model.url(), options);
 };
+*/

@@ -6,13 +6,18 @@ var FileCollection = Backbone.Collection.extend({
         this.bsType = type;
     },
     url: function() {
-        return this.urlRoot + '/' + this.bsType;
+        return this.urlRoot;
     },
     bsFetch: function() {
-        this.fetch({project: appModel.get('project')});
+        this.fetch({
+            data:{
+                project: appModel.get('project'),
+                file_type: this.bsType
+            }
+        });
     },
-    selectFile: function(file) {
-        var model = this.find(function(fileModel){ return fileModel.get('file') === file; });
+    selectFile: function(name) {
+        var model = this.find(function(fileModel){ return fileModel.get('name') === name; });
         if (!model) {
             return;
         }

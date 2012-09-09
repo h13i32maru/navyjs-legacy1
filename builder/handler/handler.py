@@ -36,7 +36,7 @@ class Handler:
             f.close()
         else:
             f = open(filepath, 'r')
-            data = f.read().encode()
+            data = f.read()
             f.close()
 
         return data

@@ -1,7 +1,6 @@
 var appModel = new (Backbone.Model.extend({
     init: function(){
-        var projectFileCollection = new FileCollection();
-        projectFileCollection.setType('project');
+        var projectFileCollection = new ProjectFileCollection();
         new ProjectFileListView({collection: projectFileCollection, appModel: this});
 
         var confFileCollection = new FileCollection();
