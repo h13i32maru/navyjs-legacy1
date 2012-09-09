@@ -4,9 +4,9 @@ var TextFileModel = Backbone.Model.extend({
         return this.urlRoot + '/' + this.get('type')
     },
     bsFetch: function() {
-        this.fetch({file: this.get('file'), success: this.bsReadOnSuccess.bind(this)});
+        this.fetch({file: this.get('file'), success: this.success.bind(this)});
     },
-    bsReadOnSuccess: function() {
+    success: function() {
         this.trigger('change', this);
     }
 });
