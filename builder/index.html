@@ -10,7 +10,7 @@
 
 <body class="fill-y">
 
-<div class="navbar">
+<div id="bs-project" class="navbar">
   <div class="navbar-inner">
     <div class="container">
       <button class="btn span2"><i class="icon-play"></i>Play</button>
@@ -18,14 +18,11 @@
         <ul class="nav pull-right">
           <li>
             <div class="btn-group">
-              <button class="btn span3" data-toggle="dropdown">Project</button>
+              <button id="bs-current-project" class="btn span3" data-toggle="dropdown">-</button>
               <button class="btn dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
               </button>
-              <ul class="dropdown-menu span3">
-                <li class="active"><a href="#">project1</a></li>
-                <li><a href="#">project2</a></li>
-                <li><a href="#">project3</a></li>
+              <ul id="bs-project-menu" class="dropdown-menu span3">
               </ul>
             </div>
           </li>
@@ -44,18 +41,16 @@
 <div class="tabbable tabs-left fill-y">
 
   <ul class="nav nav-tabs bs-fit-size-content-menu">
-    <li class="active"><a href="#">Conf</a></li>
-    <li><a href="#">Layout</a></li>
-    <li><a href="#">Code</a></li>
-    <li><a href="#">Image</a></li>
+    <li class="active"><a>Conf</a></li>
+    <li><a>Layout</a></li>
+    <li><a>Code</a></li>
+    <li><a>Image</a></li>
   </ul>
 
-  <div class="tab-content bs-flex fill-x fill-y">
+  <div id="bs-conf-file-edit" class="tab-content bs-flex fill-x fill-y">
 
     <div class="well span3 bs-file-list">
-      <ul class="nav nav-list">
-        <li><a href="#">app.json</a></li>
-        <li><a href="#">page.json</a></li>
+      <ul id="bs-conf-file-list" class="nav nav-list">
       </ul>
     </div>
 
@@ -77,9 +72,16 @@
 
 </div>
 
+<script type="text/template" id="file-list">
+  <li><a><%= name %></a></li>
+</script>
+
 <script src="jquery/jquery-1.8.1.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="underscore/underscore-min.js"></script>
+<script src="backbone/backbone-min.js"></script>
 <script src="js/fitsize.js"></script>
+<script src="js/bsbuilder.js"></script>
 </body>
 
 </html>

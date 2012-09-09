@@ -1,4 +1,6 @@
+Makefile.sample
 navy.js
 doc/_build
 doc/_static
 doc/_templates
+builder/js/builder.js

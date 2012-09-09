@@ -1,18 +1,4 @@
 $(function(){
-    /*
-    var documentHeight = $(document).height();
-
-    var contentTopOffset = $('.bs-fit-size-content').offset().top;
-    $('.bs-fit-size-main-area').height(documentHeight - contentTopOffset - 10);
-
-    var $target = $('.bs-fit-size-main-area');
-    var parentWidth = $target.parent().width();
-    var offset = $('.bs-fit-size-content-menu').width();
-    $target.width(parentWidth - offset);
-    //chromeでは後からbox-sizingを指定しないと有効にならない。chromeのバグっぽい。
-    $target.css('box-sizing', 'border-box');
-    */
-
     $target = $('.fill-x').each(function(index, $e){
         var $this = $(this);
         var $parent = $this.parent();
