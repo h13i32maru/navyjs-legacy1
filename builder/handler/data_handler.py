@@ -32,8 +32,18 @@ class DataHandler:
         else:
             return False
 
+    def get_id(self, file_path):
+        return file_path.replace(os.getcwd(), '')
+
     def get_index(self, filepath):
-        return json.dumps(os.listdir(filepath))
+        index = []
+        for name in os.listdir(filepath):
+            index.append({
+                'id': self.get_id(filepath + '/' + name),
+                'name': name
+            })
+
+        return index
 
     def get_content(self, filepath):
         if os.path.isdir(filepath):
@@ -58,7 +68,7 @@ class DataHandler:
     def do_GET_text(self, file_path, params):
         content = self.get_content(file_path)
 
-        _id = file_path.replace(os.getcwd(), '')
+        _id = self.get_id(file_path)
 
         data = {
             'id': _id,

@@ -12,10 +12,9 @@ JS	= --js js/model/app_model.js \
 	  --js js/model/text_file_model.js \
 	  --js js/model/json_file_model.js \
 	  --js js/collection/file_collection.js \
-	  --js js/collection/project_file_collection.js \
-	  --js js/view/project_file_list_view.js \
-	  --js js/view/conf_file_list_view.js \
-	  --js js/view/conf_file_edit_view.js
+	  --js js/view/projects_view.js \
+	  --js js/view/confs_view.js \
+	  --js js/view/conf_edit_view.js
 
 all: compiler
 	java -jar $(CC) $(WARNING) $(EXTERN) $(OUT) $(LEVEL) $(JS)

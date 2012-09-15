@@ -1,23 +1,20 @@
 var FileCollection = Backbone.Collection.extend({
-    urlRoot: 'list',
-    model: JsonFileModel,
-    currentFile: null,
-    setType: function(type) {
-        this.bsType = type;
+    model: TextFileModel,
+    project: null,
+    initialize: function(id) {
+        this.urlRoot = id;
+    },
+    setProject: function(project) {
+        this.project = project;
     },
     url: function() {
-        return this.urlRoot;
+        return this.urlRoot.replace('{project}', this.project);
     },
-    bsFetch: function() {
-        this.fetch({
-            data:{
-                project: appModel.get('project'),
-                file_type: this.bsType
-            }
-        });
+    parse: function(response) {
+        return response.content
     },
-    selectFile: function(name) {
-        var model = this.find(function(fileModel){ return fileModel.get('name') === name; });
+    selectFile: function(id) {
+        var model = this.find(function(fileModel){ return fileModel.get('id') === id; });
         if (!model) {
             return;
         }
@@ -27,10 +24,10 @@ var FileCollection = Backbone.Collection.extend({
         }
 
         this.currentFile = model;
-        model.bind('change', this.fileContentOnChange.bind(this));
-        model.bsFetch();
+        model.bind('change', this.fileOnChange.bind(this));
+        model.fetch();
     },
-    fileContentOnChange: function(fileModel){
+    fileOnChange: function(fileModel){
         this.trigger('change:file', this.currentFile);
     }
 });

@@ -1,4 +1,4 @@
-var ConfFileListView = Backbone.View.extend({
+var ConfsView = Backbone.View.extend({
     el: '#bs-conf-file-list',
     events: {
         'click li a': 'selectFile' 
@@ -10,7 +10,8 @@ var ConfFileListView = Backbone.View.extend({
         this.appModel.on('change:project', this.changeProject.bind(this));
     },
     changeProject: function(appModel) {
-        this.collection.bsFetch();
+        this.collection.setProject(appModel.get('project'));
+        this.collection.fetch();
     },
     render: function() {
         this.$el.children().remove();
@@ -19,14 +20,14 @@ var ConfFileListView = Backbone.View.extend({
         var template = $('#file-list').html();
         for (var i = 0; i < collection.length; i++) {
             model = collection.at(i);
-            this.$el.append(_.template(template, {name: model.get('name')}));
+            this.$el.append(_.template(template, {name: model.get('name'), id: model.get('id')}));
         }
     },
     selectFile: function(e) {
         this.$('.active').removeClass('active');
         var $target = $(e.target);
         $target.parent().addClass('active');
-        var file = $target.text();
+        var file = $target.attr('data-id');
         this.collection.selectFile(file);
     }
 });

@@ -1,4 +1,4 @@
-var ConfFileEditView = Backbone.View.extend({
+var ConfEditView = Backbone.View.extend({
     el: '#bs-conf-file-edit',
     currentFile: null,
     initialize: function(options) {

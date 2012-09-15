@@ -1,12 +1,11 @@
 var appModel = new (Backbone.Model.extend({
     init: function(){
-        var projectFileCollection = new ProjectFileCollection();
-        new ProjectFileListView({collection: projectFileCollection, appModel: this});
+        var projects = new FileCollection('/data');
+        new ProjectsView({collection: projects, appModel: this});
 
-        var confFileCollection = new FileCollection();
-        confFileCollection.setType('conf');
-        new ConfFileListView({collection: confFileCollection, appModel: this});
-        new ConfFileEditView({collection: confFileCollection, appModel: this});
+        var confs = new FileCollection('/data/{project}/conf');
+        new ConfsView({collection: confs, appModel: this});
+        new ConfEditView({collection: confs, appModel: this});
     }
 }))();
 
