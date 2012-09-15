@@ -1,9 +1,7 @@
-var ConfEditView = Backbone.View.extend({
-    el: '#bs-conf-file-edit',
+var FileEditView = Backbone.View.extend({
     currentFile: null,
     initialize: function(options) {
-        this.appModel = options.appModel;
-        this.appModel.on('change:project', this.changeProject.bind(this));
+        appModel.on('change:project', this.changeProject.bind(this));
         this.collection.on('change:file', this.changeFile.bind(this));
     },
     setContent: function(fileModel){

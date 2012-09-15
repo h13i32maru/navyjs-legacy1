@@ -49,11 +49,17 @@ a {
   float:none;
   height:100%;
   box-sizing:border-box;
+  overflow-y: auto;
+  overflow-style: scrollbar;
 }
 
 .bs-file-list li{
   border-bottom: solid 1px #ddd;
   padding:5px;
+}
+
+.tab-content:not([class*="visible"]) {
+  display:none;
 }
 
 /* size and position */
@@ -77,4 +83,10 @@ body {
 
 .bs-edit-area textarea {
   margin:0;
+}
+
+/* individual */
+.bs-file-list .search-box {
+  margin:4px;
+  border-bottom: solid 1px #ddd;
 }

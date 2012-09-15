@@ -38,22 +38,20 @@
   </div>
 </div>
 
-<div class="tabbable tabs-left fill-y">
+<div id="bs-content-tabs" class="tabbable tabs-left fill-y">
 
-  <ul class="nav nav-tabs bs-fit-size-content-menu">
-    <li class="active"><a>Conf</a></li>
-    <li><a>Layout</a></li>
-    <li><a>Code</a></li>
-    <li><a>Image</a></li>
+  <ul id="bs-content-tabs-buttons" class="nav nav-tabs bs-fit-size-content-menu">
+    <li><a id="bs-content-tab-conf" href="#bs-conf-file-edit">Conf</a></li>
+    <li><a id="bs-content-tab-layout">Layout</a></li>
+    <li><a id="bs-content-tab-code" href="#bs-code-file-edit">Code</a></li>
+    <li><a id="bs-content-tab-image">Image</a></li>
   </ul>
 
   <div id="bs-conf-file-edit" class="tab-content bs-flex fill-x fill-y">
-
-    <div class="well span3 bs-file-list">
-      <ul id="bs-conf-file-list" class="nav nav-list">
+    <div id="bs-conf-file-list" class="well span3 bs-file-list">
+      <ul class="nav nav-list">
       </ul>
     </div>
-
     <div class="bs-edit-area fill-x">
       <div class="navbar">
         <div class="navbar-inner">
@@ -62,10 +60,29 @@
           </ul>
         </div>
       </div>
-        
       <textarea class="fill-y fill-x"></textarea>
     </div>
+  </div>
 
+  <div id="bs-code-file-edit" class="tab-content bs-flex fill-x fill-y">
+    <div id="bs-code-file-list" class="well span3 bs-file-list">
+      <div class="search-box"><input type="text" placeholder="search" class="fill-x"/></div>
+      <ul class="nav nav-list">
+      </ul>
+    </div>
+    <div class="bs-edit-area fill-x">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <ul class="nav">
+            <li><button class="btn">Save</button></li>
+            <li><button class="btn">New</button></li>
+            <li><button class="btn">Move</button></li>
+            <li><button class="btn">Delete</button></li>
+          </ul>
+        </div>
+      </div>
+      <textarea class="fill-y fill-x"></textarea>
+    </div>
   </div>
 
 </div>
@@ -80,7 +97,8 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="underscore/underscore-min.js"></script>
 <script src="backbone/backbone-min.js"></script>
-<script src="js/fitsize.js"></script>
+<script src="js/jquery/jquery.fitsize.js"></script>
+<script src="js/jquery/jquery.list_filter.js"></script>
 <script src="js/builder.js"></script>
 </body>
 

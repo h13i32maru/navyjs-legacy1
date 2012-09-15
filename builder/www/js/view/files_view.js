@@ -1,27 +1,27 @@
-var ConfsView = Backbone.View.extend({
-    el: '#bs-conf-file-list',
+var FilesView = Backbone.View.extend({
     events: {
         'click li a': 'selectFile' 
     },
     initialize: function(options) {
-        this.appModel = options.appModel;
-
         this.collection.on('reset', this.render.bind(this)); 
-        this.appModel.on('change:project', this.changeProject.bind(this));
+        appModel.on('change:project', this.changeProject.bind(this));
     },
     changeProject: function(appModel) {
         this.collection.setProject(appModel.get('project'));
         this.collection.fetch();
     },
     render: function() {
-        this.$el.children().remove();
+        var $ul = this.$el.find('ul');
+        $ul.children().remove();
         var collection = this.collection;
         var model;
         var template = $('#file-list').html();
         for (var i = 0; i < collection.length; i++) {
             model = collection.at(i);
-            this.$el.append(_.template(template, {name: model.get('name'), id: model.get('id')}));
+            $ul.append(_.template(template, {name: model.get('name'), id: model.get('id')}));
         }
+
+        $ul.listFilter(this.$el.find('.search-box input'));
     },
     selectFile: function(e) {
         this.$('.active').removeClass('active');
