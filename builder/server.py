@@ -4,15 +4,12 @@ from http.server import BaseHTTPRequestHandler
 from http.server import SimpleHTTPRequestHandler
 from urllib import parse as urlparse
 
-from handler.projects_handler import ProjectsHandler
-from handler.file_handler import FileHandler
-from handler.list_handler import ListHandler
+from handler.data_handler import DataHandler
 
 class Router(SimpleHTTPRequestHandler):
     def routing(self, path):
-        #url pathの一つ目の階層をハンドラー名として使用する
-        parsed_path = urlparse.urlparse(path)
-        handler_name = parsed_path.path.split('/')[1].capitalize()
+        #pathの一つ目の階層をハンドラー名として使用する
+        handler_name = path.split('/')[1].capitalize()
         handler_name += 'Handler'
 
         if handler_name in globals():
@@ -20,15 +17,6 @@ class Router(SimpleHTTPRequestHandler):
             return handler_class(self)
         else:
             return None
-
-    def get_params(self, path):
-        # 文字列クエリを辞書型に変換する. この時に値が1つしかない場合は配列からunwrapする
-        parsed_path = urlparse.urlparse(path)
-        params = urlparse.parse_qs(parsed_path.query);
-        for k, v in params.items():
-            if len(v) == 1:
-                params[k] = v[0]
-        return params
 
     def send_result(self, result, mime):
         self.send_response(200)
@@ -44,7 +32,9 @@ class Router(SimpleHTTPRequestHandler):
             SimpleHTTPRequestHandler.do_GET(self)
             return
 
-        (result, mime) = handler.do_GET(self.get_params(self.path));
+        url = urlparse.urlparse(self.path)
+        params = urlparse.parse_qs(url.query)
+        (result, mime) = handler.do_GET(url.path, params);
         self.send_result(result, mime);
 
 def run():
