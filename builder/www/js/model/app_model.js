@@ -1,5 +1,10 @@
 var appModel = new (Backbone.Model.extend({
     doneTemplate: false,
+    initiaize: function(){
+        this.on('change:project', this.changeProject.bind(this));
+    },
+    changeProject: function(){
+    },
     insertTemplate: function(){
         if (this.doneTemplate){
             return;
