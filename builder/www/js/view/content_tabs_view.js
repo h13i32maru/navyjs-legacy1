@@ -2,7 +2,9 @@ var ContentTabsView = Backbone.View.extend({
     el: '#bs-content-tabs',
     events :{
         'click #bs-content-tab-conf': 'selectTab',
-        'click #bs-content-tab-code': 'selectTab'
+        'click #bs-content-tab-layout': 'selectTab',
+        'click #bs-content-tab-code': 'selectTab',
+        'click #bs-content-tab-image': 'selectTab'
     },
     selectTab: function(e) {
         e.preventDefault();
@@ -11,7 +13,7 @@ var ContentTabsView = Backbone.View.extend({
         $target.parent().addClass('active');
 
         var $tab_content = $($target.attr('href'));
-        this.$el.find('.tab-content').removeClass('visible');
+        this.$el.find('>.tab-content > .tab-pane').removeClass('visible');
         $tab_content.addClass('visible');
 
         $.fitsize();

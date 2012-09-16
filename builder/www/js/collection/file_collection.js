@@ -1,8 +1,9 @@
 var FileCollection = Backbone.Collection.extend({
-    model: TextFileModel,
+    model: null,
     project: null,
-    initialize: function(id) {
+    initialize: function(id, model) {
         this.urlRoot = id;
+        this.model = model;
     },
     setProject: function(project) {
         this.project = project;
