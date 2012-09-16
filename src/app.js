@@ -72,7 +72,7 @@ Navy.App = Navy.Core.instance({
     _init: function() {
         this._hideLocationBar();
 
-        var canvas = this._createCanvas();
+        var canvas = this._createCanvas(document.getElementById('navy-canvas'));
         var context = canvas.getContext('2d');
 
         this._canvas = canvas;
@@ -95,14 +95,25 @@ Navy.App = Navy.Core.instance({
         }, 500);
     },
 
+    getComputedSize: function(elm) {
+      var width = window.getComputedStyle(elm, '').getPropertyValue("width").replace('px', '');
+      width = parseInt(width, 10);
+
+      var height = window.getComputedStyle(elm, '').getPropertyValue("height").replace('px', '');
+      height = parseInt(height, 10);
+      return [width, height];
+    },
+
     /**
      * HTMLにcanvasを作成する
+     * @param {HTMLElement} parentElm canvasを追加する親要素. 指定がない時はdocument.bodyを使用する.
      * @return {Canvas} 作成したキャンバス要素.
      */
-    _createCanvas: function() {
-        document.body.style.margin = 0;
-        document.body.style.padding = 0;
-        document.body.style.backgroundColor = '#000000';
+    _createCanvas: function(parentElm) {
+        parentElm = parentElm || document.body;
+
+        parentElm.style.position = 'relative';
+
         var wrap = document.createElement('div');
         wrap.style.position = 'absolute';
         wrap.style.top = 0;
@@ -115,8 +126,9 @@ Navy.App = Navy.Core.instance({
         canvas.height = canvasHeight;
 
         //拡縮の計算
-        var browserWidth = window.innerWidth;
-        var browserHeight = window.innerHeight;
+        var parentSize = this.getComputedSize(parentElm);
+        var browserWidth = parentSize[0];
+        var browserHeight = parentSize[1];
 
         var scaleWidth = browserWidth / canvasWidth;
         var scaleHeight = browserHeight / canvasHeight;
@@ -146,7 +158,7 @@ Navy.App = Navy.Core.instance({
         }
 
         wrap.appendChild(canvas);
-        document.body.appendChild(wrap);
+        parentElm.appendChild(wrap);
 
         return canvas;
     },
