@@ -25,7 +25,9 @@ Navy.App = Navy.Core.instance({
         Navy.LayoutHolder.wakeup();
         Navy.ImageHolder.wakeup();
 
-        Navy.Config.process(this._init.bind(this));
+        if (! Navy._builder_){
+            Navy.Config.process(this._init.bind(this));
+        }
     },
 
     /**
@@ -66,13 +68,32 @@ Navy.App = Navy.Core.instance({
         return 'unknown';
     },
 
+    initForBuilder: function() {
+        Navy.Config.process(this._initForBuilder.bind(this));
+    },
+
+    _initForBuilder: function() {
+        var canvas = this._createCanvas(Navy._builder_.parentElm);
+        var context = canvas.getContext('2d');
+
+        this._canvas = canvas;
+        this._context = context;
+
+        this._setOnTouch(canvas);
+
+        Navy.Root.wakeup(Navy.Config.App.size);
+        Navy.Loop.wakeup(context);
+        //Navy.Screen.wakeup();
+        Navy.Screen.wakeup(Navy.Config.App.mainPageId);
+    },
+
     /**
      * 描画を開始するための初期化を行う.
      */
     _init: function() {
         this._hideLocationBar();
 
-        var canvas = this._createCanvas(document.getElementById('navy-canvas'));
+        var canvas = this._createCanvas();
         var context = canvas.getContext('2d');
 
         this._canvas = canvas;

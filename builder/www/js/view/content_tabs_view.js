@@ -1,14 +1,17 @@
 var ContentTabsView = Backbone.View.extend({
     el: '#bs-content-tabs',
     events :{
-        'click #bs-content-tab-conf': 'selectTab',
-        'click #bs-content-tab-layout': 'selectTab',
-        'click #bs-content-tab-code': 'selectTab',
-        'click #bs-content-tab-image': 'selectTab'
+        'click #bs-content-tabs-buttons li a': 'selectTabOnClick'
     },
-    selectTab: function(e) {
+    initialize: function() {
+        this.selectTab(this.$el.find('#bs-content-tab-layout'));
+    },
+    selectTabOnClick: function(e) {
         e.preventDefault();
-        var $target = $(e.target);
+        this.selectTab(e.target);
+    },
+    selectTab: function(elm) {
+        var $target = $(elm);
         this.$el.find('#bs-content-tabs-buttons li.active').removeClass('active');
         $target.parent().addClass('active');
 

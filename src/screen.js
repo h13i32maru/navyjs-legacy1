@@ -8,7 +8,9 @@ Navy.Screen = Navy.Core.instance({
     _transitionStack: null,
 
     initialize: function($super, mainPageId) {
-        Navy.Page.create(mainPageId, this._setMainPageOnCreatePage.bind(this));
+        if (mainPageId) {
+            Navy.Page.create(mainPageId, this._setMainPageOnCreatePage.bind(this));
+        }
     },
 
     _setMainPageOnCreatePage: function(page) {

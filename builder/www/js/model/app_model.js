@@ -1,9 +1,17 @@
+Navy._builder_ = true;
+
 var appModel = new (Backbone.Model.extend({
     doneTemplate: false,
-    initiaize: function(){
-        this.on('change:project', this.changeProject.bind(this));
+    initialize: function(){
+        this.on('change', this.changeProject.bind(this));
     },
     changeProject: function(){
+        Navy._builder_ = {
+            parentElm: document.getElementById('bs-layout-canvas'),
+            urlPrefix: 'raw/' + this.get('project') + '/'
+        };
+        Navy._builder_.parentElm.innerHTML = '';
+        Navy.App.initForBuilder();
     },
     insertTemplate: function(){
         if (this.doneTemplate){
@@ -23,6 +31,7 @@ var appModel = new (Backbone.Model.extend({
         this.insertTemplate();
         new ContentTabsView();
         new LayoutCanvasView();
+        $.fitsize();
         new LayoutEditView();
         new LayoutPickView();
 
@@ -31,7 +40,7 @@ var appModel = new (Backbone.Model.extend({
         new ProjectsView({collection: projects, appModel: this});
 
         // conf
-        var confs = new FileCollection('/data/{project}/conf', JsonFileModel);
+        var confs = new FileCollection('/data/{project}/config', JsonFileModel);
         new FilesView({collection: confs, el: '#bs-conf-file-list'});
         new FileEditView({collection: confs, el: '#bs-conf-file-edit'});
 

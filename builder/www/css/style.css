@@ -74,6 +74,9 @@ select {
   margin:0;
   margin-top: -1px;
 }
+.tab-pane {
+  height:100%;
+}
 
 
 .well {
@@ -217,4 +220,9 @@ body {
 #bs-layout-pick-view ul li{
   padding: 2px;
   border: dotted 1px #aaa;
+}
+
+#bs-layout-canvas {
+  border: dotted 1px #222;
+  background:#bbb;
 }

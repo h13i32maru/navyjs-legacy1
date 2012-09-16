@@ -28,9 +28,16 @@ class Router(SimpleHTTPRequestHandler):
     def do_GET(self):
         handler = self.routing(self.path) 
         if handler is None:
-            self.path = 'www/' + self.path
-            SimpleHTTPRequestHandler.do_GET(self)
-            return
+            if self.path.split('/')[1] == 'raw':
+                tmp = self.path.split('/');
+                tmp[1] = 'data';
+                self.path = '/'.join(tmp);
+                SimpleHTTPRequestHandler.do_GET(self)
+                return
+            else:
+                self.path = 'www/' + self.path
+                SimpleHTTPRequestHandler.do_GET(self)
+                return
 
         url = urlparse.urlparse(self.path)
         params = urlparse.parse_qs(url.query)
