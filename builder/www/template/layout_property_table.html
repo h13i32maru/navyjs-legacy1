@@ -1,0 +1,127 @@
+<style>
+table.prop {
+  width:100%;
+}
+table.prop tr {
+  border-bottom:solid 1px #ddd;
+}
+table.prop span.prop-label {
+  display:block;
+}
+table.prop tr td:first-child, table.prop tr td:first-child select {
+  padding:0;
+  width:80px;
+}
+
+table.prop input {
+  padding:2px 4px;
+  margin:0;
+  width: 90%;
+}
+
+table.prop select {
+  margin:0;
+  padding:0;
+  height:auto;
+}
+</style>
+
+<script>
+(function($){
+  $.fn.multiProp = function(){
+    var $select = this;
+
+    $select.each(hideAll);
+    $select.each(showProp);
+    $select.each(setOnChange);
+  };
+
+  var hideAll = function(){
+    $(this).find('option').each(function(){
+      $($(this).attr('value')).hide();
+    });
+  };
+
+  var showProp = function(){
+    $($(this).val()).show();
+  };
+
+  var setOnChange = function(){
+    $(this).change(function(ev){
+      hideAll.apply(this);
+      showProp.apply(this);
+    });
+  };
+})(jQuery);
+$('table.prop tr td:first-child select').multiProp();
+</script>
+
+<!-- basic -->
+<table class="prop">
+<tbody>
+<tr><td>class</td><td><input type="text"/></td></tr>
+<tr><td>id</td><td><input type="text"/></td></tr>
+<tr><td>pos</td><td><input type="text" placeholder="[1, 2]"/></td></tr>
+<tr><td>size</td><td><input type="text" placeholder="[100, 200]"/></td></tr>
+<tr>
+  <td><select><option value="#prop-padding">padding<option value="#prop-paddings">paddings</select></td>
+  <td><input id="prop-padding" type="text" placeholder="10"/><input id="prop-paddings" type="text" placeholder="[1, 2, 3, 4]"/></td>
+</tr>
+<tr><td>z</td><td><input type="text" placeholder="1"/></td></tr>
+</tbody>
+</table>
+
+<!-- background -->
+<button type="button" class="btn" data-toggle="collapse" data-target="#bs-prop-background">background</button>
+<div id="bs-prop-background" class="collapse out">
+<table class="prop">
+<tbody>
+<tr><td>src</td><td><input type="text"/></td></tr>
+<tr><td>color</td><td><input type="text"/></td></tr>
+<tr>
+  <td>gradient</td>
+  <td><div><span class="prop-label">direction</span><input type="text"/></div> <div><span class="prop-label">colorstop</span><input type="text"/></div></td>
+</tr>
+<tr>
+  <td><select><option value="#prop-background-radius">radius<option value="#prop-background-radiuses">radiuses</select></td>
+  <td><input id="prop-background-radius" type="text" placeholder="4"/><input id="prop-background-radiuses" type="text" placeholder="[1, 2, 3, 4]"/></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- border -->
+<button type="button" class="btn" data-toggle="collapse" data-target="#bs-prop-border">border</button>
+<div id="bs-prop-border" class="collapse out">
+<table class="prop">
+<tbody>
+<tr>
+  <td><select><option value="#prop-border-width">width<option value="#prop-border-widths">widths</select></td>
+  <td><input id="prop-border-width" type="text" placeholder="1"/> <input id="prop-border-widths" type="text" placeholder="[1, 2, 3, 4]"/></td>
+</tr>
+<tr>
+  <td><select><option value="#prop-border-color">color<option value="#prop-border-colors">colors</select></td>
+  <td><input id="prop-border-color" type="text" placeholder="#001122"/><input id="prop-border-colors" type="text" placeholder="['#000000', '#111111', '#222222', '#333333']"/></td>
+</tr>
+<tr>
+  <td><select><option value="#prop-border-radius">radius<option value="#prop-border-radiuses">radiuses</select></td>
+  <td><input id="prop-border-radius" type="text"/><input id="prop-border-radiuses" type="text"/></td>
+</tr>
+<tr>
+  <td><select><option value="#prop-border-gradient-wrapper">gradient<option value="#prop-border-gradients-wrapper">gradients</select></td>
+  <td>
+    <div id="prop-border-gradient-wrapper"><div><span class="prop-label">direction</span><input type="text"/></div><div><span class="prop-label">colorstop</span><input type="text"/></div></div>
+    <div id="prop-border-gradients-wrapper">
+      <div><span class="prop-label">top direction</span><input type="text"/><span class="prop-label">top colorstop</span><input type="text"/></div>
+      <div><span class="prop-label">right direction</span><input type="text"/><span class="prop-label">right colorstop</span><input type="text"/></div>
+      <div><span class="prop-label">bottom direction</span><input type="text"/><span class="prop-label">bottom colorstop</span><input type="text"/></div>
+      <div><span class="prop-label">left direction</span><input type="text"/><span class="prop-label">left colorstop</span><input type="text"/></div>
+    </div>
+  </td>
+</tr>
+
+
+</tbody>
+</table>
+</div>
+

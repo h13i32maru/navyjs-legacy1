@@ -25,7 +25,9 @@ Navy.App = Navy.Core.instance({
         Navy.LayoutHolder.wakeup();
         Navy.ImageHolder.wakeup();
 
-        Navy.Config.process(this._init.bind(this));
+        if (! Navy._builder_){
+            Navy.Config.process(this._init.bind(this));
+        }
     },
 
     /**
@@ -66,6 +68,25 @@ Navy.App = Navy.Core.instance({
         return 'unknown';
     },
 
+    initForBuilder: function() {
+        Navy.Config.process(this._initForBuilder.bind(this));
+    },
+
+    _initForBuilder: function() {
+        var canvas = this._createCanvas(Navy._builder_.parentElm);
+        var context = canvas.getContext('2d');
+
+        this._canvas = canvas;
+        this._context = context;
+
+        this._setOnTouch(canvas);
+
+        Navy.Root.wakeup(Navy.Config.App.size);
+        Navy.Loop.wakeup(context);
+        //Navy.Screen.wakeup();
+        Navy.Screen.wakeup(Navy.Config.App.mainPageId);
+    },
+
     /**
      * 描画を開始するための初期化を行う.
      */
@@ -95,14 +116,25 @@ Navy.App = Navy.Core.instance({
         }, 500);
     },
 
+    getComputedSize: function(elm) {
+      var width = window.getComputedStyle(elm, '').getPropertyValue("width").replace('px', '');
+      width = parseInt(width, 10);
+
+      var height = window.getComputedStyle(elm, '').getPropertyValue("height").replace('px', '');
+      height = parseInt(height, 10);
+      return [width, height];
+    },
+
     /**
      * HTMLにcanvasを作成する
+     * @param {HTMLElement} parentElm canvasを追加する親要素. 指定がない時はdocument.bodyを使用する.
      * @return {Canvas} 作成したキャンバス要素.
      */
-    _createCanvas: function() {
-        document.body.style.margin = 0;
-        document.body.style.padding = 0;
-        document.body.style.backgroundColor = '#000000';
+    _createCanvas: function(parentElm) {
+        parentElm = parentElm || document.body;
+
+        parentElm.style.position = 'relative';
+
         var wrap = document.createElement('div');
         wrap.style.position = 'absolute';
         wrap.style.top = 0;
@@ -115,8 +147,9 @@ Navy.App = Navy.Core.instance({
         canvas.height = canvasHeight;
 
         //拡縮の計算
-        var browserWidth = window.innerWidth;
-        var browserHeight = window.innerHeight;
+        var parentSize = this.getComputedSize(parentElm);
+        var browserWidth = parentSize[0];
+        var browserHeight = parentSize[1];
 
         var scaleWidth = browserWidth / canvasWidth;
         var scaleHeight = browserHeight / canvasHeight;
@@ -146,7 +179,7 @@ Navy.App = Navy.Core.instance({
         }
 
         wrap.appendChild(canvas);
-        document.body.appendChild(wrap);
+        parentElm.appendChild(wrap);
 
         return canvas;
     },
