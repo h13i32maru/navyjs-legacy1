@@ -74,6 +74,9 @@ Navy.Root = Navy.View.ViewGroup.instance({
      */
     popPage: function() {
         var page = this._pages.pop();
+        if (!page) {
+            return;
+        }
         page.onChangeParent(null);
         page.onChangeRoot(null);
     },

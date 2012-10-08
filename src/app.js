@@ -83,8 +83,7 @@ Navy.App = Navy.Core.instance({
 
         Navy.Root.wakeup(Navy.Config.App.size);
         Navy.Loop.wakeup(context);
-        //Navy.Screen.wakeup();
-        Navy.Screen.wakeup(Navy.Config.App.mainPageId);
+        Navy.Screen.wakeup();
     },
 
     /**

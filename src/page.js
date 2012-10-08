@@ -184,3 +184,18 @@ Navy.Page.create = function(pageId, callback) {
 
     return page;
 };
+
+//TODO:jsdoc
+Navy.Page.createByLayoutUrl = function(layoutUrl, callback) {
+    var size = Navy.Root.getSize();
+    var layout = {
+        //id: pageId,
+        pos: [0, 0],
+        size: [size[0], size[1]],
+        extra: {
+            ref: layoutUrl
+        }
+    };
+
+    return new Navy.Page(layout, callback);
+};
