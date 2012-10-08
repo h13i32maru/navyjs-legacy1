@@ -176,7 +176,11 @@ Navy.Page.create = function(pageId, callback) {
         layout.background = pageConfig.background;
     }
 
-    var page = new window[pageClass](layout, callback);
+    if (window[pageClass]){
+        var page = new window[pageClass](layout, callback);
+    } else {
+        var page = new Navy.Page(layout, callback);
+    }
 
     return page;
 };

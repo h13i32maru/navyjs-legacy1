@@ -2,3 +2,6 @@ navy.js
 doc/_build
 doc/_static
 doc/_templates
+builder/www/js/builder.js
+builder/data/*
+*.pyc
