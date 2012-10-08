@@ -45,7 +45,7 @@ class Router(SimpleHTTPRequestHandler):
         self.send_result(result, mime);
 
 def run():
-    server_address = ('', 8000)
+    server_address = ('', 8080)
     httpd = HTTPServer(server_address, Router)
     httpd.serve_forever()
 
