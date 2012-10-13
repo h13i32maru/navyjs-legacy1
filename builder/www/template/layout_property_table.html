@@ -8,21 +8,33 @@ table.prop tr {
 table.prop span.prop-label {
   display:block;
 }
-table.prop tr td:first-child, table.prop tr td:first-child select {
+table.prop tr td:first-child {
+  padding:0;
+  width: 120px;
+}
+table.prop tr td:first-child select {
   padding:0;
   width:80px;
 }
 
-table.prop input {
+table.prop input[type="text"] {
   padding:2px 4px;
   margin:0;
   width: 90%;
+}
+
+table.prop input[type="checkbox"] {
+  margin:0 4px;
 }
 
 table.prop select {
   margin:0;
   padding:0;
   height:auto;
+}
+
+table.prop input::-webkit-input-placeholder {
+    color:#bbb;
 }
 </style>
 
@@ -53,21 +65,40 @@ table.prop select {
     });
   };
 })(jQuery);
-$('table.prop tr td:first-child select').multiProp();
+//$('table.prop tr td:first-child select').multiProp();
 </script>
 
 <!-- basic -->
 <table class="prop">
 <tbody>
-<tr><td>class</td><td><input type="text"/></td></tr>
-<tr><td>id</td><td><input type="text"/></td></tr>
-<tr><td>pos</td><td><input type="text" placeholder="[1, 2]"/></td></tr>
-<tr><td>size</td><td><input type="text" placeholder="[100, 200]"/></td></tr>
 <tr>
-  <td><select><option value="#prop-padding">padding<option value="#prop-paddings">paddings</select></td>
-  <td><input id="prop-padding" type="text" placeholder="10"/><input id="prop-paddings" type="text" placeholder="[1, 2, 3, 4]"/></td>
+  <td>class</td>
+  <td><input type="text" id="prop-class" disabled/></td>
 </tr>
-<tr><td>z</td><td><input type="text" placeholder="1"/></td></tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-id"/><span>id</span></td>
+  <td><input type="text" id="prop-id" placeholder='"id"'/></td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-pos"/>pos</td>
+  <td><input type="text" id="prop-pos" placeholder="[1, 2]"/></td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-size"/>size</td>
+  <td><input type="text" id="prop-size" placeholder="[100, 200]"/></td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-padding"/>padding</td>
+  <td><input id="prop-padding" type="text" placeholder="10"/></td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-paddings"/>paddings</td>
+  <td><input id="prop-paddings" type="text" placeholder="[1, 2, 3, 4]"/></td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-z"/>z</td><td>
+  <input type="text" id="prop-z" placeholder="1"/></td>
+</tr>
 </tbody>
 </table>
 
@@ -76,15 +107,28 @@ $('table.prop tr td:first-child select').multiProp();
 <div id="bs-prop-background" class="collapse out">
 <table class="prop">
 <tbody>
-<tr><td>src</td><td><input type="text"/></td></tr>
-<tr><td>color</td><td><input type="text"/></td></tr>
 <tr>
-  <td>gradient</td>
-  <td><div><span class="prop-label">direction</span><input type="text"/></div> <div><span class="prop-label">colorstop</span><input type="text"/></div></td>
+  <td><input type="checkbox" id="checkbox-prop-"/>src</td>
+  <td><input type="text" id="prop-background-src" placeholder='"image/foo.png"'/></td>
 </tr>
 <tr>
-  <td><select><option value="#prop-background-radius">radius<option value="#prop-background-radiuses">radiuses</select></td>
-  <td><input id="prop-background-radius" type="text" placeholder="4"/><input id="prop-background-radiuses" type="text" placeholder="[1, 2, 3, 4]"/></td>
+  <td><input type="checkbox" id="checkbox-prop-"/>color</td>
+  <td><input type="text" id="prop-background-color" placeholder='"#001122"'/></td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-"/>gradient</td>
+  <td>
+    <div><input type="text" id="prop-background-gradient-direction" title="direction" placeholder='"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'/></div>
+    <div><input type="text" id="prop-background-gradient-colorstop" title="colorstop" placeholder='[[0, "#000030"], [0.5, "#000030"], [1, "#000010"]]'/></div>
+  </td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-"/>radius</td>
+  <td><input id="prop-background-radius" type="text" placeholder="1"/></td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-"/>radiuses</td>
+  <td><input id="prop-background-radiuses" type="text" placeholder="[1, 2, 3, 4]"/></td>
 </tr>
 </tbody>
 </table>
@@ -96,31 +140,48 @@ $('table.prop tr td:first-child select').multiProp();
 <table class="prop">
 <tbody>
 <tr>
-  <td><select><option value="#prop-border-width">width<option value="#prop-border-widths">widths</select></td>
-  <td><input id="prop-border-width" type="text" placeholder="1"/> <input id="prop-border-widths" type="text" placeholder="[1, 2, 3, 4]"/></td>
+  <td><input type="checkbox" id="checkbox-prop-"/>width</td>
+  <td><input id="prop-border-width" type="text" placeholder="1"/></td>
 </tr>
 <tr>
-  <td><select><option value="#prop-border-color">color<option value="#prop-border-colors">colors</select></td>
-  <td><input id="prop-border-color" type="text" placeholder="#001122"/><input id="prop-border-colors" type="text" placeholder="['#000000', '#111111', '#222222', '#333333']"/></td>
+  <td><input type="checkbox" id="checkbox-prop-"/>widths</td>
+  <td><input id="prop-border-widths" type="text" placeholder="[1, 2, 3, 4]"/></td>
 </tr>
 <tr>
-  <td><select><option value="#prop-border-radius">radius<option value="#prop-border-radiuses">radiuses</select></td>
-  <td><input id="prop-border-radius" type="text"/><input id="prop-border-radiuses" type="text"/></td>
+  <td><input type="checkbox" id="checkbox-prop-"/>color</td>
+  <td><input id="prop-border-color" type="text" placeholder='"#001122"'/></td>
 </tr>
 <tr>
-  <td><select><option value="#prop-border-gradient-wrapper">gradient<option value="#prop-border-gradients-wrapper">gradients</select></td>
+  <td><input type="checkbox" id="checkbox-prop-"/>colors</td>
+  <td><input id="prop-border-colors" type="text" placeholder='["#000000", "#111111", "#222222", "#333333"]'/></td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-"/>radius</td>
+  <td><input id="prop-border-radius" type="text" placeholder="1"/></td>
+</tr>
+  <td><input type="checkbox" id="checkbox-prop-"/>radiuses</td>
+  <td><input id="prop-border-radiuses" type="text" placeholder="[1, 2, 3, 4]"/></td>
+</tr>
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-"/>gradient</td>
   <td>
-    <div id="prop-border-gradient-wrapper"><div><span class="prop-label">direction</span><input type="text"/></div><div><span class="prop-label">colorstop</span><input type="text"/></div></div>
-    <div id="prop-border-gradients-wrapper">
-      <div><span class="prop-label">top direction</span><input type="text"/><span class="prop-label">top colorstop</span><input type="text"/></div>
-      <div><span class="prop-label">right direction</span><input type="text"/><span class="prop-label">right colorstop</span><input type="text"/></div>
-      <div><span class="prop-label">bottom direction</span><input type="text"/><span class="prop-label">bottom colorstop</span><input type="text"/></div>
-      <div><span class="prop-label">left direction</span><input type="text"/><span class="prop-label">left colorstop</span><input type="text"/></div>
-    </div>
+    <input type="text" id="prop-border-gradient-direction" title="direction" placeholder='"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'/>
+    <input type="text" id="prop-border-gradient-colorstop" title="colorstop" placeholder='[[0, "#000030"], [0.5, "#000030"], [1, "#000010"]]'/>
   </td>
 </tr>
-
-
+<tr>
+  <td><input type="checkbox" id="checkbox-prop-"/>gradients</td>
+  <td>
+    <input type="text" id="prop-border-gradients-0-direction" title="top direction" placeholder='"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'/>
+    <input type="text" id="prop-border-gradients-0-colorstop" title="top colorstop" placeholder='[[0, "#000030"], [0.5, "#000030"], [1, "#000010"]]'/>
+    <input type="text" id="prop-border-gradients-1-direction" title="left direction" placeholder='"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'/>
+    <input type="text" id="prop-border-gradients-1-colorstop" title="left colorstop" placeholder='[[0, "#000030"], [0.5, "#000030"], [1, "#000010"]]'/>
+    <input type="text" id="prop-border-gradients-2-direction" title="bottom direction" placeholder='"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'/>
+    <input type="text" id="prop-border-gradients-2-colorstop" title="bottom colorstop" placeholder='[[0, "#000030"], [0.5, "#000030"], [1, "#000010"]]'/>
+    <input type="text" id="prop-border-gradients-3-direction" title="left direction" placeholder='"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'/>
+    <input type="text" id="prop-border-gradients-3-colorstop" title="left colorstop" placeholder='[[0, "#000030"], [0.5, "#000030"], [1, "#000010"]]'/>
+  </td>
+</tr>
 </tbody>
 </table>
 </div>

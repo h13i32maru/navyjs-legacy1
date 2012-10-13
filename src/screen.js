@@ -79,5 +79,17 @@ Navy.Screen = Navy.Core.instance({
             Navy.Root.popPage();
         });
         transition.back();
+    },
+
+    //TODO:jsdoc
+    showLayout: function(layoutUrl){
+        Navy.Page.createByLayoutUrl(layoutUrl, this._showLayout.bind(this));
+    },
+
+    //TODO:jsdoc
+    _showLayout: function(newPage){
+        Navy.Root.popPage();
+        newPage.onCreate();
+        Navy.Root.pushPage(newPage);
     }
 });

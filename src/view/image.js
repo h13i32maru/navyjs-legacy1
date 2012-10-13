@@ -13,7 +13,6 @@ Navy.View.Image = Navy.View.subclass({
      * @constructor
      */
     initialize: function($super, layout) {
-        this._image = new Image();
         $super(layout);
     },
 
@@ -33,8 +32,7 @@ Navy.View.Image = Navy.View.subclass({
      */
     setImageSrc: function(src) {
         this._loaded = false;
-        this._image.addEventListener('load', this._onLoad.bind(this), false);
-        this._image.src = src;
+        Navy.ImageHolder.getImage(src, this._onLoad.bind(this));
     },
 
     //TODO:jsdco
@@ -57,8 +55,9 @@ Navy.View.Image = Navy.View.subclass({
     /**
      * 画像が読み込まれた時のリスナ
      */
-    _onLoad: function() {
+    _onLoad: function(image) {
         this._loaded = true;
+        this._image = image;
         Navy.Loop.requestDraw();
     },
 

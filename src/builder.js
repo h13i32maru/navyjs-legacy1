@@ -1,0 +1,90 @@
+//TODO:jsdoc
+Navy.Builder = Navy.Core.instance({
+    CLASS: 'Navy.Builder',
+    _enable: false,
+    _canvasParent: null,
+    _urlPrefix: null,
+    _selectedViewListener: null,
+    _moveViewListener: null,
+    _view: null,
+    initialize: function(){
+    },
+    init: function(){
+        Navy.App.initForBuilder();
+    },
+    setEnable: function(enable) {
+        this._enable = enable;
+    },
+    getEnable: function() {
+        return this._enable;
+    },
+    setCanvasParentElement: function(parentElement){
+        parentElement.innerHTML = '';
+        this._canvasParent = parentElement;
+    },
+    getCanvasparentElement: function() {
+        return this._canvasParent;
+    },
+    setUrlPrefix: function(urlPrefix) {
+        this._urlPrefix = urlPrefix;
+    },
+    getUrl: function(url) {
+        if (this._enable) {
+            return this._urlPrefix + url;
+        } else {
+            return url;
+        }
+    },
+    setSelectedViewListener: function(listener) {
+        this._selectedViewListener = listener;
+    },
+    setMoveViewListener: function(listener) {
+        this._moveViewListener = listener;
+    },
+    selectView: function(view){
+        //TODO: リスナを削除しておく必要あり。page.removeTouchListener(this._view.getAbsoluteId(), this._onMove.bind(this));
+
+        this._view = view;
+        this._selectedViewListener(view);
+
+        var page = view.getPage();
+        page.addTouchListener(view.getAbsoluteId(), this._onMove.bind(this));
+
+        Navy.Loop.requestDraw();
+    },
+    _onMove: function(touchEvent) {
+        var view = touchEvent.target;
+        if (touchEvent.action !== 'move') {
+            view.setData('touch', touchEvent);
+            return;
+        }
+
+        var prev = view.getData('touch');
+        var dx = touchEvent.x - prev.x;
+        var dy = touchEvent.y - prev.y;
+
+        view.addPosition(dx, dy);
+
+        view.setData('touch', touchEvent);
+
+        this._moveViewListener(view);
+    },
+    drawViewBorder: function(context){
+        if (!this._view) {
+            return;
+        }
+
+        var rect = this._view.getComputedRect();
+        var padding = 0;
+        rect[0] -= padding;
+        rect[1] -= padding;
+        rect[2] += padding;
+        rect[3] += padding;
+
+        context.lineWidth = 2;
+        context.strokeStyle = '#ff0000';
+        context.strokeRect(rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1]);
+    }
+});
+
+Navy.Builder.wakeup();

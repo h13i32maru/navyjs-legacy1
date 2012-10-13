@@ -50,13 +50,15 @@ Navy.Touch.Handler = Navy.Core.subclass({
             break;
         }
 
-        this._callTouchListener(touchEvent);
+        var touchedEvents = this._callTouchListener(touchEvent);
 
         if (touchEvent.action === 'end') {
             this._isEventProcessing = false;
         }
 
         this._latestTouchEvent = touchEvent;
+
+        return touchedEvents;
     },
 
     /**
@@ -79,7 +81,14 @@ Navy.Touch.Handler = Navy.Core.subclass({
             break;
         }
 
+        var touchedEvents = [];
+
         //TODO:z順でソート必要あり
+        listeners.sort(function(a, b){
+            var order = a.view.getOrderZ(b.view);
+            return order * -1;
+        });
+
         var len = listeners.length;
         for (var i = 0; i < len; i++) {
             //TODO:戻り値を見て、伝搬するかチェックする
@@ -93,8 +102,14 @@ Navy.Touch.Handler = Navy.Core.subclass({
                 _touchEvent.y = this._latestTouchEvent.y;
             }
 
-            listeners[i]['listener'](_touchEvent);
+            var result = listeners[i]['listener'](_touchEvent);
+            touchedEvents.push(_touchEvent);
+            if (result === false) {
+                break;
+            }
         }
+
+        return touchedEvents;
     },
 
     /**
@@ -115,7 +130,8 @@ Navy.Touch.Handler = Navy.Core.subclass({
                 continue;
             }
 
-            var rect = view.getAbsoluteRect();
+            //var rect = view.getAbsoluteRect();
+            var rect = view.getComputedRect();
             var x0 = rect[0];
             var y0 = rect[1];
             var x1 = rect[2];

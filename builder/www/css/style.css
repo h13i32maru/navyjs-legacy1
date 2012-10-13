@@ -8,6 +8,14 @@ input{
 }
 select {
   font-size:12px;
+  margin:0;
+  height:24px;
+  line-height:24px;
+  margin-bottom:4px;
+  margin-right:4px;
+}
+select:focus {
+  outline:none;
 }
 .well {
   background:white;
@@ -24,9 +32,19 @@ select {
   margin-top:0;
 }
 .btn.icon {
-  width:40px;
-  height:23px;
-  margin-right:4px;
+  background:none;
+  border-style:none;
+  width:24px;
+  height:24px;
+  margin:0 2px;
+}
+.btn.icon:hover {
+  border-style:solid;
+}
+.btn-separator {
+  width: 1px;
+  height: 24px;
+  border-left: solid 1px #aaa;
 }
 .btn-group {
   margin-right:4px;

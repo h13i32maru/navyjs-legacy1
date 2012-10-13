@@ -23,7 +23,7 @@ Navy.Gesture = Navy.Core.subclass({
      * @param {Navy.Touch.Event} touchEvent タッチイベント.
      */
     _callListener: function(touchEvent) {
-        this._listener(touchEvent);
+        return this._listener(touchEvent);
     },
 
     /**
