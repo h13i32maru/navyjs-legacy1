@@ -148,5 +148,18 @@ Navy.Core.prototype = {
         }
 
         return true;
+    },
+    //TODO:jsdoc
+    pp: function(obj, properties) {
+        var len = properties.length;
+        for (var i = 0; i < len; i++) {
+            if (properties[i] in obj && obj[properties[i]] !== null) {
+                obj = obj[properties[i]];
+            } else {
+                return false;
+            }
+        }
+
+        return true;
     }
 };

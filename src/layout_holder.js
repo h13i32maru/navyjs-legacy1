@@ -16,8 +16,7 @@ Navy.LayoutHolder = Navy.Core.instance({
      * @param {function(Object, string)} callback レイアウトJSONのダウンロード終了後にレイアウトJSONを引数に実行される. Object: レイアウトJSON, string: レイアウトURL.
      */
     download: function(layoutUrl, callback) {
-        var urlPrefix = Navy._builder_ ? Navy._builder_.urlPrefix : '';
-        layoutUrl = urlPrefix + layoutUrl;
+        layoutUrl = Navy.Builder.getUrl(layoutUrl);
 
         //既に保持している場合はすぐにコールバックを呼び出して終了.
         if (this._layout[layoutUrl]) {

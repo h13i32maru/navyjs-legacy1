@@ -25,7 +25,7 @@ Navy.App = Navy.Core.instance({
         Navy.LayoutHolder.wakeup();
         Navy.ImageHolder.wakeup();
 
-        if (! Navy._builder_){
+        if (! Navy.Builder.getEnable()){
             Navy.Config.process(this._init.bind(this));
         }
     },
@@ -73,7 +73,7 @@ Navy.App = Navy.Core.instance({
     },
 
     _initForBuilder: function() {
-        var canvas = this._createCanvas(Navy._builder_.parentElm);
+        var canvas = this._createCanvas(Navy.Builder.getCanvasparentElement());
         var context = canvas.getContext('2d');
 
         this._canvas = canvas;

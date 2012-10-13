@@ -9,8 +9,7 @@ Navy.ImageHolder = Navy.Core.instance({
     },
 
     getImage: function(url, callback) {
-        var urlPrefix = Navy._builder_ ? Navy._builder_.urlPrefix : '';
-        url = urlPrefix + url;
+        url = Navy.Builder.getUrl(url);
 
         if (this._images[url]) {
             callback(this._images[url]);

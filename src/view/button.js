@@ -62,7 +62,10 @@ Navy.View.Button = Navy.View.Text.subclass({
             return;
         }
 
-        page.addTouchListener(this.getAbsoluteId(), this._onTouch.bind(this));
+        //ビルダー上で使う時はボタンのリスナーをセットしない
+        if (!Navy.Builder.getEnable()) {
+            page.addTouchListener(this.getAbsoluteId(), this._onTouch.bind(this));
+        }
     },
 
     addTapListener: function(listener) {

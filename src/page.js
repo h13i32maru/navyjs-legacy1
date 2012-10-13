@@ -13,9 +13,12 @@ Navy.Page = Navy.View.ViewGroup.subclass({
     /** ページに登録されているタッチリスナー */
     _touchListeners: null,
 
+    _globalTouchListeners: null,
+
     initialize: function($super, layout, callback) {
         this._touchHandler = new Navy.Touch.Handler();
         this._touchListeners = [];
+        this._globalTouchListeners = [];
 
         this.setVisible(false);
 
@@ -147,7 +150,26 @@ Navy.Page = Navy.View.ViewGroup.subclass({
      * @param {Event} event DOM Event.
      */
     onTouch: function(event) {
-        this._touchHandler.process(event, this._touchListeners);
+        var touchedEvents = this._touchHandler.process(event, this._touchListeners);
+
+        this._callGlobalTouch(touchedEvents);
+    },
+
+    //TODO:jsdoc 全てのタッチイベントを通知する
+    _callGlobalTouch: function(touchedEvents){
+        if (!touchedEvents) {
+            return;
+        }
+
+        var listeners = this._globalTouchListeners;
+        for(var i = 0; i < listeners.length; i++){
+            listeners[i](touchedEvents);
+        }
+    },
+
+    //TODO:jsdoc
+    addGlobalTouchListener: function(listener) {
+        this._globalTouchListeners.push(listener);
     }
 });
 

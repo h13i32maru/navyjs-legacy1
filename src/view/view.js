@@ -5,6 +5,7 @@ Navy.View = Navy.Core.subclass({
     CLASS: 'Navy.View',
 
     _isDestroy: false,
+    _class: null,
     _id: null,
     /** 親root */
     _root: null,
@@ -43,6 +44,8 @@ Navy.View = Navy.Core.subclass({
             this._id = Navy.View.createUniqueId();
         }
 
+        this._class = layout['class'];
+
         if (layout) {
             this._setLayout(layout);
         }
@@ -55,6 +58,20 @@ Navy.View = Navy.Core.subclass({
      */
     onChangeRoot: function(root) {
         this._root = root;
+
+        //TODO:refactor
+        if (Navy.Builder.getEnable() && root) {
+            var page = this.getPage();
+            if (page) {
+                page.addTapListener(this.getAbsoluteId(), function(){
+                    //page直下の要素だけが選択対象になる
+                    if (this.getPage() === this.getParent()) {
+                        Navy.Builder.selectView(this);
+                        return false;
+                    }
+                }.bind(this));
+            }
+        }
     },
 
     /**
@@ -103,6 +120,11 @@ Navy.View = Navy.Core.subclass({
         return this._id;
     },
 
+    //TODO:jsdoc
+    getClass: function() {
+        return this._class;
+    },
+
     /**
      * rootからの絶対IDを取得する.
      * @return {string} 絶対ID.
@@ -127,6 +149,24 @@ Navy.View = Navy.Core.subclass({
         else {
             return this._id;
         }
+    },
+
+    _initLayout: function() {
+        this._layout = null;
+        this._x = 0;
+        this._y = 0;
+        this._z = 0;
+        this._width = null;
+        this._height = null;
+        this._rotation = 0;
+        this._visible = true;
+        this._background = null;
+        this._border = null;
+        this._shadow = null;
+        this._paddingTop = null;
+        this._paddingRight = null;
+        this._paddingBottom = null;
+        this._paddingLeft = null;
     },
 
     /**
@@ -195,6 +235,44 @@ Navy.View = Navy.Core.subclass({
      */
     getZ: function() {
         return this._z;
+    },
+
+    //TODO:jsdoc
+    getAbsoluteZ: function() {
+        if (this._parent) {
+            var parentZ = this._parent.getAbsoluteZ();
+            parentZ.push(this._z);
+            return parentZ;
+        } else {
+            return [this._z];
+        }
+    },
+
+    //TODO:jsdoc
+    getOrderZ: function(view) {
+        var myZ = this.getAbsoluteZ();
+        var otherZ = view.getAbsoluteZ();
+
+        var i = 0;
+        while (true) {
+            if (i >= myZ.length && i >= otherZ.length) {
+                return 0;
+            } else if (i >= myZ.length) {
+                return -1;
+            } else if (i >= otherZ.length) {
+                return 1;
+            }
+
+            if (myZ[i] > otherZ[i]) {
+                return 1;
+            } else if (myZ[i] < otherZ[i]) {
+                return -1;
+            }
+
+            i++;
+        }
+
+        return 0;
     },
 
     /**
@@ -376,6 +454,16 @@ Navy.View = Navy.Core.subclass({
         return [pos[0] + this._x, pos[1] + this._y];
     },
 
+    //TODO:jsdoc
+    getComputedPosition: function() {
+        return this.getAbsolutePosition();
+    },
+
+    //TODO:jsdoc
+    getComputedRect: function() {
+        return this.getAbsoluteRect();
+    },
+
     /**
      * 要素の矩形頂点座標を取得する.
      * @return {Array.<number>} [x0, y0, x1, y1].
@@ -517,7 +605,7 @@ Navy.View = Navy.Core.subclass({
 
         context.save();
 
-        var rect = this.getAbsoluteRect();
+        var rect = this.getComputedRect();
 
         var clearShadowFlag = true;
         if (this._shadow) {
@@ -534,6 +622,12 @@ Navy.View = Navy.Core.subclass({
             clearShadowFlag = true;
         }
 
+        context.restore();
+
+        this._drawExtra(context);
+
+        context.save();
+
         if (this._border) {
             this._drawBorder(context, this._border, rect);
             this._clearShadow(context);
@@ -547,13 +641,12 @@ Navy.View = Navy.Core.subclass({
         }
 
         context.restore();
-        this._drawExtra(context);
     },
 
     //TODO:jsdoc
     _drawBackground: function(context, background, rect) {
         if (!rect) {
-            var rect = this.getAbsoluteRect();
+            var rect = this.getComputedRect();
         }
         var x0 = rect[0];
         var y0 = rect[1];
@@ -563,7 +656,7 @@ Navy.View = Navy.Core.subclass({
         var height = y1 - y0;
 
         //garidnet or color
-        if (background.gradient) {
+        if (this.pp(background, ['gradient', 'colorstop'])) {
             var gradient = background.gradient;
             var direction = gradient.direction;
             var gr = this._createLinearGradient(context, direction, rect);
@@ -575,6 +668,8 @@ Navy.View = Navy.Core.subclass({
             context.fillStyle = gr;
         } else if (background.color) {
             context.fillStyle = this._convertColor(background.color);
+        } else {
+            return;
         }
 
         //round-angle or right-angle
@@ -606,7 +701,7 @@ Navy.View = Navy.Core.subclass({
     //TODO:jsdoc
     _drawBorder: function(context, border, rect) {
         if (!rect) {
-            var rect = this.getAbsoluteRect();
+            var rect = this.getComputedRect();
         }
         var x = rect[0];
         var y = rect[1];
@@ -624,6 +719,8 @@ Navy.View = Navy.Core.subclass({
         var widths = this._parseBoxProperty(border, 'widths', 'width');
         var radiuses = this._parseBoxProperty(border, 'radiuses', 'radius');
         var gradients = this._parseBoxProperty(border, 'gradients', 'gradient');
+
+        if (!widths) { return; }
 
         for (var i = 0; i < 4; i++) {
             //width
