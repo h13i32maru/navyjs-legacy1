@@ -6,41 +6,47 @@
 <title>BS Builder</title>
 <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
+<script src="lib/jquery/jquery-1.8.1.min.js"></script>
+<script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/underscore/underscore-min.js"></script>
+<script src="lib/backbone/backbone-min.js"></script>
+<script src="js/jquery/jquery.fitsize.js"></script>
+<script src="js/jquery/jquery.list_filter.js"></script>
+<script src="js/navy.js"></script>
+<script src="lib/nameless/nameless.js"></script>
+<script src="js/new.js"></script>
+<!--
+<script src="js/builder.js"></script>
+-->
 </head>
 
 <body class="fill-y">
-
+<!-- {{{ projects -->
 <div id="bs-project" class="navbar">
   <div class="navbar-inner">
     <ul class="nav">
-      <li>
-        <div class="btn-group">
-          <button id="bs-current-project" class="btn span3" data-toggle="dropdown">-</button>
-          <button class="btn dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-          </button>
-          <ul id="bs-project-menu" class="dropdown-menu span3">
-          </ul>
-        </div>
-      </li>
+      <li><select id="bs-project-menu"><option>-</option></select></li>
+      <li class="btn-separator"></li>
       <li><button class="btn icon" title="Play"><i class="icon-play"></i></button></li>
+      <li class="btn-separator"></li>
       <li><button class="btn icon" title="New"><i class="icon-plus"></i></button></li>
+      <li class="btn-separator"></li>
       <li><button class="btn icon" title="Delete"><i class="icon-trash"></i></button></li>
+      <li class="btn-separator"></li>
     </ul>
   </div>
 </div>
-
+<!-- }}} -->
+<!-- {{{ tab-content -->
 <div id="bs-content-tabs" class="tabbable tabs-left fill-y">
-
 <ul id="bs-content-tabs-buttons" class="nav nav-tabs bs-fit-size-content-menu">
   <li><a id="bs-content-tab-conf" href="#bs-conf-file-edit">Config</a></li>
   <li><a id="bs-content-tab-layout" href="#bs-layout-file-edit">Layout</a></li>
   <li><a id="bs-content-tab-code" href="#bs-code-file-edit">Code</a></li>
   <li><a id="bs-content-tab-image" href="#bs-image-file-list">Image</a></li>
 </ul>
-
 <div class="tab-content fill-x fill-y">
-
   <!--{{{ conf-->
   <div id="bs-conf-file-edit" class="tab-pane bs-flex fill-x fill-y">
     <div id="bs-conf-file-list" class="well span3 bs-file-list">
@@ -143,10 +149,13 @@
     </ul>
   </div>
   <!-- }}} -->
-
 </div>
-
 </div>
+<!-- }}} -->
+<!-- {{{tamplate -->
+<script type="text/template" id="project-list">
+<option data-id="<%= id %>"><%= name %></option>
+</script>
 
 <script type="text/template" id="file-list">
   <li><a data-id="<%= id %>"><%= name %></a></li>
@@ -155,16 +164,7 @@
 <script type="text/template" id="image-list">
   <li><a data-id="<%= id %>"><img src="<%= id %>" title="<%= name %>"/><div><%= name %></div></a></li>
 </script>
-
-<script src="lib/jquery/jquery-1.8.1.min.js"></script>
-<script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
-<script src="lib/bootstrap/js/bootstrap.min.js"></script>
-<script src="lib/underscore/underscore-min.js"></script>
-<script src="lib/backbone/backbone-min.js"></script>
-<script src="js/jquery/jquery.fitsize.js"></script>
-<script src="js/jquery/jquery.list_filter.js"></script>
-<script src="js/navy.js"></script>
-<script src="js/builder.js"></script>
+<!-- }}} -->
 </body>
 
 </html>

@@ -67,9 +67,12 @@ Navy.Loop = Navy.Core.instance({
         context.fillStyle = '#000000';
         context.fillRect(0, 0, size[0], size[1]);
 
+        this._requestDrawFlag = false;
         Navy.Root.draw(context);
 
-        this._requestDrawFlag = false;
+        if (Navy.Builder.getEnable()) {
+            Navy.Builder.drawViewBorder(context);
+        }
     },
 
     /**

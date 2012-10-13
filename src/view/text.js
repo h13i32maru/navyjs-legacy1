@@ -219,18 +219,20 @@ Navy.View.Text = Navy.View.subclass({
     _setLayout: function($super, layout) {
         this._context = Navy.App.getContext();
 
-        this._text = layout.extra.text || '';
-        this._textColor = layout.extra.color || '#000000';
-        this._textShadow = layout.extra.shadow;
-        this._textSize = layout.extra.size || 24;
-        this._textFont = layout.extra.font || 'sans-serif';
-        this._textWeight = layout.extra.weight || 'normal';
-        this._textStyle = layout.extra.style || 'normal';
-        this._textVerticalAlign = layout.extra.valign || 'left';
-        this._textHorizontalAlign = layout.extra.halign || 'top';
-        this._textLineSpace = layout.extra.linespace || 0;
-        this._textCutEnd = layout.extra.cutend || '';
-        this._textMultiLine = ('multiline' in layout.extra ? layout.extra.multiline : true);
+        if (layout.extra) {
+            this._text = layout.extra.text || '';
+            this._textColor = layout.extra.color || '#000000';
+            this._textShadow = layout.extra.shadow;
+            this._textSize = layout.extra.size || 24;
+            this._textFont = layout.extra.font || 'sans-serif';
+            this._textWeight = layout.extra.weight || 'normal';
+            this._textStyle = layout.extra.style || 'normal';
+            this._textVerticalAlign = layout.extra.valign || 'left';
+            this._textHorizontalAlign = layout.extra.halign || 'top';
+            this._textLineSpace = layout.extra.linespace || 0;
+            this._textCutEnd = layout.extra.cutend || '';
+            this._textMultiLine = ('multiline' in layout.extra ? layout.extra.multiline : true);
+        }
 
         $super(layout);
 
@@ -288,10 +290,15 @@ Navy.View.Text = Navy.View.subclass({
      * @param {boolean} noDrawFlag trueにした場合、内部の状態を更新するだけで、描画は行わない.
      */
     _update: function(noDrawFlag) {
+        this._context.save();
+
         this._updateMeasure();
         this._updateLines();
         this._updateSize();
         this._updatePosition();
+
+        this._context.restore();
+
         if (!noDrawFlag) {
             Navy.Loop.requestDraw();
         }

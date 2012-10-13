@@ -29,8 +29,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
     _setLayout: function($super, layout, callback) {
         $super(layout);
 
-        var ref = layout.extra.ref;
-        if (ref) {
+        if (this.p(layout, ['extra', 'ref'])) {
+            var ref = layout.extra.ref;
             if (callback) {
                 this._callbackOnSetLayout = callback;
             }
@@ -184,6 +184,41 @@ Navy.View.ViewGroup = Navy.View.subclass({
     getViews: function() {
         //TODO:コピーして渡すべき
         return this._views;
+    },
+
+    //TODO:jsdoc
+    getComputedPosition: function(){
+        var views = this._views;
+        var pos = this.getAbsolutePosition();
+        var x = pos[0];
+        var y = pos[1];
+        for (var viewId in views){
+            var pos = views[viewId].getComputedPosition();
+            x = Math.min(x, pos[0]);
+            y = Math.min(y, pos[1]);
+        }
+
+        return [x, y];
+    },
+
+    //TODO:jsdoc
+    getComputedRect: function(){
+        var pos = this.getComputedPosition();
+        var x0 = pos[0];
+        var y0 = pos[1];
+
+        var rect = this.getAbsoluteRect();
+        var x1 = rect[2]; 
+        var y1 = rect[3];
+
+        var views = this._views;
+        for (var viewId in views) {
+            var rect = views[viewId].getComputedRect();
+            x1 = Math.max(x1, rect[2]);
+            y1 = Math.max(y1, rect[3]);
+        }
+
+        return [x0, y0, x1, y1];
     },
 
     /**

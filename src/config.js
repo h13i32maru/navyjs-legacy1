@@ -16,15 +16,13 @@ Navy.Config = Navy.Core.instance({
     /**
      * 設定を読み込む
      * @param {function(void)} callback コールバック.
-     * @param {string} urlPrefix 設定ファイルの読み込みURLのプレフィックス.
      */
-    process: function(callback, urlPrefix) {
+    process: function(callback) {
         this._callback = callback;
-        var urlPrefix = Navy._builder_ ? Navy._builder_.urlPrefix : '';
 
         var list = [
-            {name: 'App',  url: urlPrefix + 'config/app.json'},
-            {name: 'Page', url: urlPrefix + 'config/page.json'}
+            {name: 'App',  url: Navy.Builder.getUrl('config/app.json')},
+            {name: 'Page', url: Navy.Builder.getUrl('config/page.json')}
         ];
 
         this._configNum = list.length;
