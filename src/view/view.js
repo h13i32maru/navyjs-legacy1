@@ -19,7 +19,7 @@ Navy.View = Navy.Core.subclass({
     _data: null,
     _x: 0,
     _y: 0,
-    _z: 0,
+    _z: null,
     _width: null,
     _height: null,
     _rotation: 0,
@@ -31,6 +31,8 @@ Navy.View = Navy.Core.subclass({
     _paddingRight: null,
     _paddingBottom: null,
     _paddingLeft: null,
+    //レイアウトファイルの配列上で何番目に位置するかを保持する
+    _layoutSequence: null,
 
     /**
      * @constructor
@@ -215,9 +217,23 @@ Navy.View = Navy.Core.subclass({
         if ('z' in layout) {
             this.setZ(layout.z);
         }
-        else {
-            this.setZ(0);
+    },
+
+    //TODO:jsdoc
+    setLayoutSequence: function(seq) {
+        //一度しか設定できない
+        if (this._layoutSequence !== null) {
+            //TODO:exceptionsにする
+            console.log('error');
+            return;
         }
+
+        this._layoutSequence = seq;
+    },
+
+    //TODO:jsdoc
+    getLayoutSequence: function() {
+        return this._layoutSequence;
     },
 
     /*
@@ -668,8 +684,6 @@ Navy.View = Navy.Core.subclass({
             context.fillStyle = gr;
         } else if (background.color) {
             context.fillStyle = this._convertColor(background.color);
-        } else {
-            return;
         }
 
         //round-angle or right-angle

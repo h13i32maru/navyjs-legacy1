@@ -150,6 +150,29 @@ NL.App.push('LayoutView', SimpleFileView.subclass({
     }
 }));
 
+NL.App.push('LayoutTabView', NL.View.subclass({
+    initialize: function($super){
+        $super();
+        this.$el = $('#bs-layout-tabs');
+        //this.selectTab(this.$el.find('#bs-content-tab-layout'));
+        this.$el.on('click', '.nav-tabs li a', this.onSelectTab.bind(this));
+    },
+    onSelectTab: function(ev){
+        this.selectTab(ev.target);
+    },
+    selectTab: function(elm) {
+        var $target = $(elm);
+        this.$el.find('.nav-tabs li.active').removeClass('active');
+        $target.parent().addClass('active');
+
+        var $tab_content = $($target.attr('href'));
+        this.$el.find('>.tab-content > .tab-pane').removeClass('visible');
+        $tab_content.addClass('visible');
+
+        //$.fitsize();
+    }
+}));
+
 NL.App.push('LayoutPropView', NL.View.subclass({
     initialize: function($super){
         $super();
@@ -173,12 +196,15 @@ NL.App.push('LayoutPropView', NL.View.subclass({
         this.$el.find('#prop-class').val(JSON.stringify(view.getClass()));
         this.$el.find('#prop-pos').val(JSON.stringify(view.getPosition()));
 
+        var z = view.getZ();
+        if (z !== null){
+            this.$el.find('#prop-z').val(JSON.stringify(z));
+        }
+
         this.setValue('id', layout);
-        //this.setValue('pos', layout);
         this.setValue('size', layout);
         this.setValue('padding', layout);
         this.setValue('paddings', layout);
-        this.setValue('z', layout);
 
         this.setValue('background-src', layout);
         this.setValue('background-color', layout);
@@ -280,6 +306,30 @@ NL.App.push('LayoutPropView', NL.View.subclass({
         this.getValue('border-gradients-3-colorstop', layout);
 
         NL.Event.trigger('requestNewLayout', {layout:layout, id:id}, this);
+    }
+}));
+
+NL.App.push('LayoutEditLayer', NL.View.subclass({
+    initialize: function($super) {
+        $super();
+        this.$el = $('#bs-layout-edit-layer');
+        this.$el.find('ul').sortable();
+    }
+}));
+
+NL.App.push('LayoutPickLib', NL.View.subclass({
+    el: '#bs-layout-pick-lib',
+    initialize: function($super){
+        $super();
+        this.$el = $(this.el);
+        this.$el.find('li').draggable({helper: 'clone'});
+        $('#bs-layout-canvas').droppable({drop: function(e, ui){
+            var viewClass = $(ui.draggable[0]).attr('data-view-class');
+            var x = Math.max(ui.position.left - $(this).offset().left, 0);
+            var y = Math.max(ui.position.top - $(this).offset().top, 0);
+            console.log(viewClass, x, y);
+            alert([viewClass, 'x = ' + ~~x, 'y = ' + ~~y]);
+        }});
     }
 }));
 

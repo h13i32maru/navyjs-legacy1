@@ -71,6 +71,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
                 var view = new Navy.View[viewClass](viewLayout);
                 callback(view);
             }
+
+            view.setLayoutSequence(i);
         }
     },
 
@@ -98,6 +100,16 @@ Navy.View.ViewGroup = Navy.View.subclass({
         for (var viewId in _views) {
             _views[viewId].onChangeRoot(root);
         }
+    },
+
+    //TODO:jsdco
+    getMaxZ: function(){
+        var z = 0;
+        var views = this._views;
+        for (var viewId in views) {
+            z = Mat.max(z, views[viewId].getZ());
+        }
+        return z;
     },
 
     /**
@@ -252,7 +264,12 @@ Navy.View.ViewGroup = Navy.View.subclass({
      * @return {number} 負数ならview1はview2より下, 0ならview1とview2は同じ位置, 正数ならview1はview2より上.
      */
     _compareViewByZ: function(view1, view2) {
-        return view1.getZ() - view2.getZ();
+        var res = view1.getZ() - view2.getZ();
+        if (res === 0) {
+            res = view1.getLayoutSequence() - view2.getLayoutSequence();
+        }
+
+        return res;
     },
 
     /**

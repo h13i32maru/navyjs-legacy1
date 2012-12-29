@@ -193,10 +193,10 @@ body {
   margin-right:4px;
 }
 
-#bs-layout-edit-zindex {
+#bs-layout-edit-layer {
   height:100%;
 }
-#bs-layout-edit-zindex ul {
+#bs-layout-edit-layer ul {
   list-style:none;
   margin:0;
   padding:0;
@@ -207,7 +207,7 @@ body {
   boz-sizing: border-box;
 }
 
-#bs-layout-edit-zindex ul li{
+#bs-layout-edit-layer ul li{
   padding: 2px;
   border: dotted 1px #aaa;
 }
@@ -221,10 +221,10 @@ body {
   height: 100%;
 }
 
-#bs-layout-pick-view {
+#bs-layout-pick-lib {
   height:100%;
 }
-#bs-layout-pick-view ul {
+#bs-layout-pick-lib ul {
   list-style:none;
   margin:0;
   padding:0;
@@ -235,7 +235,7 @@ body {
   boz-sizing: border-box;
 }
 
-#bs-layout-pick-view ul li{
+#bs-layout-pick-lib ul li{
   padding: 2px;
   border: dotted 1px #aaa;
 }

@@ -7,6 +7,7 @@ Navy.Builder = Navy.Core.instance({
     _selectedViewListener: null,
     _moveViewListener: null,
     _view: null,
+    _listenerId: null,
     initialize: function(){
     },
     init: function(){
@@ -42,13 +43,17 @@ Navy.Builder = Navy.Core.instance({
         this._moveViewListener = listener;
     },
     selectView: function(view){
-        //TODO: リスナを削除しておく必要あり。page.removeTouchListener(this._view.getAbsoluteId(), this._onMove.bind(this));
+        if (this._view){
+            //リスナを削除しておく必要あり。
+            var page = this._view.getPage();
+            page.removeTouchListener(this._listenerId);
+        }
 
         this._view = view;
         this._selectedViewListener(view);
 
         var page = view.getPage();
-        page.addTouchListener(view.getAbsoluteId(), this._onMove.bind(this));
+        this._listenerId = page.addTouchListener(view.getAbsoluteId(), this._onMove.bind(this));
 
         Navy.Loop.requestDraw();
     },

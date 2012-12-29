@@ -121,20 +121,31 @@ Navy.Page = Navy.View.ViewGroup.subclass({
      * タッチリスナーを登録する.
      * @param {string} viewId リスナーを貼り付けるviewのid.
      * @param {function(Navy.Touch.Event)} listener リスナー関数.
+     * @return TODO
      */
     addTouchListener: function(viewId, listener) {
         var view = this.findView(viewId);
         this._touchListeners.push({view: view, listener: listener});
+        return this._touchListeners.length - 1;
+    },
+
+    //TODO:jsdoc
+    removeTouchListener: function(listenerId) {
+        if (typeof listenerId === 'number') {
+            this._touchListeners.splice(listenerId, 1);
+        }
     },
 
     /**
      * タップリスナーを登録する.
      * @param {string} viewId リスナーを貼り付けるviewのid.
      * @param {function(Navy.Touch.Event)} listener リスナー関数.
+     * @return TODO
      */
     addTapListener: function(viewId, listener) {
         var tapListener = new Navy.Gesture.Tap(listener);
         this.addTouchListener(viewId, tapListener.getTouchListener());
+        return this._touchListeners.length - 1;
     },
 
     /**
