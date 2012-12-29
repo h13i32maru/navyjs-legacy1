@@ -1,0 +1,75 @@
+$bg-color: #dddddd;
+$fg-color: #ffffff;
+$hover-color: #eee;
+$active-color: #08C;
+$font: 12px "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+$color: #333;
+
+
+html, body {
+    height: 100%;
+    background-color: $bg-color;
+    font: $font;
+    color: $color;
+}
+
+@mixin box($x, $y, $width, $height){
+    position:absolute;
+    top: $y;
+    left: $x;
+    width: $width;
+    height: $height;
+}
+
+.n-header, .n-nav {
+    .btn-group {
+        display: inline;
+    }
+}
+
+.btn {
+    font: $font;
+}
+
+.n-header {
+    @include box(10px, 10px, auto, auto);
+}
+
+.n-code, .n-config {
+    .n-filelist {
+        @include box(10px, 50px, 200px, auto);
+        background-color: $fg-color;
+        margin-bottom: 10px;
+        padding: 4px;
+
+        .n-search {
+            width: 100%;
+            padding: 4px !important;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 28px;
+            margin:0;
+        }
+
+        .nav.nav-list {
+            padding: 0;
+            li {
+                color: $color;
+                padding: 2px 5px;
+                &:hover {
+                    background-color: $hover-color;
+                }
+                &.active {
+                    background-color: $active-color;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .n-textarea {
+        @include box(220px, 50px, 200px, auto);
+        margin-right: 10px;
+        border:none;
+    }
+}

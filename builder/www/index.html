@@ -9,6 +9,9 @@
 <script src="lib/jquery/jquery-1.8.1.min.js"></script>
 <script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/knockout-2.2.0.js"></script>
+<script src="js/builder.js"></script>
+<!--
 <script src="lib/underscore/underscore-min.js"></script>
 <script src="lib/backbone/backbone-min.js"></script>
 <script src="js/jquery/jquery.fitsize.js"></script>
@@ -16,36 +19,101 @@
 <script src="js/navy.js"></script>
 <script src="lib/nameless/nameless.js"></script>
 <script src="js/new.js"></script>
+-->
 <!--
 <script src="js/builder.js"></script>
 -->
+<script>
+
+(function($){
+    $.fitsize = function() {
+        $target = $('.fitsize-x').each(function(index, $e){
+            var $this = $(this);
+            var left          = parseInt($this.css('left'), 10);
+            var marginLeft    = parseInt($this.css('margin-left'), 10);
+            var marginRight   = parseInt($this.css('margin-right'), 10);
+            var paddingLeft   = parseInt($this.css('padding-left'), 10);
+            var paddingRight  = parseInt($this.css('padding-right'), 10);
+            var borderLeft    = parseInt($this.css('border-left'), 10);
+            var borderRight   = parseInt($this.css('border-right'), 10);
+            var width         = $(document.body).width() - (left + marginLeft + marginRight + paddingLeft + paddingRight + borderLeft + borderRight);
+            $this.width(width);
+        });
+
+        $target = $('.fitsize-y').each(function(index, $e){
+            var $this = $(this);
+            var top           = parseInt($this.css('top'), 10);
+            var marginTop     = parseInt($this.css('margin-top'), 10);
+            var marginBottom  = parseInt($this.css('margin-bottom'), 10);
+            var paddingTop    = parseInt($this.css('padding-top'), 10);
+            var paddingBottom = parseInt($this.css('padding-bottom'), 10);
+            var borderTop     = parseInt($this.css('border-top'), 10);
+            var borderBottom  = parseInt($this.css('border-bottom'), 10);
+            var height        = $(document.body).height() - (top + marginTop + marginBottom + paddingTop + paddingBottom + borderTop + borderBottom);
+            $this.height(height);
+        });
+    }
+})(jQuery);
+
+$($.fitsize);
+</script>
 </head>
 
-<body class="fill-y">
-<!-- {{{ projects -->
-<div id="bs-project" class="navbar">
-  <div class="navbar-inner">
-    <ul class="nav">
-      <li><select id="bs-project-menu"><option>-</option></select></li>
-      <li class="btn-separator"></li>
-      <li><button class="btn icon" title="Play"><i class="icon-play"></i></button></li>
-      <li class="btn-separator"></li>
-      <li><button class="btn icon" title="New"><i class="icon-plus"></i></button></li>
-      <li class="btn-separator"></li>
-      <li><button class="btn icon" title="Delete"><i class="icon-trash"></i></button></li>
-      <li class="btn-separator"></li>
-    </ul>
+<body>
+
+<!-- n-header -->
+<div class="n-header">
+  <select data-bind="options: projects"></select>
+
+  <div class="btn-group">
+    <button class="btn icon" title="Play"><i class="icon-play"></i></button>
+    <button class="btn icon" title="New"><i class="icon-plus"></i></button>
+    <button class="btn icon" title="Delete"><i class="icon-trash"></i></button>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn active">Config</button>
+    <button class="btn">Layout</button>
+    <button class="btn">Code</button>
+    <button class="btn">Image</button>
+  </div> 
+
+  <div class="btn-group">
+    <button class="btn">Save</button>
+    <button class="btn">New</button>
+    <button class="btn">Move</button>
+    <button class="btn">Delete</button>
   </div>
 </div>
-<!-- }}} -->
+<!-- end -->
+
+<div class="n-config">
+
+  <div class="n-filelist fitsize-y">
+    <input type="text" placeholder="Search" class="n-search"/>
+    <ul class="nav nav-list">
+      <li>hoge</li>
+      <li class="active">hoge</li>
+      <li>hoge</li>
+    </ul>
+  </div>
+
+  <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
+
+</div>
+
+
+
 <!-- {{{ tab-content -->
 <div id="bs-content-tabs" class="tabbable tabs-left fill-y">
+<!--
 <ul id="bs-content-tabs-buttons" class="nav nav-tabs bs-fit-size-content-menu">
   <li><a id="bs-content-tab-conf" href="#bs-conf-file-edit">Config</a></li>
   <li><a id="bs-content-tab-layout" href="#bs-layout-file-edit">Layout</a></li>
   <li><a id="bs-content-tab-code" href="#bs-code-file-edit">Code</a></li>
   <li><a id="bs-content-tab-image" href="#bs-image-file-list">Image</a></li>
 </ul>
+-->
 <div class="tab-content fill-x fill-y">
   <!--{{{ conf-->
   <div id="bs-conf-file-edit" class="tab-pane bs-flex fill-x fill-y">
