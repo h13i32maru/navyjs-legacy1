@@ -3,8 +3,6 @@ var fs = require('fs');
 
 var host = 'localhost';
 var port = 8080;
-var docRoot = 'www';
-var defFile = '/index.html';
 var mime = {
     '.css'  : 'text/css',
     '.gif'  : 'image/gif',
@@ -17,18 +15,9 @@ var mime = {
 };
 
 function getStaticContent(url) {
-    var path;
-    var ext;
+    var path = url.pathname;
+    var ext = path.match(/\.[A-Z0-9]+$/i);
 
-    if (url.pathname == '/') {
-        path = defFile;
-    } else {
-        path = url.pathname;
-    }
-
-    ext = path.match(/\.[A-Z0-9]+$/i);
-
-    var filePath = docRoot + path;
     var statusCode;
     var contentType;
     var body;
@@ -37,9 +26,9 @@ function getStaticContent(url) {
         return get404NotFound(path);
     }
 
-    contentType = mime[ext];
     try {
-        body = fs.readFileSync(filePath);
+        contentType = mime[ext];
+        body = fs.readFileSync(path);
         statusCode = 200;
         return {statusCode: statusCode, body: body, type: contentType};
     } catch(e) {
@@ -83,14 +72,18 @@ function getProjectContent(url) {
 http.createServer(function (req, res) {
     var url = require('url').parse(req.url, true);
 
-    var content;
-    switch (url.pathname) {
-    case '/data':
+    if (url.query.method) {
         content = getProjectContent(url);
-        break;
-    default:
+    } else if (url.pathname.indexOf('/data') === 0) {
+        url.pathname = './' + url.pathname;
         content = getStaticContent(url);
-        break;
+    } else {
+        if (url.pathname === '/') {
+            url.pathname = './www/index.html';
+        } else {
+            url.pathname = './www/' + url.pathname;
+        }
+        content = getStaticContent(url);
     }
     
     res.writeHead(content.statusCode, {

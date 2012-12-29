@@ -17,37 +17,49 @@ html, body {
   width: auto;
   height: auto; }
 
-.n-code .n-filelist, .n-config .n-filelist {
-  position: absolute;
-  top: 50px;
-  left: 10px;
-  width: 200px;
-  height: auto;
-  background-color: white;
-  margin-bottom: 10px;
+.n-content {
+  display: none; }
+  .n-content .n-filelist {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    width: 200px;
+    height: auto;
+    background-color: white;
+    margin-bottom: 10px;
+    padding: 4px;
+    overflow-y: scroll; }
+    .n-content .n-filelist .n-search {
+      width: 100%;
+      padding: 4px !important;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      height: 28px;
+      margin: 0; }
+    .n-content .n-filelist .nav.nav-list {
+      padding: 0; }
+      .n-content .n-filelist .nav.nav-list li {
+        color: #333333;
+        padding: 2px 5px; }
+        .n-content .n-filelist .nav.nav-list li:hover {
+          background-color: #eeeeee; }
+        .n-content .n-filelist .nav.nav-list li.active {
+          background-color: #0088cc;
+          color: white; }
+  .n-content .n-textarea {
+    position: absolute;
+    top: 50px;
+    left: 220px;
+    width: 200px;
+    height: auto;
+    margin-right: 10px;
+    border: none; }
+
+.n-image .n-filelist .nav.nav-list li {
+  display: inline-block;
   padding: 4px; }
-  .n-code .n-filelist .n-search, .n-config .n-filelist .n-search {
-    width: 100%;
-    padding: 4px !important;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    height: 28px;
-    margin: 0; }
-  .n-code .n-filelist .nav.nav-list, .n-config .n-filelist .nav.nav-list {
-    padding: 0; }
-    .n-code .n-filelist .nav.nav-list li, .n-config .n-filelist .nav.nav-list li {
-      color: #333333;
-      padding: 2px 5px; }
-      .n-code .n-filelist .nav.nav-list li:hover, .n-config .n-filelist .nav.nav-list li:hover {
-        background-color: #eeeeee; }
-      .n-code .n-filelist .nav.nav-list li.active, .n-config .n-filelist .nav.nav-list li.active {
-        background-color: #0088cc;
-        color: white; }
-.n-code .n-textarea, .n-config .n-textarea {
-  position: absolute;
-  top: 50px;
-  left: 220px;
-  width: 200px;
-  height: auto;
-  margin-right: 10px;
-  border: none; }
+  .n-image .n-filelist .nav.nav-list li img {
+    vertical-align: top;
+    max-width: 128px; }
+.n-image .n-filelist .n-search {
+  width: 200px; }

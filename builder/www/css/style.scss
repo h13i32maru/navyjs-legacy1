@@ -35,12 +35,14 @@ html, body {
     @include box(10px, 10px, auto, auto);
 }
 
-.n-code, .n-config {
+.n-content {
+    display:none;
     .n-filelist {
         @include box(10px, 50px, 200px, auto);
         background-color: $fg-color;
         margin-bottom: 10px;
         padding: 4px;
+        overflow-y:scroll;
 
         .n-search {
             width: 100%;
@@ -71,5 +73,20 @@ html, body {
         @include box(220px, 50px, 200px, auto);
         margin-right: 10px;
         border:none;
+    }
+}
+
+.n-image {
+    .n-filelist .nav.nav-list li{
+        display:inline-block;
+        padding: 4px;
+        img {
+            vertical-align: top;
+            max-width: 128px;
+        }
+    }
+
+    .n-filelist .n-search {
+        width: 200px;
     }
 }

@@ -71,11 +71,11 @@ $($.fitsize);
     <button class="btn icon" title="Delete"><i class="icon-trash"></i></button>
   </div>
 
-  <div class="btn-group">
-    <button class="btn active">Config</button>
-    <button class="btn">Layout</button>
-    <button class="btn">Code</button>
-    <button class="btn">Image</button>
+  <div class="btn-group" data-bind="click: switchContent">
+    <button class="btn" data-content-class=".n-config">Config</button>
+    <button class="btn" data-content-class=".n-layout">Layout</button>
+    <button class="btn" data-content-class=".n-code">Code</button>
+    <button class="btn" data-content-class=".n-image">Image</button>
   </div> 
 
   <div class="btn-group">
@@ -87,33 +87,37 @@ $($.fitsize);
 </div>
 <!-- end -->
 
-<div class="n-config">
-
+<div class="n-content n-config">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search"/>
-    <ul class="nav nav-list" data-bind="foreach: files">
-      <li data-bind="text: $data, click: $root.readFile.bind($root)"></li>
+    <ul class="nav nav-list" data-bind="foreach: files, click: $root.readFile">
+      <li data-bind="text: $data"></li>
     </ul>
   </div>
 
   <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
-
 </div>
 
 
-<div class="n-code">
-
+<div class="n-content n-code">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search"/>
-    <ul class="nav nav-list" data-bind="foreach: files">
-      <li data-bind="text: $data, click: $root.readFile.bind($root)"></li>
+    <ul class="nav nav-list" data-bind="foreach: files, click: $root.readFile.bind($root)">
+      <li data-bind="text: $data"></li>
     </ul>
   </div>
 
   <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
-
 </div>
 
+<div class="n-content n-image">
+  <div class="n-filelist fitsize-y fitsize-x">
+    <input type="text" placeholder="Search" class="n-search"/>
+    <ul class="nav nav-list" data-bind="foreach: files">
+      <li><img data-bind="attr: {src: $data}"/></li>
+    </ul>
+  </div>
+</div>
 
 
 <!-- {{{ tab-content -->
