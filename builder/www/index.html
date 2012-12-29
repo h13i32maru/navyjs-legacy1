@@ -63,7 +63,7 @@ $($.fitsize);
 
 <!-- n-header -->
 <div class="n-header">
-  <select data-bind="options: projects"></select>
+  <select data-bind="options: projects, value: selectedProject"></select>
 
   <div class="btn-group">
     <button class="btn icon" title="Play"><i class="icon-play"></i></button>
@@ -91,10 +91,22 @@ $($.fitsize);
 
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search"/>
-    <ul class="nav nav-list">
-      <li>hoge</li>
-      <li class="active">hoge</li>
-      <li>hoge</li>
+    <ul class="nav nav-list" data-bind="foreach: files">
+      <li data-bind="text: $data, click: $root.readFile.bind($root)"></li>
+    </ul>
+  </div>
+
+  <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
+
+</div>
+
+
+<div class="n-code">
+
+  <div class="n-filelist fitsize-y">
+    <input type="text" placeholder="Search" class="n-search"/>
+    <ul class="nav nav-list" data-bind="foreach: files">
+      <li data-bind="text: $data, click: $root.readFile.bind($root)"></li>
     </ul>
   </div>
 
