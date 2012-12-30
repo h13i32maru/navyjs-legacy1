@@ -206,4 +206,14 @@ Navy.App = Navy.Core.instance({
     }
 });
 
-window.addEventListener('load', Navy.App.wakeup.bind(Navy.App), false);
+(function(){
+    //navy.jsが読み込まれたスクリプトを取得する
+    var scripts = document.querySelectorAll('script');
+    var navyScript = scripts[scripts.length - 1];
+    var builder = JSON.parse(navyScript.getAttribute('data-builder'));
+    Navy.Builder.setEnable(true);
+    //builderではない時だけ初期化を実行する
+    if (!builder) {
+        window.addEventListener('load', Navy.App.wakeup.bind(Navy.App), false);
+    }
+})();

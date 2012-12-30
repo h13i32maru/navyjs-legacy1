@@ -1,3 +1,5 @@
+Builder = {};
+
 var read = function(path, callback) {
     var params = {method: 'get', path: path};
     $.getJSON('/data', params, callback);
@@ -10,7 +12,7 @@ var format = function(str, arg) {
     return str;
 }
 
-var Header = {
+Builder.Header = {
     $el: null,
     projects: ko.observableArray(),
     selectedProject: ko.observable(),
@@ -35,7 +37,7 @@ var Header = {
     }
 };
 
-var Config = {
+Builder.Config = {
     $el: null,
     files: ko.observableArray([]),
     project: null,
@@ -47,7 +49,7 @@ var Config = {
     },
 
     onChangeProject: function(){
-        var project = Header.selectedProject();
+        var project = Builder.Header.selectedProject();
         this.project = project;
         if (!project) {
             return;
@@ -71,7 +73,7 @@ var Config = {
     }
 };
 
-var Layout = {
+Builder.Layout = {
     $el: null,
     files: ko.observableArray([]),
     project: null,
@@ -84,10 +86,6 @@ var Layout = {
         var $target = this.$el.find('.n-canvas').first();
         var appWidth = 640;
         var appHeight = 960;
-
-        var appWidth = 960;
-        var appHeight = 640;
-
         var cssMaxWidth = parseInt($target.css('max-width'), 10);
         var cssWidth = parseInt($target.css('width'), 10);
         var maxWidth = Math.min(cssMaxWidth, cssWidth);
@@ -106,6 +104,7 @@ var Layout = {
         //iPhone4Sのサイズを基本としている
         //var width = 640 * this.$el.height() / 960;
         //this.$el.find('.n-canvas').width(width);
+
     },
 
     toggle: function(vm, ev) {
@@ -119,7 +118,7 @@ var Layout = {
     },
 
     onChangeProject: function(){
-        var project = Header.selectedProject();
+        var project = Builder.Header.selectedProject();
         this.project = project;
         if (!project) {
             return;
@@ -129,6 +128,12 @@ var Layout = {
         read(path, function(data){
             this.files(data);
         }.bind(this));
+
+        Navy.Builder.setCanvasParentElement(this.$el.find('.n-canvas')[0]);
+        Navy.Builder.setUrlPrefix('data/' + project + '/');
+        //Navy.Builder.setSelectedViewListener(this.onSelectedNavyView.bind(this));
+        //Navy.Builder.setMoveViewListener(this.onMoveNavyView.bind(this));
+        Navy.Builder.init();
     },
 
     readFile: function(data, ev){
@@ -140,10 +145,13 @@ var Layout = {
         read(path, function(data){
             this.$el.find('textarea').val(data.content);
         }.bind(this));
+
+        var url = 'layout/' + filename;
+        Navy.Screen.showLayout(url);
     }
 };
 
-Layout.propBasic = ko.observableArray([
+Builder.Layout.propBasic = ko.observableArray([
     {name: 'id', title: '"str"'},
     {name: 'pos', title: '[x, y]'},
     {name: 'size', title: '[width, height]'},
@@ -151,7 +159,7 @@ Layout.propBasic = ko.observableArray([
     {name: 'paddings', title: '[top, right, bottom, left]'}
 ]);
 
-Layout.propBackground = ko.observableArray([
+Builder.Layout.propBackground = ko.observableArray([
     {name: 'src', title: '"image/foo.png"'},
     {name: 'color', title: '"#001122"'},
     {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'},
@@ -160,7 +168,7 @@ Layout.propBackground = ko.observableArray([
     {name: 'radiuses', title: '[top, right, bottom, left]'}
 ]);
 
-Layout.propBorder = ko.observableArray([
+Builder.Layout.propBorder = ko.observableArray([
     {name: 'width', title: 'num'},
     {name: 'widths', title: '[top, right, bottom, left]'},
     {name: 'color', title: '"#001122"'},
@@ -179,7 +187,7 @@ Layout.propBorder = ko.observableArray([
     {name: 'gradient-left-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]'}
 ]);
 
-var Code = {
+Builder.Code = {
     $el: null,
     files: ko.observableArray([]),
     project: null,
@@ -191,7 +199,7 @@ var Code = {
     },
 
     onChangeProject: function(){
-        var project = Header.selectedProject();
+        var project = Builder.Header.selectedProject();
         this.project = project;
         if (!project) {
             return;
@@ -215,7 +223,7 @@ var Code = {
     }
 };
 
-var Image = {
+Builder.Image = {
     $el: null,
     files: ko.observableArray([]),
     project: null,
@@ -227,7 +235,7 @@ var Image = {
     },
 
     onChangeProject: function(){
-        var project = Header.selectedProject();
+        var project = Builder.Header.selectedProject();
         this.project = project;
         if (!project) {
             return;
@@ -246,9 +254,12 @@ var Image = {
 };
 
 $(function(){
-    Header.init();
-    Config.init();
-    Layout.init();
-    Code.init();
-    Image.init();
+    $.fitsize();
+    Navy.App.wakeup();
+
+    Builder.Header.init();
+    Builder.Config.init();
+    Builder.Layout.init();
+    Builder.Code.init();
+    Builder.Image.init();
 });
