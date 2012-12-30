@@ -12,6 +12,18 @@ var format = function(str, arg) {
     return str;
 }
 
+var recursive = function(obj, key) {
+    var keys = key.split('-');
+    var value = obj;
+    for (var i = 0; i < keys.length; i++) {
+        value = value[keys[i]];
+        if (value === undefined) {
+            break;
+        }
+    }
+    return value;
+}
+
 Builder.Header = {
     $el: null,
     projects: ko.observableArray(),
@@ -100,11 +112,6 @@ Builder.Layout = {
         $.fitsize();
 
         $target.css({width: width + 'px', height: height + 'px'});
-
-        //iPhone4Sのサイズを基本としている
-        //var width = 640 * this.$el.height() / 960;
-        //this.$el.find('.n-canvas').width(width);
-
     },
 
     toggle: function(vm, ev) {
@@ -131,8 +138,8 @@ Builder.Layout = {
 
         Navy.Builder.setCanvasParentElement(this.$el.find('.n-canvas')[0]);
         Navy.Builder.setUrlPrefix('data/' + project + '/');
-        //Navy.Builder.setSelectedViewListener(this.onSelectedNavyView.bind(this));
-        //Navy.Builder.setMoveViewListener(this.onMoveNavyView.bind(this));
+        Navy.Builder.setSelectedViewListener(this.onSelectedNavyView.bind(this));
+        Navy.Builder.setMoveViewListener(this.onMoveNavyView.bind(this));
         Navy.Builder.init();
     },
 
@@ -148,43 +155,66 @@ Builder.Layout = {
 
         var url = 'layout/' + filename;
         Navy.Screen.showLayout(url);
+    },
+
+    setProp: function(prefix, layout, props) {
+        for (var i = 0; i < props.length; i++) {
+            var prop = props[i];
+            var value = recursive(layout, prefix + prop.name);
+            var valueText = JSON.stringify(value);
+            prop.value(valueText);
+        }
+    },
+
+    onSelectedNavyView: function(view){
+        var layout = view.getLayout();
+        console.log(layout);
+
+        this.propClass(layout['class']);
+        this.setProp('', layout, this.propBasic());
+        this.setProp('background-', layout, this.propBackground());
+        this.setProp('border-', layout, this.propBorder());
+    },
+
+    onMoveNavyView: function(view) {
     }
 };
 
+Builder.Layout.propClass = ko.observable();
 Builder.Layout.propBasic = ko.observableArray([
-    {name: 'id', title: '"str"'},
-    {name: 'pos', title: '[x, y]'},
-    {name: 'size', title: '[width, height]'},
-    {name: 'padding', title: 'num'},
-    {name: 'paddings', title: '[top, right, bottom, left]'}
+    {name: 'id', title: '"str"', value: ko.observable()},
+    {name: 'pos', title: '[x, y]', value: ko.observable()},
+    {name: 'size', title: '[width, height]', value: ko.observable()},
+    {name: 'padding', title: 'num', value: ko.observable()},
+    {name: 'paddings', title: '[top, right, bottom, left]', value: ko.observable()}
 ]);
 
 Builder.Layout.propBackground = ko.observableArray([
-    {name: 'src', title: '"image/foo.png"'},
-    {name: 'color', title: '"#001122"'},
-    {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'},
-    {name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]'},
-    {name: 'radius', title: 'num'},
-    {name: 'radiuses', title: '[top, right, bottom, left]'}
+    {name: 'src', title: '"image/foo.png"', value: ko.observable()},
+    {name: 'color', title: '"#001122"', value: ko.observable()},
+    {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"', value: ko.observable()},
+    {name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
+    {name: 'radius', title: 'num', value: ko.observable()},
+    {name: 'radiuses', title: '[top, right, bottom, left]', value: ko.observable()}
 ]);
 
 Builder.Layout.propBorder = ko.observableArray([
-    {name: 'width', title: 'num'},
-    {name: 'widths', title: '[top, right, bottom, left]'},
-    {name: 'color', title: '"#001122"'},
-    {name: 'colors', title: '[top, right, bottom, left]'},
-    {name: 'radius', title: 'num'},
-    {name: 'radiuses', title: '[top, right, bottom, left]'},
-    {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'},
-    {name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]'},
-    {name: 'gradient-top-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'},
-    {name: 'gradient-top-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]'},
-    {name: 'gradient-right-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'},
-    {name: 'gradient-right-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]'},
-    {name: 'gradient-bottom-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'},
-    {name: 'gradient-bottom-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]'},
-    {name: 'gradient-left-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"'},
-    {name: 'gradient-left-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]'}
+    {name: 'width', title: 'num', value: ko.observable()},
+    {name: 'widths', title: '[top, right, bottom, left]', value: ko.observable()},
+    {name: 'color', title: '"#001122"', value: ko.observable()},
+    {name: 'colors', title: '[top, right, bottom, left]', value: ko.observable()},
+    {name: 'radius', title: 'num', value: ko.observable()},
+    {name: 'radiuses', title: '[top, right, bottom, left]', value: ko.observable()},
+    {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"', value: ko.observable()},
+    {name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
+    {name: 'gradients-0-direction', title: 'top', value: ko.observable()},
+    {name: 'gradients-0-colorstop', title: 'top', value: ko.observable()},
+    {name: 'gradients-1-direction', title: 'right', value: ko.observable()},
+    {name: 'gradients-1-colorstop', title: 'right', value: ko.observable()},
+    {name: 'gradients-2-direction', title: 'bottom', value: ko.observable()},
+    {name: 'gradients-2-colorstop', title: 'bottom', value: ko.observable()},
+    {name: 'gradients-3-direction', title: 'left', value: ko.observable()},
+    {name: 'gradients-3-colorstop', title: 'left', value: ko.observable()}
 ]);
 
 Builder.Code = {

@@ -291,20 +291,23 @@
 <!-- }}} -->
 
 <script type="text/html" id="prop-template">
-<div><label>class</label><input type="text" id="prop-class" disabled/></div>
+<ul class="nav nav-list">
+  <li><label>class</label><div><input type="text" id="prop-class" disabled data-bind="value: propClass"/></div></li>
+</ul>
+
 <div>Basic</div>
 <ul class="nav nav-list" data-bind="foreach: propBasic">
-  <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text"></div></li>
+  <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text" data-bind="value: value"></div></li>
 </ul>
 
 <div>Background</div>
 <ul class="nav nav-list" data-bind="foreach: propBackground">
-  <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text"></div></li>
+  <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text" data-bind="value: value"></div></li>
 </ul>
 
 <div>Border</div>
 <ul class="nav nav-list" data-bind="foreach: propBorder">
-  <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text"></div></li>
+  <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text" data-bind="value: value"></div></li>
 </ul>
 </script>
 
