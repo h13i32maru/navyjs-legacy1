@@ -76,6 +76,10 @@ html, body {
     }
 }
 
+.n-config {
+    display: block;
+}
+
 .n-image {
     .n-filelist .nav.nav-list li{
         display:inline-block;
@@ -88,5 +92,72 @@ html, body {
 
     .n-filelist .n-search {
         width: 200px;
+    }
+}
+
+.n-layout {
+    .btn-group {
+        @include box(230px, 50px, auto, auto);
+    }
+    .n-pane {
+        @include box(230px, 80px, auto, auto);
+        margin-right: 10px;
+        margin-bottom: 10px;
+
+        .n-prop, .n-layer, .n-source, .n-lib {
+            display:none;
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: $fg-color;
+            overflow-y: scroll;
+            overflow-x: scroll;
+        }
+
+        .n-prop {
+            display:block;
+            
+            ul {
+                list-style:none;
+                padding: 4px;
+                li {
+                    padding: 4px 0;
+                    label {
+                        white-space: nowrap;
+                        overflow-x:scroll;
+                        display:block;
+                        width: 120px;
+                        background-color:red;
+                        margin:0;
+                        float:left;
+
+                        input {
+                            margin: 0;
+                            margin-right: 4px;
+                        }
+                    }
+                    div {
+                        margin-left: 130px;
+                        input[type="text"] {
+                            display:block;
+                            width:100%;
+                            box-sizing: border-box;
+                            margin:0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .n-textarea {
+        position:static;
+    }
+
+    .n-canvas, {
+        @include box(230px, 50px, 320px, 480px);
+        max-width: 700px;
+        margin-bottom: 10px;
+        background-color: black;
     }
 }

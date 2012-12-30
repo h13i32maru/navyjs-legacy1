@@ -55,6 +55,9 @@ html, body {
     margin-right: 10px;
     border: none; }
 
+.n-config {
+  display: block; }
+
 .n-image .n-filelist .nav.nav-list li {
   display: inline-block;
   padding: 4px; }
@@ -63,3 +66,62 @@ html, body {
     max-width: 128px; }
 .n-image .n-filelist .n-search {
   width: 200px; }
+
+.n-layout .btn-group {
+  position: absolute;
+  top: 50px;
+  left: 230px;
+  width: auto;
+  height: auto; }
+.n-layout .n-pane {
+  position: absolute;
+  top: 80px;
+  left: 230px;
+  width: auto;
+  height: auto;
+  margin-right: 10px;
+  margin-bottom: 10px; }
+  .n-layout .n-pane .n-prop, .n-layout .n-pane .n-layer, .n-layout .n-pane .n-source, .n-layout .n-pane .n-lib {
+    display: none;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+    overflow-y: scroll;
+    overflow-x: scroll; }
+  .n-layout .n-pane .n-prop {
+    display: block; }
+    .n-layout .n-pane .n-prop ul {
+      list-style: none;
+      padding: 4px; }
+      .n-layout .n-pane .n-prop ul li {
+        padding: 4px 0; }
+        .n-layout .n-pane .n-prop ul li label {
+          white-space: nowrap;
+          overflow-x: scroll;
+          display: block;
+          width: 120px;
+          background-color: red;
+          margin: 0;
+          float: left; }
+          .n-layout .n-pane .n-prop ul li label input {
+            margin: 0;
+            margin-right: 4px; }
+        .n-layout .n-pane .n-prop ul li div {
+          margin-left: 130px; }
+          .n-layout .n-pane .n-prop ul li div input[type="text"] {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0; }
+.n-layout .n-textarea {
+  position: static; }
+.n-layout .n-canvas {
+  position: absolute;
+  top: 50px;
+  left: 230px;
+  width: 320px;
+  height: 480px;
+  max-width: 700px;
+  margin-bottom: 10px;
+  background-color: black; }
