@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="utf-8"/>
-<title>BS Builder</title>
+<title>NavyBuilder</title>
 
 <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
@@ -296,17 +296,17 @@
 </ul>
 
 <div>Basic</div>
-<ul class="nav nav-list" data-bind="foreach: propBasic">
+<ul class="nav nav-list" data-bind="foreach: propBasic, event: {keyup: onKeyUp}">
   <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text" data-bind="value: value"></div></li>
 </ul>
 
 <div>Background</div>
-<ul class="nav nav-list" data-bind="foreach: propBackground">
+<ul class="nav nav-list" data-bind="foreach: propBackground, event: {keyup: onKeyUp}">
   <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text" data-bind="value: value"></div></li>
 </ul>
 
 <div>Border</div>
-<ul class="nav nav-list" data-bind="foreach: propBorder">
+<ul class="nav nav-list" data-bind="foreach: propBorder, event: {keyup: onKeyUp}">
   <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text" data-bind="value: value"></div></li>
 </ul>
 </script>

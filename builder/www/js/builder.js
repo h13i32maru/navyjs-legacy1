@@ -12,7 +12,15 @@ var format = function(str, arg) {
     return str;
 }
 
-var recursive = function(obj, key) {
+/**
+ * 文字列で指定されたキー名をもとに再帰的にオブジェクトから値を読み出す.
+ *
+ * e.g.
+ * obj = {a: {b: {c: 1}}}
+ * key = 'a-b-c'
+ * > 1
+ */
+var recursiveRead = function(obj, key) {
     var keys = key.split('-');
     var value = obj;
     for (var i = 0; i < keys.length; i++) {
@@ -22,6 +30,49 @@ var recursive = function(obj, key) {
         }
     }
     return value;
+}
+
+/**
+ * 文字列で指定されたキー名をもとに再帰的にオブジェクトに値を書き出す.
+ *
+ * e.g.
+ * obj = {}
+ * key = 'a-b-c'
+ * value = 1
+ * > obj = {a: {b: {c: 1}}}
+ *
+ * 配列にも対応している.
+ * e.g.
+ * obj = {}
+ * key = 'a-0-b'
+ * value = 1
+ * > obj = {a: [{b: 1}]}
+ */
+var recursiveWrite = function(obj, key, value) {
+    if (value === undefined) {
+        return;
+    }
+
+    var keys = key.split('-');
+    var k;
+    var nk; //next key
+    for (var i = 0; i < keys.length - 1; i++) {
+        k = keys[i];
+
+        if (!(k in obj)) {
+            nk = keys[i + 1];
+            if (/^[0-9]+$/.test(nk)) {
+                //k = parseInt(k, 10);
+                obj[k] = [];
+            } else {
+                obj[k] = {};
+            }
+        }
+
+        obj = obj[k];
+    }
+
+    obj[keys[i]] = value;
 }
 
 Builder.Header = {
@@ -89,6 +140,7 @@ Builder.Layout = {
     $el: null,
     files: ko.observableArray([]),
     project: null,
+    view: null,
     
     init: function(){
         this.$el = $('.n-layout');
@@ -144,6 +196,7 @@ Builder.Layout = {
     },
 
     readFile: function(data, ev){
+        this.view = null;
         var $target = $(ev.srcElement);
         $target.siblings().removeClass('active');
         $target.addClass('active');
@@ -157,26 +210,66 @@ Builder.Layout = {
         Navy.Screen.showLayout(url);
     },
 
-    setProp: function(prefix, layout, props) {
+    layoutToInput: function(prefix, layout, props) {
         for (var i = 0; i < props.length; i++) {
             var prop = props[i];
-            var value = recursive(layout, prefix + prop.name);
+            var value = recursiveRead(layout, prefix + prop.name);
             var valueText = JSON.stringify(value);
             prop.value(valueText);
         }
     },
 
+    inputToLayout: function(prefix, layout, props) {
+        for (var i = 0; i < props.length; i++) {
+            var prop = props[i];
+            var key = prop.name;
+            var valueText = prop.value();
+            if (valueText === undefined) { continue; }
+            var value = JSON.parse(valueText);
+            recursiveWrite(layout, prefix + key, value);
+        }
+    },
+
     onSelectedNavyView: function(view){
+        this.view = view;
         var layout = view.getLayout();
         console.log(layout);
 
-        this.propClass(layout['class']);
-        this.setProp('', layout, this.propBasic());
-        this.setProp('background-', layout, this.propBackground());
-        this.setProp('border-', layout, this.propBorder());
+        this.propClass(JSON.stringify(layout['class']));
+        this.layoutToInput('', layout, this.propBasic());
+        this.layoutToInput('background-', layout, this.propBackground());
+        this.layoutToInput('border-', layout, this.propBorder());
     },
 
     onMoveNavyView: function(view) {
+    },
+
+    onKeyUp: function(vm, ev) {
+        if (ev.keyCode === 13) {
+            this.setNewLayoutToView();
+        }
+    },
+
+    setNewLayoutToView: function() {
+        if (!this.view) {
+            return;
+        }
+
+        var view = this.view;
+        var layout = this.buildLayout();
+        console.log(layout);
+        Navy.Builder.setLayout(view, layout);
+    },
+
+    buildLayout: function() {
+        var layout = {};
+
+        layout['class'] = JSON.parse(this.propClass());
+        this.inputToLayout('', layout, this.propBasic());
+        this.inputToLayout('background-', layout, this.propBackground());
+        this.inputToLayout('border-', layout, this.propBorder());
+
+        return layout;
     }
 };
 
