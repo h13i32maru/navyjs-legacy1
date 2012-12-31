@@ -86,7 +86,7 @@
   </div> 
 
   <div class="btn-group">
-    <button class="btn">Save</button>
+    <button class="btn" data-bind="click: save">Save</button>
     <button class="btn">New</button>
     <button class="btn">Move</button>
     <button class="btn">Delete</button>
@@ -98,12 +98,12 @@
 <div class="n-content n-config">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search"/>
-    <ul class="nav nav-list" data-bind="foreach: files, click: $root.readFile">
+    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile">
       <li data-bind="text: $data"></li>
     </ul>
   </div>
 
-  <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
+  <textarea class="n-textarea fitsize-y fitsize-x" data-bind="value: text, event: {change: onChangeText}"></textarea>
 </div>
 <!-- end -->
 

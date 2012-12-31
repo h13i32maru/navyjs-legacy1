@@ -5,6 +5,11 @@ var read = function(path, callback) {
     $.getJSON('/data', params, callback);
 }
 
+var write = function(path, content, callback) {
+    var params = {method: 'post', path: path, content: content};
+    $.get('/data', params, callback);
+}
+
 var format = function(str, arg) {
     for (var i = 0; i < arg.length; i++) {
         str = str.replace('%s', arg[i]);
@@ -97,13 +102,36 @@ Builder.Header = {
         var cssClass = $(ev.srcElement).attr('data-toggle');
         $(cssClass).siblings().not(this.$el).hide();
         $(cssClass).show();
+    },
+
+    save: function(vm, ev) {
+        Builder.Config.save();
     }
 };
 
+/*
+Builder.TextFiles = function(endpointPrefix, filenames) {
+    this._endpointPrefix = endpointPrefix;
+    this._filenames = filenames;
+    this._files = {};
+    var filename;
+    for (var i = 0; i < filenames.length; i++) {
+        var filename = filenames[i];
+        this._files[filename] = {
+            endpoint: endpointPrefix + filename,
+            text: null,
+        };
+    }
+};
+*/
+
 Builder.Config = {
     $el: null,
-    files: ko.observableArray([]),
+    filenames: ko.observableArray([]),
     project: null,
+    filename: null,
+    text: ko.observable(),
+    textChanged: false,
     
     init: function(){
         this.$el = $('.n-config');
@@ -120,19 +148,38 @@ Builder.Config = {
 
         var path = format('/%s/config', [project]);
         read(path, function(data){
-            this.files(data);
+            this.filenames(data);
         }.bind(this));
     },
 
     readFile: function(data, ev){
+        if (this.textChanged) {
+            if (!confirm('Do you want to discard the changes?')) {
+                return;
+            }
+        }
+
+        this.textChanged = false;
+
         var $target = $(ev.srcElement);
         $target.siblings().removeClass('active');
         $target.addClass('active');
-        var filename = $target.text();
-        var path = format('/%s/config/%s', [this.project, filename]);
+
+        this.filename = $target.text();
+        var path = format('/%s/config/%s', [this.project, this.filename]);
         read(path, function(data){
-            this.$el.find('textarea').val(data.content);
+            this.text(data.content);
         }.bind(this));
+    },
+
+    save: function() {
+        var path = format('/%s/config/%s', [this.project, this.filename]);
+        write(path, this.text(), function(data){
+        }.bind(this));
+    },
+
+    onChangeText: function(vm, ev) {
+        this.textChanged = true;
     }
 };
 

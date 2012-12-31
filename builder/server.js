@@ -67,13 +67,42 @@ function getProjectContent(url) {
     } catch(e) {
         return get404NotFound(path);
     }
+};
+
+function postProjectContent(url) {
+    var path = './data/' + url.query.path.replace(/\.\./g, '');
+    var body;
+    var statusCode;
+    var contentType;
+
+    try {
+        var stat = fs.statSync(path);
+        if (stat.isDirectory()) {
+            return get404NotFound(path);
+        }
+
+        var filebody = url.query.content;
+        fs.writeFileSync(path, filebody, 'utf-8');
+        statusCode = 200;
+        body = JSON.stringify({});
+        contentType = mime['.json'];
+        return {statusCode: 200, body: body, type: contentType};
+    } catch(e) {
+        return get404NotFound(path);
+    }
 }
  
 http.createServer(function (req, res) {
     var url = require('url').parse(req.url, true);
-
     if (url.query.method) {
-        content = getProjectContent(url);
+        switch (url.query.method) {
+        case 'get':
+            content = getProjectContent(url);
+            break;
+        case 'post':
+            content = postProjectContent(url);
+            break;
+        }
     } else if (url.pathname.indexOf('/data') === 0) {
         url.pathname = './' + url.pathname;
         content = getStaticContent(url);
