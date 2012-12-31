@@ -291,24 +291,42 @@
 <!-- }}} -->
 
 <script type="text/html" id="prop-template">
-<ul class="nav nav-list">
-  <li><label>class</label><div><input type="text" id="prop-class" disabled data-bind="value: propClass"/></div></li>
-</ul>
+<table><tbody>
+  <tr>
+    <td><label>class</label></td>
+    <td><input type="text" id="prop-class" disabled data-bind="value: propClass"/></td>
+  </tr>
+</tbody></table>
 
-<div>Basic</div>
-<ul class="nav nav-list" data-bind="foreach: propBasic, event: {keyup: onKeyUp}">
-  <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text" data-bind="value: value"></div></li>
-</ul>
+<table>
+<caption>Basic</caption>
+<tbody data-bind="foreach: propBasic, event: {keyup: onKeyUp}">
+  <tr>
+    <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
+    <td><input type="text" data-bind="value: value"></td>
+  </tr>
+</tbody>
+</table>
 
-<div>Background</div>
-<ul class="nav nav-list" data-bind="foreach: propBackground, event: {keyup: onKeyUp}">
-  <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text" data-bind="value: value"></div></li>
-</ul>
+<table>
+<caption>Background</caption>
+<tbody data-bind="foreach: propBackground, event: {keyup: onKeyUp}">
+  <tr>
+    <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
+    <td><input type="text" data-bind="value: value"></td>
+  </tr>
+</tbody>
+</table>
 
-<div>Border</div>
-<ul class="nav nav-list" data-bind="foreach: propBorder, event: {keyup: onKeyUp}">
-  <li><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label><div><input type="text" data-bind="value: value"></div></li>
-</ul>
+<table>
+<caption>Border</caption>
+<tbody data-bind="foreach: propBorder, event: {keyup: onKeyUp}">
+  <tr>
+    <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
+    <td><input type="text" data-bind="value: value"></td>
+  </tr>
+</tbody>
+</table>
 </script>
 
 <script type="text/html" id="lib-template">

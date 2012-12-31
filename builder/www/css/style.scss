@@ -116,18 +116,56 @@ html, body {
 
         .n-prop {
             display:block;
+
+            table {
+                margin:10px 4px;
+                caption {
+                    text-align: left;
+                    background-color: $bg-color;
+                    padding: 4px;
+                }
+                tbody {
+                    tr {
+                        border-bottom: solid 1px #aaa;
+                        td {
+                            &:nth-child(1) {
+                                border-right: solid 1px #aaa;
+                                label {
+                                    width: 160px;
+                                    margin: 0;
+                                    input {
+                                        margin: 0;
+                                        margin-right: 4px;
+                                    }
+                                }
+                            }
+                            &:nth-child(2) {
+                                width: 100%;
+                                input {
+                                    width: 100%;
+                                    margin: 0;
+                                    border:none;
+                                    box-sizing: border-box;
+                                    padding: 4px 2px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             
             ul {
                 list-style:none;
                 padding: 4px;
                 li {
+                    $label-width: 160px;
                     padding: 4px 0;
                     label {
                         white-space: nowrap;
                         overflow-x:scroll;
                         display:block;
-                        width: 120px;
-                        background-color:red;
+                        width: $label-width;
+                        //background-color:red;
                         margin:0;
                         float:left;
 
@@ -137,12 +175,13 @@ html, body {
                         }
                     }
                     div {
-                        margin-left: 130px;
+                        margin-left: $label-width + 10px;
                         input[type="text"] {
                             display:block;
                             width:100%;
                             box-sizing: border-box;
                             margin:0;
+                            border-color:transparent;
                         }
                     }
                 }
