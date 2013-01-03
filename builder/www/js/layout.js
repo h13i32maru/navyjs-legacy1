@@ -1,13 +1,12 @@
-Builder.Layout = {
-    $el: null,
-    files: ko.observableArray([]),
-    project: null,
+Builder.Layout = nClass.instance(Builder.Core, {
+    CLASS: 'Layout',
+    target: '.n-layout',
+    type: 'layout',
     view: null,
     
-    init: function(){
-        this.$el = $('.n-layout');
-        ko.applyBindings(this, this.$el[0]);
-        ko.computed(this.onChangeProject.bind(this));
+    initialize: function($super){
+        this.initObservable();
+        $super();
 
         var $target = this.$el.find('.n-canvas').first();
         var appWidth = 640;
@@ -28,10 +27,6 @@ Builder.Layout = {
         $target.css({width: width + 'px', height: height + 'px'});
     },
 
-    show: function() {
-        this.$el.show();
-    },
-
     toggle: function(vm, ev) {
         var $button = $(ev.srcElement);
         $button.siblings().removeClass('active');
@@ -42,44 +37,29 @@ Builder.Layout = {
         this.$el.find(cssClass).show();
     },
 
-    onChangeProject: function(){
-        var project = Builder.Header.selectedProject();
-        this.project = project;
-        if (!project) {
+    onChangeProject: function($super){
+        $super();
+        if (!this.project) {
             return;
         }
-
-        var path = format('/%s/layout', [project]);
-        read(path, function(data){
-            this.files(data);
-        }.bind(this));
-
         Navy.Builder.setCanvasParentElement(this.$el.find('.n-canvas')[0]);
-        Navy.Builder.setUrlPrefix('data/' + project + '/');
+        Navy.Builder.setUrlPrefix('data/' + this.project + '/');
         Navy.Builder.setSelectedViewListener(this.onSelectedNavyView.bind(this));
         Navy.Builder.setMoveViewListener(this.onMoveNavyView.bind(this));
         Navy.Builder.init();
     },
 
-    readFile: function(data, ev){
+    readFile: function($super, data, ev){
+        $super(data, ev);
         this.view = null;
-        var $target = $(ev.srcElement);
-        $target.siblings().removeClass('active');
-        $target.addClass('active');
-        var filename = $target.text();
-        var path = format('/%s/layout/%s', [this.project, filename]);
-        read(path, function(data){
-            this.$el.find('textarea').val(data.content);
-        }.bind(this));
-
-        var url = 'layout/' + filename;
+        var url = 'layout/' + this.filename;
         Navy.Screen.showLayout(url);
     },
 
     layoutToInput: function(prefix, layout, props) {
         for (var i = 0; i < props.length; i++) {
             var prop = props[i];
-            var value = recursiveRead(layout, prefix + prop.name);
+            var value = Builder.Util.recursiveRead(layout, prefix + prop.name);
             var valueText = JSON.stringify(value);
             prop.value(valueText);
         }
@@ -92,7 +72,7 @@ Builder.Layout = {
             var valueText = prop.value();
             if (valueText === undefined) { continue; }
             var value = JSON.parse(valueText);
-            recursiveWrite(layout, prefix + key, value);
+            Builder.Util.recursiveWrite(layout, prefix + key, value);
         }
     },
 
@@ -136,43 +116,46 @@ Builder.Layout = {
         this.inputToLayout('border-', layout, this.propBorder());
 
         return layout;
+    },
+
+    initObservable: function(){
+        this.propClass = ko.observable();
+
+        this.propBasic = ko.observableArray([
+            {name: 'id', title: '"str"', value: ko.observable()},
+            {name: 'pos', title: '[x, y]', value: ko.observable()},
+            {name: 'size', title: '[width, height]', value: ko.observable()},
+            {name: 'padding', title: 'num', value: ko.observable()},
+            {name: 'paddings', title: '[top, right, bottom, left]', value: ko.observable()}
+        ]);
+
+        this.propBackground = ko.observableArray([
+            {name: 'src', title: '"image/foo.png"', value: ko.observable()},
+            {name: 'color', title: '"#001122"', value: ko.observable()},
+            {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"', value: ko.observable()},
+            {name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
+            {name: 'radius', title: 'num', value: ko.observable()},
+            {name: 'radiuses', title: '[top, right, bottom, left]', value: ko.observable()}
+        ]);
+
+        this.propBorder = ko.observableArray([
+            {name: 'width', title: 'num', value: ko.observable()},
+            {name: 'widths', title: '[top, right, bottom, left]', value: ko.observable()},
+            {name: 'color', title: '"#001122"', value: ko.observable()},
+            {name: 'colors', title: '[top, right, bottom, left]', value: ko.observable()},
+            {name: 'radius', title: 'num', value: ko.observable()},
+            {name: 'radiuses', title: '[top, right, bottom, left]', value: ko.observable()},
+            {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"', value: ko.observable()},
+            {name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
+            {name: 'gradients-0-direction', title: 'top', value: ko.observable()},
+            {name: 'gradients-0-colorstop', title: 'top', value: ko.observable()},
+            {name: 'gradients-1-direction', title: 'right', value: ko.observable()},
+            {name: 'gradients-1-colorstop', title: 'right', value: ko.observable()},
+            {name: 'gradients-2-direction', title: 'bottom', value: ko.observable()},
+            {name: 'gradients-2-colorstop', title: 'bottom', value: ko.observable()},
+            {name: 'gradients-3-direction', title: 'left', value: ko.observable()},
+            {name: 'gradients-3-colorstop', title: 'left', value: ko.observable()}
+        ]);
     }
-};
-
-Builder.Layout.propClass = ko.observable();
-Builder.Layout.propBasic = ko.observableArray([
-    {name: 'id', title: '"str"', value: ko.observable()},
-    {name: 'pos', title: '[x, y]', value: ko.observable()},
-    {name: 'size', title: '[width, height]', value: ko.observable()},
-    {name: 'padding', title: 'num', value: ko.observable()},
-    {name: 'paddings', title: '[top, right, bottom, left]', value: ko.observable()}
-]);
-
-Builder.Layout.propBackground = ko.observableArray([
-    {name: 'src', title: '"image/foo.png"', value: ko.observable()},
-    {name: 'color', title: '"#001122"', value: ko.observable()},
-    {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"', value: ko.observable()},
-    {name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
-    {name: 'radius', title: 'num', value: ko.observable()},
-    {name: 'radiuses', title: '[top, right, bottom, left]', value: ko.observable()}
-]);
-
-Builder.Layout.propBorder = ko.observableArray([
-    {name: 'width', title: 'num', value: ko.observable()},
-    {name: 'widths', title: '[top, right, bottom, left]', value: ko.observable()},
-    {name: 'color', title: '"#001122"', value: ko.observable()},
-    {name: 'colors', title: '[top, right, bottom, left]', value: ko.observable()},
-    {name: 'radius', title: 'num', value: ko.observable()},
-    {name: 'radiuses', title: '[top, right, bottom, left]', value: ko.observable()},
-    {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"', value: ko.observable()},
-    {name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
-    {name: 'gradients-0-direction', title: 'top', value: ko.observable()},
-    {name: 'gradients-0-colorstop', title: 'top', value: ko.observable()},
-    {name: 'gradients-1-direction', title: 'right', value: ko.observable()},
-    {name: 'gradients-1-colorstop', title: 'right', value: ko.observable()},
-    {name: 'gradients-2-direction', title: 'bottom', value: ko.observable()},
-    {name: 'gradients-2-colorstop', title: 'bottom', value: ko.observable()},
-    {name: 'gradients-3-direction', title: 'left', value: ko.observable()},
-    {name: 'gradients-3-colorstop', title: 'left', value: ko.observable()}
-]);
+});
 

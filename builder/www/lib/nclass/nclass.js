@@ -73,7 +73,7 @@ nClass = (function(){
 
     var _create = function(superClass, protoObj) {
         var constructor = function() {
-            if (typeof this.initialize === 'function') {
+            if (typeof this.initialize === 'function' && !this.constructor.__delayInitialize__) {
                 this.initialize.apply(this, arguments);
             }
         };
@@ -129,9 +129,17 @@ nClass = (function(){
 
     };
 
+    var instance = function() {
+        var _class = create.apply(this, arguments);
+        _class.__delayInitialize__ = true;
+        var obj = new _class();
+        return obj;
+    };
+
     create.PropertyTypeError = PropertyTypeError;
     create.InvalidArgumentError = InvalidArgumentError;
     create.OverrideError = OverrideError;
+    create.instance = instance;
 
     return create;
 })();

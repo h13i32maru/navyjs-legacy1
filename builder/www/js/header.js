@@ -1,17 +1,40 @@
-Builder.Header = {
+Builder.Header = nClass.instance({
+    CLASS: 'Header',
+    target: '.n-header',
     $el: null,
-    projects: ko.observableArray(),
-    selectedProject: ko.observable(),
     currentContent: null,
+    contents: null,
 
-    init: function(){
-        this.$el = $('.n-header');
+    initialize: function(){
+        this.$el = $(this.target);
+        this.contents = [
+            {name: 'Config', content: Builder.Config},
+            {name: 'Code', content: Builder.Code},
+            {name: 'Layout', content: Builder.Layout},
+            {name: 'Image', content: Builder.Image}
+        ];
+        this.projects = ko.observableArray();
+        this.selectedProject = ko.observable();
         this.currentContent = Builder.Config;
         ko.applyBindings(this, this.$el[0]);
 
-        read('/', function(data){
+        Builder.Util.read('/', function(data){
             this.projects(data);
         }.bind(this));
+    },
+
+    getContent: function(name) {
+        for (var i = 0; i < this.contents.length; i++) {
+            if (this.contents[i].name === name) {
+                return this.contents[i].content;
+            }
+        }
+    },
+
+    hideAllContents: function() {
+        for (var i = 0; i < this.contents.length; i++) {
+            this.contents[i].content.hide();
+        }
     },
 
     toggle: function(vm, ev){
@@ -19,13 +42,13 @@ Builder.Header = {
         $button.siblings().removeClass('active');
         $button.addClass('active');
 
-        $('.n-content').hide();
+        this.hideAllContents();
         var contentName = $button.attr('data-toggle');
-        this.currentContent = Builder[contentName];
+        this.currentContent = this.getContent(contentName);
         this.currentContent.show();
     },
 
     save: function(vm, ev) {
         this.currentContent.save();
     }
-};
+});

@@ -1,36 +1,18 @@
-Builder.Image = {
-    $el: null,
-    files: ko.observableArray([]),
-    project: null,
+Builder.Image = nClass.instance(Builder.Core, {
+    CLASS: 'Image',
+    target: '.n-image',
+    type: 'image',
 
-    init: function(){
-        this.$el = $('.n-image');
-        ko.applyBindings(this, this.$el[0]);
-        ko.computed(this.onChangeProject.bind(this));
+    save: function($super) {
+        //画像の保存は何もしない
     },
 
-    show: function() {
-        this.$el.show();
-    },
-
-    save: function() {
-    },
-
-    onChangeProject: function(){
-        var project = Builder.Header.selectedProject();
-        this.project = project;
-        if (!project) {
-            return;
+    onReadFilenames: function($super, data) {
+        var sources = [];
+        for (var i = 0; i < data.length; i++) {
+            var src = Builder.Util.format('/data/%s/%s/%s', [this.project, this.type, data[i]]);
+            sources.push(src);
         }
-
-        var path = format('/%s/image', [project]);
-        read(path, function(data){
-            var sources = [];
-            for (var i = 0; i < data.length; i++) {
-                var src = format('/data/%s/image/%s', [this.project, data[i]]);
-                sources.push(src);
-            }
-            this.files(sources);
-        }.bind(this));
+        this.filenames(sources);
     }
-};
+});

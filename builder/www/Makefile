@@ -8,6 +8,7 @@ OUT		= --js_output_file js/builder.js
 
 #base
 JS	= --js js/index.js \
+	  --js js/util.js \
 	  --js js/core.js \
 	  --js js/header.js \
 	  --js js/config.js \

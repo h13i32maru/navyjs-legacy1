@@ -4,9 +4,9 @@ $(function(){
     $.fitsize();
     Navy.App.wakeup();
 
-    Builder.Header.init();
-    Builder.Config.init();
-    Builder.Layout.init();
-    Builder.Code.init();
-    Builder.Image.init();
+    Builder.Header.initialize();
+    Builder.Config.initialize();
+    Builder.Layout.initialize();
+    Builder.Code.initialize();
+    Builder.Image.initialize();
 });
