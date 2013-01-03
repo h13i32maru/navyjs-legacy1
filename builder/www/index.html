@@ -8,67 +8,17 @@
 <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
 
-<script src="js/navy.js" data-builder="true"></script>
-
 <script src="lib/jquery/jquery-1.8.1.min.js"></script>
+<script src="lib/jquery-plugin/fitsize.js"></script>
 <script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
-
-<script src="js/knockout-2.2.0.js"></script>
+<script src="lib/knockout/knockout-2.2.0.js"></script>
+<script src="lib/nclass/nclass.js"></script>
+<script src="lib/navy/navy.js" data-builder="true"></script>
 <script src="js/builder.js"></script>
-<script>
-
-(function($){
-    $.fitsize = function() {
-        $target = $('.fitsize-x').each(function(index, $e){
-            var $this = $(this);
-            var left          = parseInt($this.css('left'), 10);
-            var marginLeft    = parseInt($this.css('margin-left'), 10);
-            var marginRight   = parseInt($this.css('margin-right'), 10);
-            var paddingLeft   = parseInt($this.css('padding-left'), 10);
-            var paddingRight  = parseInt($this.css('padding-right'), 10);
-            var borderLeft    = parseInt($this.css('border-left'), 10);
-            var borderRight   = parseInt($this.css('border-right'), 10);
-            var width         = $(document.body).width() - (left + marginLeft + marginRight + paddingLeft + paddingRight + borderLeft + borderRight);
-            $this.width(width);
-        });
-
-        $target = $('.fitsize-y').each(function(index, $e){
-            var $this = $(this);
-            var top           = parseInt($this.css('top'), 10);
-            var marginTop     = parseInt($this.css('margin-top'), 10);
-            var marginBottom  = parseInt($this.css('margin-bottom'), 10);
-            var paddingTop    = parseInt($this.css('padding-top'), 10);
-            var paddingBottom = parseInt($this.css('padding-bottom'), 10);
-            var borderTop     = parseInt($this.css('border-top'), 10);
-            var borderBottom  = parseInt($this.css('border-bottom'), 10);
-            var height        = $(document.body).height() - (top + marginTop + marginBottom + paddingTop + paddingBottom + borderTop + borderBottom);
-            $this.height(height);
-        });
-    }
-})(jQuery);
-
-//$($.fitsize);
-</script>
-<!--
-<script src="lib/bootstrap/js/bootstrap.min.js"></script>
--->
-<!--
-<script src="lib/underscore/underscore-min.js"></script>
-<script src="lib/backbone/backbone-min.js"></script>
-<script src="js/jquery/jquery.fitsize.js"></script>
-<script src="js/jquery/jquery.list_filter.js"></script>
-<script src="js/navy.js"></script>
-<script src="lib/nameless/nameless.js"></script>
-<script src="js/new.js"></script>
--->
-<!--
-<script src="js/builder.js"></script>
--->
 </head>
 
 <body>
-
-<!-- n-header -->
+<!-- {{{ header -->
 <div class="n-header">
   <select data-bind="options: projects, value: selectedProject"></select>
 
@@ -79,10 +29,10 @@
   </div>
 
   <div class="btn-group" data-bind="click: toggle">
-    <button class="btn active" data-toggle=".n-config">Config</button>
-    <button class="btn" data-toggle=".n-layout">Layout</button>
-    <button class="btn" data-toggle=".n-code">Code</button>
-    <button class="btn" data-toggle=".n-image">Image</button>
+    <button class="btn active" data-toggle="Config">Config</button>
+    <button class="btn" data-toggle="Layout">Layout</button>
+    <button class="btn" data-toggle="Code">Code</button>
+    <button class="btn" data-toggle="Image">Image</button>
   </div> 
 
   <div class="btn-group">
@@ -92,9 +42,8 @@
     <button class="btn">Delete</button>
   </div>
 </div>
-<!-- end -->
-
-<!-- config -->
+<!-- }}} -->
+<!-- {{{ config -->
 <div class="n-content n-config">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search"/>
@@ -105,9 +54,8 @@
 
   <textarea class="n-textarea fitsize-y fitsize-x" data-bind="value: text, event: {change: onChangeText}"></textarea>
 </div>
-<!-- end -->
-
-<!-- layout -->
+<!-- }}} -->
+<!-- {{{ layout -->
 <div class="n-content n-layout">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search"/>
@@ -133,22 +81,20 @@
   </div>
 
 </div>
-<!-- end -->
-
-<!-- code -->
+<!-- }}} -->
+<!-- {{{ code -->
 <div class="n-content n-code">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search"/>
-    <ul class="nav nav-list" data-bind="foreach: files, click: $root.readFile.bind($root)">
+    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile.bind($root)">
       <li data-bind="text: $data"></li>
     </ul>
   </div>
 
-  <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
+  <textarea class="n-textarea fitsize-y fitsize-x" data-bind="value: text, event: {change: onChangeText}"></textarea>
 </div>
-<!-- end -->
-
-<!-- image -->
+<!-- }}} -->
+<!-- {{{ image -->
 <div class="n-content n-image">
   <div class="n-filelist fitsize-y fitsize-x">
     <input type="text" placeholder="Search" class="n-search"/>
@@ -157,8 +103,7 @@
     </ul>
   </div>
 </div>
-<!-- end -->
-
+<!-- }}} -->
 
 <!-- {{{ tab-content -->
 <div id="bs-content-tabs" class="tabbable tabs-left fill-y">
@@ -276,20 +221,7 @@
 </div>
 </div>
 <!-- }}} -->
-<!-- {{{tamplate -->
-<script type="text/template" id="project-list">
-<option data-id="<%= id %>"><%= name %></option>
-</script>
-
-<script type="text/template" id="file-list">
-  <li><a data-id="<%= id %>"><%= name %></a></li>
-</script>
-
-<script type="text/template" id="image-list">
-  <li><a data-id="<%= id %>"><img src="<%= id %>" title="<%= name %>"/><div><%= name %></div></a></li>
-</script>
-<!-- }}} -->
-
+<!-- {{{template -->
 <script type="text/html" id="prop-template">
 <table><tbody>
   <tr>
@@ -338,6 +270,7 @@
   <li data-view-class="ViewGroup">ViewGroup</li>
 </ul>
 </script>
+<!-- }}} -->
 </body>
 
 </html>
