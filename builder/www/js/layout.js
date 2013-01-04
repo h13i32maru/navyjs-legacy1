@@ -136,10 +136,10 @@ Builder.Layout = nClass.instance(Builder.Core, {
         var newLayout = this.buildLayout();
         var layout = $.extend(true, {}, currentLayout, newLayout);
 
-        Navy.Builder.setLayout(view, layout);
-
-        var pageLayouts = Navy.Builder.getPageLayoutFromView(view);
-        this.text(JSON.stringify(pageLayouts, null, 4));
+        Navy.Builder.setLayout(view, layout, function(view){
+            var pageLayouts = Navy.Builder.getPageLayoutFromView(view);
+            this.text(JSON.stringify(pageLayouts, null, 4));
+        }.bind(this));
     },
 
     buildLayout: function() {
@@ -206,6 +206,11 @@ Builder.Layout = nClass.instance(Builder.Core, {
         ]);
 
         this.propExtra = {};
+
+        this.propExtra.ViewGroup = ko.observableArray([
+            {name: 'ref', title: '"layout/foo.json"', value: ko.observable()}
+        ]);
+
         this.propExtra.Text = ko.observableArray([
             {name: 'style', title: '"normal | italic | oblique"', value: ko.observable()},
             {name: 'weight', title: '"normal | bold | bolder | lighter"', value: ko.observable()},
@@ -215,6 +220,10 @@ Builder.Layout = nClass.instance(Builder.Core, {
             {name: 'valign', title: '"top | middle | bottom"', value: ko.observable()},
             {name: 'halign', title: '"left | center | right"', value: ko.observable()},
             {name: 'cutend', title: '"str"', value: ko.observable()}
+        ]);
+
+        this.propExtra.Image = ko.observableArray([
+            {name: 'src', title: '"image/foo.png"', value: ko.observable()}
         ]);
 
         this.propExtra.Button = ko.observableArray([

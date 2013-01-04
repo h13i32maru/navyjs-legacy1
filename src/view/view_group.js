@@ -20,6 +20,16 @@ Navy.View.ViewGroup = Navy.View.subclass({
         $super(layout);
     },
 
+    //TODO:jsdoc
+    _initLayout: function($super) {
+        $super();
+
+        for (var viewId in this._views) {
+            this.removeView(viewId);
+        }
+        this._views = {};
+    },
+
     /**
      * 自身のレイアウトと子要素のレイアウトを行う.
      * @override

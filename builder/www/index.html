@@ -260,9 +260,29 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-text">
+<table class="n-prop-extra-ViewGroup">
+<caption data-bind="click: togglePropInput">Extra(ViewGroup)</caption>
+<tbody data-bind="foreach: propExtra.ViewGroup, event: {keyup: onKeyUp}">
+  <tr>
+    <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
+    <td><input type="text" data-bind="value: value"></td>
+  </tr>
+</tbody>
+</table>
+
+<table class="n-prop-extra-Text">
 <caption data-bind="click: togglePropInput">Extra(Text)</caption>
 <tbody data-bind="foreach: propExtra.Text, event: {keyup: onKeyUp}">
+  <tr>
+    <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
+    <td><input type="text" data-bind="value: value"></td>
+  </tr>
+</tbody>
+</table>
+
+<table class="n-prop-extra-Image">
+<caption data-bind="click: togglePropInput">Extra(Image)</caption>
+<tbody data-bind="foreach: propExtra.Image, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
     <td><input type="text" data-bind="value: value"></td>

@@ -36,9 +36,14 @@ Navy.Builder = Navy.Core.instance({
             return url;
         }
     },
-    setLayout: function(view, layout) {
-        view._initLayout()
-        view._setLayout(layout);
+    setLayout: function(view, layout, callback) {
+        view._initLayout();
+        if (layout.extra.ref) {
+            view._setLayout(layout, callback);
+        } else {
+            view._setLayout(layout);
+            callback(view);
+        }
     },
     setSelectedViewListener: function(listener) {
         this._selectedViewListener = listener;
