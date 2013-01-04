@@ -231,7 +231,7 @@
 </tbody></table>
 
 <table>
-<caption>Basic</caption>
+<caption data-bind="click: togglePropInput">Basic</caption>
 <tbody data-bind="foreach: propBasic, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -241,7 +241,7 @@
 </table>
 
 <table>
-<caption>Background</caption>
+<caption data-bind="click: togglePropInput">Background</caption>
 <tbody data-bind="foreach: propBackground, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -251,7 +251,7 @@
 </table>
 
 <table>
-<caption>Border</caption>
+<caption data-bind="click: togglePropInput">Border</caption>
 <tbody data-bind="foreach: propBorder, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>

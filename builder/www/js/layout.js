@@ -122,6 +122,11 @@ Builder.Layout = nClass.instance(Builder.Core, {
         return layout;
     },
 
+    togglePropInput: function(vm, ev) {
+        var $propInput = $(ev.srcElement).next();
+        $propInput.toggle();
+    },
+
     initObservable: function(){
         this.propClass = ko.observable();
 
@@ -130,7 +135,10 @@ Builder.Layout = nClass.instance(Builder.Core, {
             {name: 'pos', title: '[x, y]', value: ko.observable()},
             {name: 'size', title: '[width, height]', value: ko.observable()},
             {name: 'padding', title: 'num', value: ko.observable()},
-            {name: 'paddings', title: '[top, right, bottom, left]', value: ko.observable()}
+            {name: 'paddings', title: '[top, right, bottom, left]', value: ko.observable()},
+            {name: 'shadow-offset', title: '[x, y]', value: ko.observable()},
+            {name: 'shadow-color', title: '#001122', value: ko.observable()},
+            {name: 'shadow-blur', title: 'num', value: ko.observable()}
         ]);
 
         this.propBackground = ko.observableArray([

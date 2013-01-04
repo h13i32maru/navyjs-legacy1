@@ -90,9 +90,11 @@ html, body {
     overflow-y: scroll;
     overflow-x: scroll; }
   .n-layout .n-pane .n-prop {
-    display: block; }
+    display: block;
+    padding: 4px; }
     .n-layout .n-pane .n-prop table {
-      margin: 10px 4px; }
+      width: 100%;
+      margin-bottom: 10px; }
       .n-layout .n-pane .n-prop table caption {
         text-align: left;
         background-color: #dddddd;

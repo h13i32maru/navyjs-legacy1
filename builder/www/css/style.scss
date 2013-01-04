@@ -116,9 +116,11 @@ html, body {
 
         .n-prop {
             display:block;
+            padding: 4px;
 
             table {
-                margin:10px 4px;
+                width: 100%;
+                margin-bottom: 10px;
                 caption {
                     text-align: left;
                     background-color: $bg-color;
