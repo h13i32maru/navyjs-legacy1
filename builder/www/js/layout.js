@@ -54,12 +54,26 @@ Builder.Layout = nClass.instance(Builder.Core, {
         this.view = null;
         var url = 'layout/' + this.filename;
         Navy.Screen.showLayout(url);
+        Navy.Builder.selectView(null);
     },
 
     layoutToInput: function(prefix, layout, props) {
         for (var i = 0; i < props.length; i++) {
             var prop = props[i];
-            var value = Builder.Util.recursiveRead(layout, prefix + prop.name);
+            if (prop.separator) {
+                continue;
+            }
+
+            var name = '';
+            if (prefix) {
+                name += prefix;
+            }
+            if (prop.prefix) {
+                name += prop.prefix;
+            }
+            name += prop.name;
+
+            var value = Builder.Util.recursiveRead(layout, name);
             var valueText = JSON.stringify(value);
             prop.value(valueText);
         }
@@ -68,11 +82,24 @@ Builder.Layout = nClass.instance(Builder.Core, {
     inputToLayout: function(prefix, layout, props) {
         for (var i = 0; i < props.length; i++) {
             var prop = props[i];
-            var key = prop.name;
+
+            if (prop.separator) {
+                continue;
+            }
+
+            var name = '';
+            if (prefix) {
+                name += prefix;
+            }
+            if (prop.prefix) {
+                name += prop.prefix;
+            }
+
+            name += prop.name;
             var valueText = prop.value();
             if (valueText === undefined) { continue; }
             var value = JSON.parse(valueText);
-            Builder.Util.recursiveWrite(layout, prefix + key, value);
+            Builder.Util.recursiveWrite(layout, name, value);
         }
     },
 
@@ -84,6 +111,10 @@ Builder.Layout = nClass.instance(Builder.Core, {
         this.layoutToInput('', layout, this.propBasic());
         this.layoutToInput('background-', layout, this.propBackground());
         this.layoutToInput('border-', layout, this.propBorder());
+
+        if (this.propExtra[layout['class']]) {
+            this.layoutToInput('extra-', layout, this.propExtra[layout['class']]());
+        }
     },
 
     onMoveNavyView: function(view) {
@@ -119,6 +150,10 @@ Builder.Layout = nClass.instance(Builder.Core, {
         this.inputToLayout('background-', layout, this.propBackground());
         this.inputToLayout('border-', layout, this.propBorder());
 
+        if (this.propExtra[layout['class']]) {
+            this.inputToLayout('extra-', layout, this.propExtra[layout['class']]());
+        }
+
         return layout;
     },
 
@@ -143,6 +178,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
         this.propBackground = ko.observableArray([
             {name: 'src', title: '"image/foo.png"', value: ko.observable()},
+            {name: 'alpha', title: 'num', value: ko.observable()},
             {name: 'color', title: '"#001122"', value: ko.observable()},
             {name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"', value: ko.observable()},
             {name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
@@ -167,6 +203,38 @@ Builder.Layout = nClass.instance(Builder.Core, {
             {name: 'gradients-2-colorstop', title: 'bottom', value: ko.observable()},
             {name: 'gradients-3-direction', title: 'left', value: ko.observable()},
             {name: 'gradients-3-colorstop', title: 'left', value: ko.observable()}
+        ]);
+
+        this.propExtra = {};
+        this.propExtra.Text = ko.observableArray([
+            {name: 'style', title: '"normal | italic | oblique"', value: ko.observable()},
+            {name: 'weight', title: '"normal | bold | bolder | lighter"', value: ko.observable()},
+            {name: 'text', title: '"str"', value: ko.observable()},
+            {name: 'color', title: '"#001122"', value: ko.observable()},
+            {name: 'size', title: 'num', value: ko.observable()},
+            {name: 'valign', title: '"top | middle | bottom"', value: ko.observable()},
+            {name: 'halign', title: '"left | center | right"', value: ko.observable()},
+            {name: 'cutend', title: '"str"', value: ko.observable()}
+        ]);
+
+        this.propExtra.Button = ko.observableArray([
+            {name: 'link', title: '"page name"', value: ko.observable()},
+            {separator: true, name: 'normal > background', title: ''},
+            {prefix: 'normal-background-', name: 'src', title: '"image/foo.png"', value: ko.observable()},
+            {prefix: 'normal-background-', name: 'alpha', title: 'num', value: ko.observable()},
+            {prefix: 'normal-background-', name: 'color', title: '"#001122"', value: ko.observable()},
+            {prefix: 'normal-background-', name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"', value: ko.observable()},
+            {prefix: 'normal-background-', name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
+            {prefix: 'normal-background-', name: 'radius', title: 'num', value: ko.observable()},
+            {prefix: 'normal-background-', name: 'radiuses', title: '[top, right, bottom, left]', value: ko.observable()},
+            {separator: true, name: 'tapped > background', title: ''},
+            {prefix: 'tapped-background-', name: 'src', title: '"image/foo.png"', value: ko.observable()},
+            {prefix: 'tapped-background-', name: 'alpha', title: 'num', value: ko.observable()},
+            {prefix: 'tapped-background-', name: 'color', title: '"#001122"', value: ko.observable()},
+            {prefix: 'tapped-background-', name: 'gradient-direction', title: '"top | right | bottom | left | top-right | top-left| bottom-right | bottom-left"', value: ko.observable()},
+            {prefix: 'tapped-background-', name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
+            {prefix: 'tapped-background-', name: 'radius', title: 'num', value: ko.observable()},
+            {prefix: 'tapped-background-', name: 'radiuses', title: '[top, right, bottom, left]', value: ko.observable()}
         ]);
     }
 });

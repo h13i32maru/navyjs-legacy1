@@ -54,6 +54,10 @@ Navy.Builder = Navy.Core.instance({
         }
 
         this._view = view;
+        if (!this._view) {
+            return;
+        }
+
         this._selectedViewListener(view);
 
         var page = view.getPage();
