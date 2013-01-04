@@ -51,10 +51,17 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
     readFile: function($super, data, ev){
         $super(data, ev);
+
         this.view = null;
+        this.clearAllPropInput();
+
         var url = 'layout/' + this.filename;
         Navy.Screen.showLayout(url);
         Navy.Builder.selectView(null);
+    },
+
+    clearAllPropInput: function() {
+        this.$el.find('.n-prop input:text').val('');
     },
 
     layoutToInput: function(prefix, layout, props) {
