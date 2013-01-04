@@ -20,6 +20,7 @@ Navy.Page = Navy.View.ViewGroup.subclass({
         this._touchListeners = [];
         this._globalTouchListeners = [];
 
+        this._layout = layout;
         this.setVisible(false);
 
         $super(layout, callback);

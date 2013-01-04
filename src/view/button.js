@@ -8,10 +8,6 @@ Navy.View.Button = Navy.View.Text.subclass({
     _listeners: null,
 
     _state: 'normal',
-    _stateNormalLayout: null,
-    _stateTappedLayout: null,
-
-    _link: null,
 
     initialize: function($super, layout) {
         $super(layout);
@@ -24,7 +20,7 @@ Navy.View.Button = Navy.View.Text.subclass({
      * @param {string} link ページID.
      */
     setLink: function(link) {
-        this._link = link;
+        this._extra.link = link;
     },
 
     /**
@@ -32,23 +28,7 @@ Navy.View.Button = Navy.View.Text.subclass({
      * @return {string} リンク.
      */
     getLink: function() {
-        return this._link;
-    },
-
-    _setLayout: function($super, layout) {
-        $super(layout);
-
-        if (layout.extra.link) {
-            this._link = layout.extra.link;
-        }
-
-        if (layout.extra.normal) {
-            this._stateNormalLayout = layout.extra.normal;
-        }
-
-        if (layout.extra.tapped) {
-            this._stateTappedLayout = layout.extra.tapped;
-        }
+        return this._extra.link;
     },
 
     onChangeRoot: function($super, root) {
@@ -116,13 +96,13 @@ Navy.View.Button = Navy.View.Text.subclass({
     },
 
     _callListeners: function(touchEvent) {
-        if (this._link) {
-            var _link = this._link;
+        if (this._extra.link) {
+            var _link = this._extra.link;
             if (_link === '$back') {
                 Navy.Screen.back();
             }
             else {
-                Navy.Screen.next(this._link);
+                Navy.Screen.next(this._extra.link);
             }
         }
 
@@ -137,9 +117,9 @@ Navy.View.Button = Navy.View.Text.subclass({
         $super(context);
 
         if (this._state === 'normal') {
-            var layout = this._stateNormalLayout;
+            var layout = this._extra.normal;
         } else if (this._state === 'tapped') {
-            var layout = this._stateTappedLayout;
+            var layout = this._extra.tapped;
         } else {
             //TODO:例外なげる
         }

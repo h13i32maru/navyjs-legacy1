@@ -19,9 +19,12 @@ Navy.Root = Navy.View.ViewGroup.instance({
 
         this.onChangeParent(null);
 
-        this.setSize(size[0], size[1]);
+        var layout = {
+            size: [size[0], size[1]],
+            visible: true
+        };
 
-        this.setVisible(true);
+        this._setLayout(layout);
     },
 
     /**

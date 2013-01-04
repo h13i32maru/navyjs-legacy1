@@ -4,10 +4,10 @@
 Navy.LayoutHolder = Navy.Core.instance({
     CLASS: 'Navy.LayoutHolder',
 
-    _layout: null,
+    _layoutJSON: null,
 
     initialize: function() {
-        this._layout = {};
+        this._layoutJSON = {};
     },
 
     /**
@@ -21,8 +21,9 @@ Navy.LayoutHolder = Navy.Core.instance({
         //builderが有効の場合はキャッシュ機能を使わない
         if (! Navy.Builder.getEnable()) {
             //既に保持している場合はすぐにコールバックを呼び出して終了.
-            if (this._layout[layoutUrl]) {
-                callback(this._layout[layoutUrl], layoutUrl);
+            if (this._layoutJSON[layoutUrl]) {
+                var layout = JSON.parse(this._layoutJSON[layoutUrl]);
+                callback(layout, layoutUrl);
                 return;
             }
         }
@@ -31,11 +32,12 @@ Navy.LayoutHolder = Navy.Core.instance({
     },
 
     _onSuccess: function(data, option) {
-        var layout = JSON.parse(data);
+        var layoutJSON = data;
+        var layout = JSON.parse(layoutJSON);
         var callback = option.callback;
         var layoutUrl = option.layoutUrl;
 
-        this._layout[layoutUrl] = layout;
+        this._layoutJSON[layoutUrl] = layoutJSON;
 
         callback(layout, layoutUrl);
     },
