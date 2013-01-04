@@ -18,10 +18,13 @@ Navy.LayoutHolder = Navy.Core.instance({
     download: function(layoutUrl, callback) {
         layoutUrl = Navy.Builder.getUrl(layoutUrl);
 
-        //既に保持している場合はすぐにコールバックを呼び出して終了.
-        if (this._layout[layoutUrl]) {
-            callback(this._layout[layoutUrl], layoutUrl);
-            return;
+        //builderが有効の場合はキャッシュ機能を使わない
+        if (! Navy.Builder.getEnable()) {
+            //既に保持している場合はすぐにコールバックを呼び出して終了.
+            if (this._layout[layoutUrl]) {
+                callback(this._layout[layoutUrl], layoutUrl);
+                return;
+            }
         }
 
         Navy.Network.get(layoutUrl, null, this._onSuccess.bind(this), this._onFailure.bind(this), {layoutUrl: layoutUrl, callback:callback});
