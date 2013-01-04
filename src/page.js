@@ -37,8 +37,8 @@ Navy.Page = Navy.View.ViewGroup.subclass({
      * @param {Navy.View} view 追加するview.
      */
     addView: function($super, view) {
-        $super(view);
         view.onChangePage(this);
+        $super(view);
     },
 
     /**

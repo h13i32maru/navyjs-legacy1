@@ -927,3 +927,6 @@ Navy.View.createUniqueId = function() {
 
     return 'id_' + seq;
 }
+
+//TODO:Navy.View.Viewでアクセスするように全体を修正
+Navy.View.View = Navy.View;

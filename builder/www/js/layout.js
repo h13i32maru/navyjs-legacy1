@@ -2,6 +2,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
     CLASS: 'Layout',
     target: '.n-layout',
     type: 'layout',
+    page: null,
     view: null,
     
     initialize: function($super){
@@ -10,6 +11,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
         this.calcCanvasSize();
 
+        var _this = this;
         this.$el.find('.n-lib li span').draggable({helper: 'clone'});
         this.$el.find('.n-canvas').droppable({drop: function(e, ui){
             var droppable = {
@@ -26,8 +28,15 @@ Builder.Layout = nClass.instance(Builder.Core, {
             var y = Math.max(draggable.y - droppable.y, 0);
             var viewClassName = $(ui.helper[0]).attr('data-view-class');
 
-            Navy.Builder.addView(view.getPage(), viewClassName, x, y);
+            Navy.Builder.createViewToPage(_this.page, viewClassName, x, y);
         }});
+    },
+
+    save: function($super) {
+        var pageLayouts = Navy.Builder.getPageLayout(this.page);
+        this.text(JSON.stringify(pageLayouts, null, 4));
+
+        $super();
     },
 
     calcCanvasSize: function() {
@@ -77,14 +86,38 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
         this.view = null;
         this.clearAllPropInput();
+        Navy.Builder.selectView(null);
 
         var url = 'layout/' + this.filename;
-        Navy.Screen.showLayout(url);
-        Navy.Builder.selectView(null);
+        this.page = Navy.Screen.showLayout(url);
+    },
+
+    findProp: function(props, name) {
+        for (var i = 0; i < props.length; i++) {
+            if (props[i].name === name) {
+                return props[i];
+            }
+        }
+        return null;
     },
 
     clearAllPropInput: function() {
-        this.$el.find('.n-prop input:text').val('');
+        this.propClass('');
+
+        var props = [];
+        props = props.concat(this.propBasic());
+        props = props.concat(this.propBackground());
+        props = props.concat(this.propBorder());
+        props = props.concat(this.propExtra.Text());
+        props = props.concat(this.propExtra.Button());
+        props = props.concat(this.propExtra.Image());
+        props = props.concat(this.propExtra.ViewGroup());
+
+        for (var i = 0; i < props.length; i++) {
+            if (props[i].value) {
+                props[i].value('');
+            }
+        }
     },
 
     layoutToInput: function(prefix, layout, props) {
@@ -146,11 +179,20 @@ Builder.Layout = nClass.instance(Builder.Core, {
             this.layoutToInput('extra-', layout, this.propExtra[layout['class']]());
         }
 
+        var propId = this.findProp(this.propBasic(), 'id');
+        if (!propId.value()) {
+            propId.value(JSON.stringify(view.getId()));
+        }
+
+
         this.$el.find('[class^="n-prop-extra"]').hide();
         this.$el.find('.n-prop-extra-' + layout['class']).show();
     },
 
     onMoveNavyView: function(view) {
+        var pos = view.getPosition();
+        var prop = this.findProp(this.propBasic(), 'pos');
+        prop.value(JSON.stringify(pos));
     },
 
     onKeyUp: function(vm, ev) {
@@ -170,7 +212,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
         var layout = $.extend(true, {}, currentLayout, newLayout);
 
         Navy.Builder.setLayout(view, layout, function(view){
-            var pageLayouts = Navy.Builder.getPageLayoutFromView(view);
+            var pageLayouts = Navy.Builder.getPageLayout(this.page);
             this.text(JSON.stringify(pageLayouts, null, 4));
         }.bind(this));
     },
@@ -202,6 +244,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
             {name: 'id', title: '"str"', value: ko.observable()},
             {name: 'pos', title: '[x, y]', value: ko.observable()},
             {name: 'size', title: '[width, height]', value: ko.observable()},
+            {name: 'z', title: 'num', value: ko.observable()},
             {name: 'padding', title: 'num', value: ko.observable()},
             {name: 'paddings', title: '[top, right, bottom, left]', value: ko.observable()},
             {name: 'shadow-offset', title: '[x, y]', value: ko.observable()},

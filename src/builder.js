@@ -108,8 +108,8 @@ Navy.Builder = Navy.Core.instance({
         context.strokeRect(rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1]);
     },
 
-    getPageLayoutFromView: function(view) {
-        var views = view.getPage().getViews();
+    getPageLayout: function(page) {
+        var views = page.getViews();
         var layoutSeqs = [];
         for (var id in views) {
             layoutSeqs.push({seq: views[id].getLayoutSequence(), layout: views[id].getLayout()});
@@ -122,6 +122,21 @@ Navy.Builder = Navy.Core.instance({
         }
 
         return layouts;
+    },
+
+    createViewToPage: function(page, viewClassName, x, y) {
+        var layout = {
+            'class': viewClassName,
+            size: [100, 100],
+            pos: [x, y],
+            background: {
+                color: '#aaaaaa'
+            },
+            extra: {}
+        };
+
+        var view = new Navy.View[viewClassName](layout);
+        page.addView(view);
     }
 });
 
