@@ -3,4 +3,5 @@ doc/_build
 doc/_static
 doc/_templates
 builder/data/*
+builder/js/builder.js
 *.pyc
