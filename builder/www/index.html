@@ -290,13 +290,12 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-button">
+<table class="n-prop-extra-Button">
 <caption data-bind="click: togglePropInput">Extra(Button)</caption>
 <tbody data-bind="foreach: propExtra.Button, event: {keyup: onKeyUp}">
   <tr>
     <!-- ko if: $data.separator -->
-    <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
-    <td></td>
+    <td class="n-prop-separator" colspan="2"><label data-bind="attr: {title: title}"><span data-bind="text: name"/></label></td>
     <!-- /ko -->
 
     <!-- ko if: !$data.separator -->

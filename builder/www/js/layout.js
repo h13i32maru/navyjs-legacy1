@@ -122,6 +122,9 @@ Builder.Layout = nClass.instance(Builder.Core, {
         if (this.propExtra[layout['class']]) {
             this.layoutToInput('extra-', layout, this.propExtra[layout['class']]());
         }
+
+        this.$el.find('[class^="n-prop-extra"]').hide();
+        this.$el.find('.n-prop-extra-' + layout['class']).show();
     },
 
     onMoveNavyView: function(view) {
@@ -235,7 +238,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
         this.propExtra.Button = ko.observableArray([
             {name: 'link', title: '"page name"', value: ko.observable()},
-            {separator: true, name: 'normal > background', title: ''},
+            {separator: true, name: 'normal > background >', title: ''},
             {prefix: 'normal-background-', name: 'src', title: '"image/foo.png"', value: ko.observable()},
             {prefix: 'normal-background-', name: 'alpha', title: 'num', value: ko.observable()},
             {prefix: 'normal-background-', name: 'color', title: '"#001122"', value: ko.observable()},
@@ -243,7 +246,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
             {prefix: 'normal-background-', name: 'gradient-colorstop', title: '[[0, "#000030"], [0.5, "#000030"], [1, "#000010"], ...]', value: ko.observable()},
             {prefix: 'normal-background-', name: 'radius', title: 'num', value: ko.observable()},
             {prefix: 'normal-background-', name: 'radiuses', title: '[top, right, bottom, left]', value: ko.observable()},
-            {separator: true, name: 'tapped > background', title: ''},
+            {separator: true, name: 'tapped > background >', title: ''},
             {prefix: 'tapped-background-', name: 'src', title: '"image/foo.png"', value: ko.observable()},
             {prefix: 'tapped-background-', name: 'alpha', title: 'num', value: ko.observable()},
             {prefix: 'tapped-background-', name: 'color', title: '"#001122"', value: ko.observable()},

@@ -123,8 +123,10 @@ html, body {
                 margin-bottom: 10px;
                 caption {
                     text-align: left;
-                    background-color: $bg-color;
+                    background-color: #444444;
+                    color: white;
                     padding: 4px;
+                    font-size: 1.1em;
                 }
                 tbody {
                     tr {
@@ -133,6 +135,7 @@ html, body {
                             &:nth-child(1) {
                                 border-right: solid 1px #aaa;
                                 label {
+                                    font: $font;
                                     width: 160px;
                                     margin: 0;
                                     input {
@@ -150,6 +153,9 @@ html, body {
                                     box-sizing: border-box;
                                     padding: 4px 2px;
                                 }
+                            }
+                            &.n-prop-separator {
+                                background-color: $bg-color;
                             }
                         }
                     }

@@ -97,13 +97,16 @@ html, body {
       margin-bottom: 10px; }
       .n-layout .n-pane .n-prop table caption {
         text-align: left;
-        background-color: #dddddd;
-        padding: 4px; }
+        background-color: #444444;
+        color: white;
+        padding: 4px;
+        font-size: 1.1em; }
       .n-layout .n-pane .n-prop table tbody tr {
         border-bottom: solid 1px #aaa; }
         .n-layout .n-pane .n-prop table tbody tr td:nth-child(1) {
           border-right: solid 1px #aaa; }
           .n-layout .n-pane .n-prop table tbody tr td:nth-child(1) label {
+            font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif !important;
             width: 160px;
             margin: 0; }
             .n-layout .n-pane .n-prop table tbody tr td:nth-child(1) label input {
@@ -117,6 +120,8 @@ html, body {
             border: none;
             box-sizing: border-box;
             padding: 4px 2px; }
+        .n-layout .n-pane .n-prop table tbody tr td.n-prop-separator {
+          background-color: #dddddd; }
     .n-layout .n-pane .n-prop ul {
       list-style: none;
       padding: 4px; }
