@@ -37,7 +37,11 @@ Navy.Builder = Navy.Core.instance({
         }
     },
     setLayout: function(view, layout, callback) {
+        var _parent = view.getParent();
+        view.removeFromParent();
+        view._id = layout.id;
         view._initLayout();
+        _parent.addView(view);
         if (layout.extra.ref) {
             view._setLayout(layout, callback);
         } else {

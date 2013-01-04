@@ -8,6 +8,29 @@ Builder.Layout = nClass.instance(Builder.Core, {
         this.initObservable();
         $super();
 
+        this.calcCanvasSize();
+
+        this.$el.find('.n-lib li span').draggable({helper: 'clone'});
+        this.$el.find('.n-canvas').droppable({drop: function(e, ui){
+            var droppable = {
+                x: $(this).offset().left,
+                y: $(this).offset().top
+            };
+
+            var draggable = {
+                x: $(ui.helper[0]).offset().left,
+                y: $(ui.helper[0]).offset().top
+            };
+
+            var x = Math.max(draggable.x - droppable.x, 0);
+            var y = Math.max(draggable.y - droppable.y, 0);
+            var viewClassName = $(ui.helper[0]).attr('data-view-class');
+
+            Navy.Builder.addView(view.getPage(), viewClassName, x, y);
+        }});
+    },
+
+    calcCanvasSize: function() {
         var $target = this.$el.find('.n-canvas').first();
         var appWidth = 640;
         var appHeight = 960;
