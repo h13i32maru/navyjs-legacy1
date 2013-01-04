@@ -93,6 +93,22 @@ Navy.Builder = Navy.Core.instance({
         context.lineWidth = 2;
         context.strokeStyle = '#ff0000';
         context.strokeRect(rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1]);
+    },
+
+    getPageLayoutFromView: function(view) {
+        var views = view.getPage().getViews();
+        var layoutSeqs = [];
+        for (var id in views) {
+            layoutSeqs.push({seq: views[id].getLayoutSequence(), layout: views[id].getLayout()});
+        }
+
+        layoutSeqs.sort(function(seq1, seq2){ return seq1 - seq1; });
+        var layouts = [];
+        for (var i = 0; i < layoutSeqs.length; i++) {
+            layouts.push(layoutSeqs[i].layout);
+        }
+
+        return layouts;
     }
 });
 

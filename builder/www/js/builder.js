@@ -193,7 +193,6 @@ Builder.Layout = nClass.instance(Builder.Core, {CLASS:"Layout", target:".n-layou
 }, onSelectedNavyView:function(view) {
   this.view = view;
   var layout = view.getLayout();
-  console.log(layout);
   this.propClass(JSON.stringify(layout["class"]));
   this.layoutToInput("", layout, this.propBasic());
   this.layoutToInput("background-", layout, this.propBackground());
@@ -209,8 +208,9 @@ Builder.Layout = nClass.instance(Builder.Core, {CLASS:"Layout", target:".n-layou
   }
   var view = this.view;
   var layout = this.buildLayout();
-  console.log(layout);
-  Navy.Builder.setLayout(view, layout)
+  Navy.Builder.setLayout(view, layout);
+  var pageLayouts = Navy.Builder.getPageLayoutFromView(view);
+  this.text(JSON.stringify(pageLayouts, null, 4))
 }, buildLayout:function() {
   var layout = {};
   layout["class"] = JSON.parse(this.propClass());
