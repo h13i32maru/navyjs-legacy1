@@ -101,7 +101,10 @@ Builder.Layout = nClass.instance(Builder.Core, {
         }
 
         var view = this.view;
-        var layout = this.buildLayout();
+        var currentLayout = view.getLayout();
+        var newLayout = this.buildLayout();
+        var layout = $.extend(true, {}, currentLayout, newLayout);
+
         Navy.Builder.setLayout(view, layout);
 
         var pageLayouts = Navy.Builder.getPageLayoutFromView(view);
