@@ -76,8 +76,8 @@
   <div class="n-pane fitsize-x fitsize-y"> 
     <div class="n-prop" data-bind="template: {name: 'prop-template'}"></div>
     <div class="n-layer">
-      <ul class="nav nav-list" data-bind="foreach: layers">
-        <li data-bind="text: id"></li>
+      <ul class="nav nav-list" data-bind="foreach: layers, click: selectedLayer">
+        <li data-bind="text: id, attr: {'data-view-id': id}"></li>
       </ul>
     </div>
     <textarea class="n-source n-textarea" data-bind="value: text"></textarea>

@@ -12,7 +12,12 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
         this.calcCanvasSize();
 
-        this.$el.find('.n-layer ul').sortable();
+        var _this = this;
+        this.$el.find('.n-layer ul').sortable({
+            stop: function(ev, ui){
+                _this.changeAllViewsZ();
+            }
+        });
 
         var _this = this;
         this.$el.find('.n-lib li span').draggable({helper: 'clone'});
@@ -189,7 +194,6 @@ Builder.Layout = nClass.instance(Builder.Core, {
             propId.value(JSON.stringify(view.getId()));
         }
 
-
         this.$el.find('[class^="n-prop-extra"]').hide();
         this.$el.find('.n-prop-extra-' + layout['class']).show();
     },
@@ -206,8 +210,15 @@ Builder.Layout = nClass.instance(Builder.Core, {
         }
     },
 
+    selectedLayer: function(vm, ev) {
+        var id = $(ev.srcElement).attr('data-view-id');
+        var view = this.page.findView(id);
+        Navy.Builder.selectView(view);
+    },
+
     updateLayer: function() {
         var views = Navy.Builder.getSortedViews(this.page);
+        views = views.reverse();
         var view;
         var layers = [];
         for (var i = 0; i < views.length; i++) {
@@ -215,6 +226,17 @@ Builder.Layout = nClass.instance(Builder.Core, {
             layers.push({id: view.getId()});
         }
         this.layers(layers);
+    },
+
+    changeAllViewsZ: function() {
+        var $li = this.$el.find('.n-layer li');
+        var ids = $.map($li, function(el, index){ return $(el).attr('data-view-id'); });
+        var z = ids.length;
+        var page = this.page;
+        for (var i = 0; i < ids.length; i++) {
+            page.findView(ids[i]).setZ(z);
+            z--;
+        }
     },
 
     setNewLayoutToView: function() {
