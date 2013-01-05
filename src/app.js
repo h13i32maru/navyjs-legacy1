@@ -116,12 +116,12 @@ Navy.App = Navy.Core.instance({
     },
 
     getComputedSize: function(elm) {
-      var width = window.getComputedStyle(elm, '').getPropertyValue("width").replace('px', '');
-      width = parseInt(width, 10);
+        var width = window.getComputedStyle(elm, '').getPropertyValue("width").replace('px', '');
+        width = parseInt(width, 10);
 
-      var height = window.getComputedStyle(elm, '').getPropertyValue("height").replace('px', '');
-      height = parseInt(height, 10);
-      return [width, height];
+        var height = window.getComputedStyle(elm, '').getPropertyValue("height").replace('px', '');
+        height = parseInt(height, 10);
+        return [width, height];
     },
 
     /**
@@ -138,6 +138,7 @@ Navy.App = Navy.Core.instance({
         wrap.style.position = 'absolute';
         wrap.style.top = 0;
         wrap.style.left = 0;
+        document.body.style.overflow = 'hidden';
 
         var canvasWidth = Navy.Config.App.size[0];
         var canvasHeight = Navy.Config.App.size[1];
@@ -160,7 +161,7 @@ Navy.App = Navy.Core.instance({
             this.scale = ~~(scaleWidth * 100);
             this.scale /= 100;
 
-            var offsetY = (browserHeight - canvasStyleHeight) / 2;
+            var offsetY = Math.floor((browserHeight - canvasStyleHeight) / 2);
             wrap.style.top = offsetY + 'px';
 
             this.offset[1] = offsetY;
@@ -214,6 +215,15 @@ Navy.App = Navy.Core.instance({
     Navy.Builder.setEnable(builder);
     //builderではない時だけ初期化を実行する
     if (!builder) {
-        window.addEventListener('load', Navy.App.wakeup.bind(Navy.App), false);
+        window.addEventListener('load', function(){
+            var id = setInterval(function(){
+                var w = window.innerWidth;
+                var h = window.innerHeight;
+                if (0 < w && 0 < h) {
+                    Navy.App.wakeup();
+                    clearInterval(id);
+                }
+            }, 1);
+        }, false);
     }
 })();

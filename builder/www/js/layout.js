@@ -365,7 +365,8 @@ Builder.Layout = nClass.instance(Builder.Core, {
             {name: 'size', title: 'num', value: ko.observable()},
             {name: 'valign', title: '"top | middle | bottom"', value: ko.observable()},
             {name: 'halign', title: '"left | center | right"', value: ko.observable()},
-            {name: 'cutend', title: '"str"', value: ko.observable()}
+            {name: 'cutend', title: '"str"', value: ko.observable()},
+            {name: 'multiline', title: 'true|false', value: ko.observable()}
         ]);
 
         this.propExtra.Image = ko.observableArray([
