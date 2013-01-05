@@ -196,6 +196,13 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
         this.$el.find('[class^="n-prop-extra"]').hide();
         this.$el.find('.n-prop-extra-' + layout['class']).show();
+
+        //layer
+        var id = view.getId();
+        var selector = Builder.Util.format('.n-layer li[data-view-id="%s"]', [id]);
+        var $el = this.$el.find(selector);
+        $el.siblings().removeClass('active');
+        $el.addClass('active');
     },
 
     onMoveNavyView: function(view) {
@@ -211,9 +218,14 @@ Builder.Layout = nClass.instance(Builder.Core, {
     },
 
     selectedLayer: function(vm, ev) {
-        var id = $(ev.srcElement).attr('data-view-id');
+        var $el = $(ev.srcElement);
+        var id = $el.attr('data-view-id');
         var view = this.page.findView(id);
+
         Navy.Builder.selectView(view);
+
+        $el.siblings().removeClass('active');
+        $el.addClass('active');
     },
 
     updateLayer: function() {
