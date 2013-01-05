@@ -131,6 +131,15 @@ Navy.Core.prototype = {
     CLASS: 'Navy.Core',
     initialize: function() {},
 
+    //TODO:jsdoc
+    clone: function(obj) {
+        if (obj === undefined) {
+            return obj;
+        }
+
+        return JSON.parse(JSON.stringify(obj));
+    },
+
     /**
      * 指定されたオブジェクトにプロパティが存在するかチェックする.
      * @param {Object} obj オブジェクト.

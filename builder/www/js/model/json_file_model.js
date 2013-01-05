@@ -1,1 +1,0 @@
-var JsonFileModel = TextFileModel.extend({});

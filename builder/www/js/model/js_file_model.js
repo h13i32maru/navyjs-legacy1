@@ -1,1 +1,0 @@
-var JsFileModel = TextFileModel.extend({});

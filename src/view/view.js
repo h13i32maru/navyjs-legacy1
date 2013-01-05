@@ -5,8 +5,6 @@ Navy.View = Navy.Core.subclass({
     CLASS: 'Navy.View',
 
     _isDestroy: false,
-    _class: null,
-    _id: null,
     /** 親root */
     _root: null,
     /** 親page */
@@ -15,36 +13,17 @@ Navy.View = Navy.Core.subclass({
     _parent: null,
     /** レイアウト情報のオブジェクト */
     _layout: null,
+    _extra: null,
     /** 外から注入される任意のデータ */
     _data: null,
-    _x: 0,
-    _y: 0,
-    _z: 0,
-    _width: null,
-    _height: null,
-    _rotation: 0,
-    _visible: true,
-    _background: null,
-    _border: null,
-    _shadow: null,
-    _paddingTop: null,
-    _paddingRight: null,
-    _paddingBottom: null,
-    _paddingLeft: null,
+    //レイアウトファイルの配列上で何番目に位置するかを保持する
+    _layoutSequence: null,
 
     /**
      * @constructor
      */
     initialize: function($super, layout) {
         $super();
-
-        if (layout.id) {
-            this._id = layout.id;
-        } else {
-            this._id = Navy.View.createUniqueId();
-        }
-
-        this._class = layout['class'];
 
         if (layout) {
             this._setLayout(layout);
@@ -117,12 +96,12 @@ Navy.View = Navy.Core.subclass({
      * @return {string} ID.
      */
     getId: function() {
-        return this._id;
+        return this._layout.id;
     },
 
     //TODO:jsdoc
     getClass: function() {
-        return this._class;
+        return this._layout['class'];
     },
 
     /**
@@ -144,29 +123,15 @@ Navy.View = Navy.Core.subclass({
 
         var parentAbsId = this._parent.getAbsoluteId();
         if (parentAbsId) {
-            return parentAbsId + '.' + this._id;
+            return parentAbsId + '.' + this._layout.id;
         }
         else {
-            return this._id;
+            return this._layout.id;
         }
     },
 
     _initLayout: function() {
         this._layout = null;
-        this._x = 0;
-        this._y = 0;
-        this._z = 0;
-        this._width = null;
-        this._height = null;
-        this._rotation = 0;
-        this._visible = true;
-        this._background = null;
-        this._border = null;
-        this._shadow = null;
-        this._paddingTop = null;
-        this._paddingRight = null;
-        this._paddingBottom = null;
-        this._paddingLeft = null;
     },
 
     /**
@@ -175,49 +140,34 @@ Navy.View = Navy.Core.subclass({
      * @param {Object} layout レイアウト情報.
      */
     _setLayout: function(layout) {
+        if (!layout.id) { layout.id = Navy.View.createUniqueId(); }
+        if (!layout.pos) { layout.pos = [0, 0]; }
+        if (!layout.size) { layout.size = [null, null]; }
+        if (!layout.visible) { layout.visible = true; }
+        if (!layout.padding) { layout.padding = 0; }
+        if (!layout.z) { layout.z = 0; }
+
         this._layout = layout;
+        this._extra = layout.extra;
 
-        if ('pos' in layout) {
-            var pos = layout.pos;
-            this.setPosition(pos[0], pos[1]);
-        }
+        Navy.Loop.requestDraw()
+    },
 
-        if ('visible' in layout) {
-            this.setVisible(layout.visible);
-        }
-
-        if ('size' in layout) {
-            var size = layout.size;
-            this.setSize(size[0], size[1]);
-        }
-
-        if ('background' in layout) {
-            this.setBackground(layout.background);
+    //TODO:jsdoc
+    setLayoutSequence: function(seq) {
+        //一度しか設定できない
+        if (this._layoutSequence !== null) {
+            //TODO:exceptionsにする
+            console.log('error');
+            return;
         }
 
-        if ('border' in layout) {
-            this.setBorder(layout.border);
-        }
+        this._layoutSequence = seq;
+    },
 
-        if ('shadow' in layout) {
-            this.setShadow(layout.shadow);
-        }
-
-        if ('padding' in layout) {
-            if (layout.padding instanceof Array) {
-                this.setPaddingArray(layout.padding);
-            }
-            else {
-                this.setPaddingOne(layout.padding);
-            }
-        }
-
-        if ('z' in layout) {
-            this.setZ(layout.z);
-        }
-        else {
-            this.setZ(0);
-        }
+    //TODO:jsdoc
+    getLayoutSequence: function() {
+        return this._layoutSequence;
     },
 
     /*
@@ -225,7 +175,7 @@ Navy.View = Navy.Core.subclass({
      * @param {number} z z方向の順序.数値が大きいものほど上に表示される.
      */
     setZ: function(z) {
-        this._z = z;
+        this._layout.z = z;
         Navy.Loop.requestDraw();
     },
 
@@ -234,17 +184,17 @@ Navy.View = Navy.Core.subclass({
      * @param {number} z方向の順序. 数値が大きいものほど上に表示される.
      */
     getZ: function() {
-        return this._z;
+        return this._layout.z;
     },
 
     //TODO:jsdoc
     getAbsoluteZ: function() {
         if (this._parent) {
             var parentZ = this._parent.getAbsoluteZ();
-            parentZ.push(this._z);
+            parentZ.push(this._layout.z);
             return parentZ;
         } else {
-            return [this._z];
+            return [this._layout.z];
         }
     },
 
@@ -298,11 +248,17 @@ Navy.View = Navy.Core.subclass({
      * @param {number} bottom 下パッディング.
      * @param {number} left 左パッディング.
      */
-    setPadding: function(top, right, bottom, left) {
-        this._paddingTop = top;
-        this._paddingRight = right;
-        this._paddingBottom = bottom;
-        this._paddingLeft = left;
+    setPaddings: function(top, right, bottom, left) {
+        this._layout.paddings[0] = top;
+        this._layout.paddings[1] = right;
+        this._layout.paddings[2] = bottom;
+        this._layout.paddings[3] = left;
+        Navy.Loop.requestDraw();
+    },
+
+    //TODO:jsdoc
+    setPadding: function(padding) {
+        this._layout.padding = padding;
         Navy.Loop.requestDraw();
     },
 
@@ -310,8 +266,23 @@ Navy.View = Navy.Core.subclass({
      * 4辺のパディングを配列で取得する.
      * @return {Array<number>} padding[0]=上, padding[1]=右, padding[2]=下, padding[3]=左.
      */
+    getPaddings: function() {
+        return this.clone(this._layout.paddings);
+    },
+
+    //TODO:jsdoc
     getPadding: function() {
-        return [this._paddingTop, this._paddingRight, this._paddingBottom, this._paddingLeft];
+        return this._layout.padding;
+    },
+
+    getPaddingsMerge: function() {
+        var paddings = this.getPaddings();
+        if (paddings) {
+            return paddings;
+        }
+
+        var padding = this.getPadding();
+        return [padding, padding, padding, padding];
     },
 
     /**
@@ -319,7 +290,7 @@ Navy.View = Navy.Core.subclass({
      * @param {{color: string, width: number}} border 枠線の設定. color=#001122形式, width=枠線の幅.
      */
     setBorder: function(border) {
-        this._border = border;
+        this._layout.border = border;
         Navy.Loop.requestDraw();
     },
 
@@ -328,20 +299,18 @@ Navy.View = Navy.Core.subclass({
      * @return {{color: string, width: number}} 枠線の設定.
      */
     getBorder: function() {
-        //TODO:コピーして渡したほうが良い
-        return this._border;
+        return this.clone(this._layout.border);
     },
 
     //TODO:jsdoc
     setShadow: function(shadow) {
-        this._shadow = shadow;
+        this._layout.shadow = shadow;
         Navy.Loop.requestDraw();
     },
 
     //TODO:jsdoc
     getShadow: function() {
-        //TODO:コピーしたほうが良い?
-        return this._shadow;
+        return this.clone(this._layout.shadow);
     },
 
     /*
@@ -349,7 +318,7 @@ Navy.View = Navy.Core.subclass({
      * @return {Object} レイアウト情報.
      */
     getLayout: function() {
-        return this._layout;
+        return this.clone(this._layout);
     },
 
     /**
@@ -377,8 +346,8 @@ Navy.View = Navy.Core.subclass({
      * @param {number} y Y座標.
      */
     setPosition: function(x, y) {
-        this._x = x;
-        this._y = y;
+        this._layout.pos[0] = x;
+        this._layout.pos[1] = y;
 
         Navy.Loop.requestDraw();
     },
@@ -397,8 +366,8 @@ Navy.View = Navy.Core.subclass({
      * @param {number} dy 増減量.
      */
     addPosition: function(dx, dy) {
-        var x = this._x + dx;
-        var y = this._y + dy;
+        var x = this._layout.pos[0] + dx;
+        var y = this._layout.pos[1] + dy;
         this.setPosition(x, y);
     },
 
@@ -415,7 +384,7 @@ Navy.View = Navy.Core.subclass({
      * @return {Array.<number>} 要素の位置[x, y].
      */
     getPosition: function() {
-        return [this._x, this._y];
+        return this.clone(this._layout.pos);
     },
 
     /**
@@ -451,7 +420,7 @@ Navy.View = Navy.Core.subclass({
         }
 
         var pos = this._parent.getAbsolutePosition();
-        return [pos[0] + this._x, pos[1] + this._y];
+        return [pos[0] + this._layout.pos[0], pos[1] + this._layout.pos[1]];
     },
 
     //TODO:jsdoc
@@ -471,10 +440,15 @@ Navy.View = Navy.Core.subclass({
     getAbsoluteRect: function() {
         var size = this.getSize();
         var pos = this.getAbsolutePosition();
-        var x0 = pos[0] - this._paddingLeft;
-        var y0 = pos[1] - this._paddingTop;
-        var x1 = x0 + size[0] + this._paddingLeft + this._paddingRight;
-        var y1 = y0 + size[1] + this._paddingTop + this._paddingBottom;
+        var paddings = this.getPaddingsMerge();
+        var paddingTop = paddings[0];
+        var paddingRight = paddings[1];
+        var paddingBottom = paddings[2];
+        var paddingLeft = paddings[3];
+        var x0 = pos[0] - paddingLeft;
+        var y0 = pos[1] - paddingTop;
+        var x1 = x0 + size[0] + paddingLeft + paddingRight;
+        var y1 = y0 + size[1] + paddingTop + paddingBottom;
 
         return [x0, y0, x1, y1];
     },
@@ -503,7 +477,7 @@ Navy.View = Navy.Core.subclass({
      * @param {color: string} background 背景情報.colorは#ffffff形式.
      */
     setBackground: function(background) {
-        this._background = background;
+        this._layout.background = background;
         Navy.Loop.requestDraw();
     },
 
@@ -512,8 +486,7 @@ Navy.View = Navy.Core.subclass({
      * @param {color: string} background 背景情報. colorは#ffffff形式.
      */
     getBackground: function() {
-        //TODO:コピーして渡したほうがいい?
-        return this._background;
+        return this.clone(this._layout.background);
     },
 
     /**
@@ -521,7 +494,7 @@ Navy.View = Navy.Core.subclass({
      * @param {boolean} visible 表示非表示.
      */
     setVisible: function(visible) {
-        this._visible = visible;
+        this._layout.visible = visible;
         Navy.Loop.requestDraw();
     },
 
@@ -530,14 +503,14 @@ Navy.View = Navy.Core.subclass({
      * @return {boolean} 表示非表示.
      */
     getVisible: function(visible) {
-        return this._visible;
+        return this._layout.visible;
     },
 
     /**
      * 親をさかのぼって表示非表示を取得する.
      */
     getAbsoluteVisible: function() {
-        if (this._visible) {
+        if (this._layout.visible) {
             return this._parent.getDeepVisible();
         }
         else {
@@ -551,8 +524,7 @@ Navy.View = Navy.Core.subclass({
      * @param {number} height 縦幅px.
      */
     setSize: function(width, height) {
-        this._width = width;
-        this._height = height;
+        this._layout.size = [width, height];
         Navy.Loop.requestDraw();
     },
 
@@ -569,7 +541,12 @@ Navy.View = Navy.Core.subclass({
      * @return {Array.<number>} 要素のサイズ[width, height].
      */
     getSize: function() {
-        return [this._width, this._height];
+        var size = this.clone(this._layout.size);
+        if (size) {
+            return size;
+        } else {
+            return [null, null];
+        }
     },
 
     /**
@@ -577,7 +554,7 @@ Navy.View = Navy.Core.subclass({
      * @param {number} ratotaion 要素の回転角度.
      */
     setRotation: function(rotation) {
-        this._rotation = rotation;
+        this._layout.rotation = rotation;
         Navy.Loop.requestDraw();
     },
 
@@ -585,7 +562,7 @@ Navy.View = Navy.Core.subclass({
      * 親要素から自身を削除する.
      */
     removeFromParent: function() {
-        this._parent.removeView(this._id);
+        this._parent.removeView(this._layout.id);
     },
 
     /**
@@ -593,13 +570,14 @@ Navy.View = Navy.Core.subclass({
      * @param {Context} context コンテキスト要素.
      */
     draw: function(context) {
+        var layout = this._layout;
         if (this._isDestroy) {
             //TODO:例外にする
-            console.log('already destroy: ' + this._id);
+            console.log('already destroy: ' + layout.id);
             return;
         }
 
-        if (!this._visible) {
+        if (!layout.visible) {
             return;
         }
 
@@ -608,16 +586,16 @@ Navy.View = Navy.Core.subclass({
         var rect = this.getComputedRect();
 
         var clearShadowFlag = true;
-        if (this._shadow) {
+        if (layout.shadow) {
             //影の描画は背景もしくは枠線と一緒に行われる.
             //ただし、どちらかでしか行なってはいけない.
             //なぜなら、影が二重に描画されてしまうため.
-            this._prepareShadow(context, this._shadow);
+            this._prepareShadow(context, layout.shadow);
             clearShadowFlag = false;
         }
 
-        if (this._background) {
-            this._drawBackground(context, this._background, rect);
+        if (layout.background) {
+            this._drawBackground(context, layout.background, rect);
             this._clearShadow(context);
             clearShadowFlag = true;
         }
@@ -628,8 +606,8 @@ Navy.View = Navy.Core.subclass({
 
         context.save();
 
-        if (this._border) {
-            this._drawBorder(context, this._border, rect);
+        if (layout.border) {
+            this._drawBorder(context, layout.border, rect);
             this._clearShadow(context);
             clearShadowFlag = true;
         }
@@ -668,8 +646,6 @@ Navy.View = Navy.Core.subclass({
             context.fillStyle = gr;
         } else if (background.color) {
             context.fillStyle = this._convertColor(background.color);
-        } else {
-            return;
         }
 
         //round-angle or right-angle
@@ -913,3 +889,6 @@ Navy.View.createUniqueId = function() {
 
     return 'id_' + seq;
 }
+
+//TODO:Navy.View.Viewでアクセスするように全体を修正
+Navy.View.View = Navy.View;
