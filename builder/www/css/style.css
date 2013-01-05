@@ -4,6 +4,13 @@ html, body {
   font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   color: #333333; }
 
+select {
+  height: 1.8em;
+  width: auto;
+  min-width: 150px;
+  margin: 0;
+  vertical-align: top; }
+
 .n-header .btn-group, .n-nav .btn-group {
   display: inline; }
 
@@ -68,12 +75,18 @@ html, body {
 .n-image .n-filelist .n-search {
   width: 200px; }
 
-.n-layout .btn-group {
+.n-layout .n-layout-header {
   position: absolute;
-  top: 50px;
+  top: 42px;
   left: 230px;
   width: auto;
   height: auto; }
+  .n-layout .n-layout-header .btn-group, .n-layout .n-layout-header .n-add-view {
+    display: inline-block; }
+  .n-layout .n-layout-header .n-add-view {
+    border: dotted 1px #444;
+    padding: 4px;
+    border-radius: 4px; }
 .n-layout .n-pane {
   position: absolute;
   top: 80px;

@@ -66,11 +66,26 @@
 
   <div class="n-canvas fitsize-x fitsize-y"></div>
 
-  <div class="btn-group" data-bind="click: toggle">
-    <button class="btn active" data-toggle=".n-prop">Prop</button>
-    <button class="btn" data-toggle=".n-layer">Layer</button>
-    <button class="btn" data-toggle=".n-source">Source</button>
-    <button class="btn" data-toggle=".n-lib">Lib</button>
+  <div class="n-layout-header">
+    <div class="btn-group" data-bind="click: toggle">
+      <button class="btn active" data-toggle=".n-prop">Prop</button>
+      <button class="btn" data-toggle=".n-layer">Layer</button>
+      <button class="btn" data-toggle=".n-source">Source</button>
+      <button class="btn" data-toggle=".n-lib">Lib</button>
+    </div>
+
+    <div class="n-add-view">
+      <select>
+        <option value="View">View</option>
+        <option value="Image">Image</option>
+        <option value="Text">Text</option>
+        <option value="Button">Button</option>
+        <option value="ViewGroup">ViewGroup</option>
+      </select>
+      <button class="btn">Add</button>
+    </div>
+
+    <button class="btn">Remove</button>
   </div>
 
   <div class="n-pane fitsize-x fitsize-y"> 
