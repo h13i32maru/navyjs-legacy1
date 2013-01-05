@@ -36,16 +36,17 @@ html, body {
       -moz-box-sizing: border-box;
       height: 28px;
       margin: 0; }
-    .n-content .n-filelist .nav.nav-list {
-      padding: 0; }
-      .n-content .n-filelist .nav.nav-list li {
-        color: #333333;
-        padding: 2px 5px; }
-        .n-content .n-filelist .nav.nav-list li:hover {
-          background-color: #eeeeee; }
-        .n-content .n-filelist .nav.nav-list li.active {
-          background-color: #0088cc;
-          color: white; }
+  .n-content .nav.nav-list {
+    padding: 0; }
+    .n-content .nav.nav-list li {
+      cursor: pointer;
+      color: #333333;
+      padding: 2px 5px; }
+      .n-content .nav.nav-list li:hover {
+        background-color: #eeeeee; }
+      .n-content .nav.nav-list li.active {
+        background-color: #0088cc;
+        color: white; }
   .n-content .n-textarea {
     position: absolute;
     top: 50px;
@@ -155,6 +156,15 @@ html, body {
       display: inline-block;
       padding: 4px;
       background-color: white; }
+.n-layout .n-layer li {
+  border: dotted 1px #aaaaaa;
+  border-top: none; }
+  .n-layout .n-layer li span:first-child {
+    display: inline-block;
+    min-width: 10em; }
+  .n-layout .n-layer li span:nth-child(2) {
+    margin-left: 4px;
+    color: #aaa; }
 .n-layout .n-textarea {
   position: static; }
 .n-layout .n-canvas {

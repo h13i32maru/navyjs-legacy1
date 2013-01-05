@@ -53,18 +53,20 @@ html, body {
             margin:0;
         }
 
-        .nav.nav-list {
-            padding: 0;
-            li {
-                color: $color;
-                padding: 2px 5px;
-                &:hover {
-                    background-color: $hover-color;
-                }
-                &.active {
-                    background-color: $active-color;
-                    color: white;
-                }
+    }
+
+    .nav.nav-list {
+        padding: 0;
+        li {
+            cursor: pointer;
+            color: $color;
+            padding: 2px 5px;
+            &:hover {
+                background-color: $hover-color;
+            }
+            &.active {
+                background-color: $active-color;
+                color: white;
             }
         }
     }
@@ -209,6 +211,23 @@ html, body {
                     padding: 4px;
                     background-color: white;
                 }
+            }
+        }
+    }
+
+    .n-layer {
+        li {
+            border: dotted 1px #aaaaaa;
+            border-top: none;
+
+            span:first-child {
+                display:inline-block;
+                min-width: 10em;
+            }
+
+            span:nth-child(2) {
+                margin-left: 4px;
+                color: #aaa;
             }
         }
     }

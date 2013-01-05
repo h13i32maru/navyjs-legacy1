@@ -14,6 +14,10 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
         var _this = this;
         this.$el.find('.n-layer ul').sortable({
+            start: function(ev, ui) {
+                var $el = $(ui.helper[0]);
+                _this.activeLayer($el);
+            },
             stop: function(ev, ui){
                 _this.changeAllViewsZ();
             }
@@ -197,12 +201,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
         this.$el.find('[class^="n-prop-extra"]').hide();
         this.$el.find('.n-prop-extra-' + layout['class']).show();
 
-        //layer
-        var id = view.getId();
-        var selector = Builder.Util.format('.n-layer li[data-view-id="%s"]', [id]);
-        var $el = this.$el.find(selector);
-        $el.siblings().removeClass('active');
-        $el.addClass('active');
+        this.activeLayerByView(view);
     },
 
     onMoveNavyView: function(view) {
@@ -217,15 +216,29 @@ Builder.Layout = nClass.instance(Builder.Core, {
         }
     },
 
-    selectedLayer: function(vm, ev) {
-        var $el = $(ev.srcElement);
+    activeLayer: function($el) {
         var id = $el.attr('data-view-id');
+        if (!id) {
+            return;
+        }
         var view = this.page.findView(id);
 
         Navy.Builder.selectView(view);
 
+        this.activeLayerByView(view);
+    },
+
+    activeLayerByView: function(view) {
+        var id = view.getId();
+        var selector = Builder.Util.format('.n-layer li[data-view-id="%s"]', [id]);
+        var $el = this.$el.find(selector);
         $el.siblings().removeClass('active');
         $el.addClass('active');
+    },
+
+    selectedLayer: function(vm, ev) {
+        var $el = $(ev.srcElement).parent('li').first();
+        this.activeLayer($el);
     },
 
     updateLayer: function() {
@@ -233,11 +246,25 @@ Builder.Layout = nClass.instance(Builder.Core, {
         views = views.reverse();
         var view;
         var layers = [];
+        var id;
+        var _class;
+        var size;
+        var pos;
+        var text;
         for (var i = 0; i < views.length; i++) {
             view = views[i];
-            layers.push({id: view.getId()});
+
+            id = view.getId();
+            _class = view.getClass();
+            size = JSON.stringify(view.getSize());
+            pos = JSON.stringify(view.getPosition());
+            text = Builder.Util.format('%s, size:%s, pos:%s', [_class, size, pos]);
+
+            layers.push({id: id, text: text});
         }
         this.layers(layers);
+
+        this.activeLayerByView(this.view);
     },
 
     changeAllViewsZ: function() {
