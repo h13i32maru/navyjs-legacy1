@@ -863,7 +863,7 @@ Navy.View = Navy.Core.subclass({
      */
     destroy: function() {
         if (this._parent) {
-            this._parent.removeView(this._id);
+            this._parent.removeView(this._layout.id);
         }
 
         this._parent = null;
