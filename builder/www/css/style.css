@@ -97,6 +97,7 @@ html, body {
       width: 100%;
       margin-bottom: 10px; }
       .n-layout .n-pane .n-prop table caption {
+        cursor: pointer;
         text-align: left;
         background-color: #444444;
         color: white;
