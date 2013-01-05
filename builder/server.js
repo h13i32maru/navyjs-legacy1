@@ -52,7 +52,7 @@ function getProjectContent(url) {
     try {
         var stat = fs.statSync(path);
         if (stat.isDirectory()) {
-            var filenames = fs.readdirSync(path);
+            var filenames = fs.readdirSync(path).sort();
             statusCode = 200;
             body = JSON.stringify(filenames);
             contentType = mime['.json'];

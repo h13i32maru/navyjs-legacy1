@@ -4,6 +4,8 @@ Builder.Header = nClass.instance({
     $el: null,
     currentContent: null,
     contents: null,
+    projects: null,
+    selectedProject: null,
 
     initialize: function(){
         this.$el = $(this.target);
@@ -50,5 +52,12 @@ Builder.Header = nClass.instance({
 
     save: function(vm, ev) {
         this.currentContent.save();
+    },
+
+    play: function(vm, ev) {
+        var project = this.selectedProject();
+        var url = Builder.Util.format('/data/%s/index.html', [project]);
+        //TODO:width, heightをapp.jsonから読み取る
+        window.open(url, project, 'width=640, height=960, menubar=no, toolbar=no, scrollbars=no, location=no, status=no');
     }
 });
