@@ -71,7 +71,6 @@
       <button class="btn active" data-toggle=".n-prop">Prop</button>
       <button class="btn" data-toggle=".n-layer">Layer</button>
       <button class="btn" data-toggle=".n-source">Source</button>
-      <button class="btn" data-toggle=".n-lib">Lib</button>
     </div>
 
     <div class="n-add-view">
@@ -96,7 +95,6 @@
       </ul>
     </div>
     <textarea class="n-source n-textarea" data-bind="value: text"></textarea>
-    <div class="n-lib" data-bind="template: {name: 'lib-template'}"></div>
   </div>
 
 </div>
@@ -324,16 +322,6 @@
   </tr>
 </tbody>
 </table>
-</script>
-
-<script type="text/html" id="lib-template">
-<ul class="nav nav-list">
-  <li><span data-view-class="View">View</span></li>
-  <li><span data-view-class="Image">Image</span></li>
-  <li><span data-view-class="Text">Text</span></li>
-  <li><span data-view-class="Button">Button</span></li>
-  <li><span data-view-class="ViewGroup">ViewGroup</span></li>
-</ul>
 </script>
 <!-- }}} -->
 </body>

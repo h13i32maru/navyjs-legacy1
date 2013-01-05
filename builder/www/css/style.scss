@@ -124,7 +124,7 @@ select {
         margin-right: 10px;
         margin-bottom: 10px;
 
-        .n-prop, .n-layer, .n-source, .n-lib {
+        .n-prop, .n-layer, .n-source{
             display:none;
             height: 100%;
             width: 100%;
@@ -213,22 +213,6 @@ select {
                             border-color:transparent;
                         }
                     }
-                }
-            }
-        }
-    }
-
-    .n-lib {
-        ul {
-            padding: 0;
-            li {
-                padding:4px 10px;
-                border: dotted 1px #444;
-                span {
-                    cursor:pointer;
-                    display:inline-block;
-                    padding: 4px;
-                    background-color: white;
                 }
             }
         }
