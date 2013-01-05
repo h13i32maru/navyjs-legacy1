@@ -1,8 +1,9 @@
 var http = require('http');
 var fs = require('fs');
 
-var host = 'localhost';
-var port = 8080;
+//引数が増えたらもっとまじめに実装する
+var host = process.argv[2] || 'localhost';
+var port = parseInt(process.argv[3],10) || 8080;
 var mime = {
     '.css'  : 'text/css',
     '.gif'  : 'image/gif',
