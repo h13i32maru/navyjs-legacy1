@@ -125,9 +125,13 @@ Navy.Builder = Navy.Core.instance({
     },
 
     createViewToPage: function(page, viewClassName, x, y) {
+        var sortedViews = page.getSortedViews().reverse();
+        var z = sortedViews[0].getZ() + 1;
+
         var layout = {
             'class': viewClassName,
             size: [100, 100],
+            z: z,
             pos: [x, y],
             background: {
                 color: '#aaaaaa'

@@ -22,26 +22,6 @@ Builder.Layout = nClass.instance(Builder.Core, {
                 _this.changeAllViewsZ();
             }
         });
-
-        var _this = this;
-        this.$el.find('.n-lib li span').draggable({helper: 'clone'});
-        this.$el.find('.n-canvas').droppable({drop: function(e, ui){
-            var droppable = {
-                x: $(this).offset().left,
-                y: $(this).offset().top
-            };
-
-            var draggable = {
-                x: $(ui.helper[0]).offset().left,
-                y: $(ui.helper[0]).offset().top
-            };
-
-            var x = Math.max(draggable.x - droppable.x, 0);
-            var y = Math.max(draggable.y - droppable.y, 0);
-            var viewClassName = $(ui.helper[0]).attr('data-view-class');
-
-            Navy.Builder.createViewToPage(_this.page, viewClassName, x, y);
-        }});
     },
 
     save: function($super) {
@@ -214,6 +194,11 @@ Builder.Layout = nClass.instance(Builder.Core, {
         if (ev.keyCode === 13) {
             this.setNewLayoutToView();
         }
+    },
+
+    addNewView: function(vm, ev) {
+        var viewClassName = this.$el.find('.n-add-view select').val();
+        Navy.Builder.createViewToPage(this.page, viewClassName, 0, 0);
     },
 
     activeLayer: function($el) {
