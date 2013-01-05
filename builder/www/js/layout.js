@@ -4,12 +4,15 @@ Builder.Layout = nClass.instance(Builder.Core, {
     type: 'layout',
     page: null,
     view: null,
+    layers: null,
     
     initialize: function($super){
         this.initObservable();
         $super();
 
         this.calcCanvasSize();
+
+        this.$el.find('.n-layer ul').sortable();
 
         var _this = this;
         this.$el.find('.n-lib li span').draggable({helper: 'clone'});
@@ -67,6 +70,8 @@ Builder.Layout = nClass.instance(Builder.Core, {
         var cssClass = $(ev.srcElement).attr('data-toggle');
         this.$el.find(cssClass).siblings().hide();
         this.$el.find(cssClass).show();
+
+        this.updateLayer();
     },
 
     onChangeProject: function($super){
@@ -201,6 +206,17 @@ Builder.Layout = nClass.instance(Builder.Core, {
         }
     },
 
+    updateLayer: function() {
+        var views = Navy.Builder.getSortedViews(this.page);
+        var view;
+        var layers = [];
+        for (var i = 0; i < views.length; i++) {
+            view = views[i];
+            layers.push({id: view.getId()});
+        }
+        this.layers(layers);
+    },
+
     setNewLayoutToView: function() {
         if (!this.view) {
             return;
@@ -238,6 +254,8 @@ Builder.Layout = nClass.instance(Builder.Core, {
     },
 
     initObservable: function(){
+        this.layers = ko.observableArray([]);
+
         this.propClass = ko.observable();
 
         this.propBasic = ko.observableArray([

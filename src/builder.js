@@ -137,6 +137,10 @@ Navy.Builder = Navy.Core.instance({
 
         var view = new Navy.View[viewClassName](layout);
         page.addView(view);
+    },
+
+    getSortedViews: function(page) {
+        return page.getSortedViews();
     }
 });
 

@@ -243,13 +243,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
         return [x0, y0, x1, y1];
     },
 
-    /**
-     * 子要素も描画する.
-     * @override
-     */
-    _drawExtra: function($super, context) {
-        $super(context);
-
+    //TODO:jsdco
+    getSortedViews: function() {
         var sortedViews = [];
         var views = this._views;
         for (var viewId in views) {
@@ -257,6 +252,18 @@ Navy.View.ViewGroup = Navy.View.subclass({
         }
 
         sortedViews.sort(this._compareViewByZ);
+        
+        return sortedViews;
+    },
+
+    /**
+     * 子要素も描画する.
+     * @override
+     */
+    _drawExtra: function($super, context) {
+        $super(context);
+
+        var sortedViews = this.getSortedViews();
         var len = sortedViews.length;
         for (var i = 0; i < len; i++) {
             if (!sortedViews[i].getVisible()) {

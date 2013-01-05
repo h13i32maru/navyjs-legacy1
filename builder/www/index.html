@@ -75,7 +75,11 @@
 
   <div class="n-pane fitsize-x fitsize-y"> 
     <div class="n-prop" data-bind="template: {name: 'prop-template'}"></div>
-    <div class="n-layer"><ul/></div>
+    <div class="n-layer">
+      <ul class="nav nav-list" data-bind="foreach: layers">
+        <li data-bind="text: id"></li>
+      </ul>
+    </div>
     <textarea class="n-source n-textarea" data-bind="value: text"></textarea>
     <div class="n-lib" data-bind="template: {name: 'lib-template'}"></div>
   </div>
