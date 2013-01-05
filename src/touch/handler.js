@@ -133,7 +133,10 @@ Navy.Touch.Handler = Navy.Core.subclass({
                 continue;
             }
 
-            //var rect = view.getAbsoluteRect();
+            if (!view.getRoot()) {
+                continue;
+            }
+
             var rect = view.getComputedRect();
             var x0 = rect[0];
             var y0 = rect[1];

@@ -201,6 +201,12 @@ Builder.Layout = nClass.instance(Builder.Core, {
         Navy.Builder.createViewToPage(this.page, viewClassName, 0, 0);
     },
 
+    removeView: function(vm, ev) {
+        var view = this.view;
+        Navy.Builder.selectView(null);
+        view.removeFromParent();
+    },
+
     activeLayer: function($el) {
         var id = $el.attr('data-view-id');
         if (!id) {

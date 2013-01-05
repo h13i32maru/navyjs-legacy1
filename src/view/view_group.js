@@ -197,6 +197,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
 
             view.removeFromParent();
         }
+
+        Navy.Loop.requestDraw();
     },
 
     /**
