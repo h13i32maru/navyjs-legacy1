@@ -25,10 +25,6 @@ Navy.View = Navy.Core.subclass({
     initialize: function($super, layout) {
         $super();
 
-        if (!layout.id) {
-            layout.id = Navy.View.createUniqueId();
-        }
-
         if (layout) {
             this._setLayout(layout);
         }
@@ -144,14 +140,15 @@ Navy.View = Navy.Core.subclass({
      * @param {Object} layout レイアウト情報.
      */
     _setLayout: function(layout) {
-        this._layout = layout;
-        this._extra = layout.extra;
-
+        if (!layout.id) { layout.id = Navy.View.createUniqueId(); }
         if (!layout.pos) { layout.pos = [0, 0]; }
         if (!layout.size) { layout.size = [null, null]; }
         if (!layout.visible) { layout.visible = true; }
         if (!layout.padding) { layout.padding = 0; }
         if (!layout.z) { layout.z = 0; }
+
+        this._layout = layout;
+        this._extra = layout.extra;
 
         Navy.Loop.requestDraw()
     },

@@ -41,13 +41,13 @@ Navy.Builder = Navy.Core.instance({
         view.removeFromParent();
         view._id = layout.id;
         view._initLayout();
-        _parent.addView(view);
         if (layout.extra.ref) {
             view._setLayout(layout, callback);
         } else {
             view._setLayout(layout);
             callback(view);
         }
+        _parent.addView(view);
     },
     setSelectedViewListener: function(listener) {
         this._selectedViewListener = listener;
