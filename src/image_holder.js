@@ -11,12 +11,9 @@ Navy.ImageHolder = Navy.Core.instance({
     getImage: function(url, callback) {
         url = Navy.Builder.getUrl(url);
 
-        //builderが向こうの時だけキャッシュ判定する
-        if (!Navy.Builder.getEnable()) {
-            if (this._images[url]) {
-                callback(this._images[url]);
-                return;
-            }
+        if (this._images[url]) {
+            callback(this._images[url]);
+            return;
         }
 
         var image = new Image();
