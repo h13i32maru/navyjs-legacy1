@@ -20,6 +20,16 @@ Navy.View.ViewGroup = Navy.View.subclass({
         $super(layout);
     },
 
+    //TODO:jsdoc
+    _initLayout: function($super) {
+        $super();
+
+        for (var viewId in this._views) {
+            this.removeView(viewId);
+        }
+        this._views = {};
+    },
+
     /**
      * 自身のレイアウトと子要素のレイアウトを行う.
      * @override
@@ -71,6 +81,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
                 var view = new Navy.View[viewClass](viewLayout);
                 callback(view);
             }
+
+            view.setLayoutSequence(i);
         }
     },
 
@@ -98,6 +110,16 @@ Navy.View.ViewGroup = Navy.View.subclass({
         for (var viewId in _views) {
             _views[viewId].onChangeRoot(root);
         }
+    },
+
+    //TODO:jsdco
+    getMaxZ: function(){
+        var z = 0;
+        var views = this._views;
+        for (var viewId in views) {
+            z = Mat.max(z, views[viewId].getZ());
+        }
+        return z;
     },
 
     /**
@@ -175,6 +197,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
 
             view.removeFromParent();
         }
+
+        Navy.Loop.requestDraw();
     },
 
     /**
@@ -221,13 +245,8 @@ Navy.View.ViewGroup = Navy.View.subclass({
         return [x0, y0, x1, y1];
     },
 
-    /**
-     * 子要素も描画する.
-     * @override
-     */
-    _drawExtra: function($super, context) {
-        $super(context);
-
+    //TODO:jsdco
+    getSortedViews: function() {
         var sortedViews = [];
         var views = this._views;
         for (var viewId in views) {
@@ -235,6 +254,18 @@ Navy.View.ViewGroup = Navy.View.subclass({
         }
 
         sortedViews.sort(this._compareViewByZ);
+        
+        return sortedViews;
+    },
+
+    /**
+     * 子要素も描画する.
+     * @override
+     */
+    _drawExtra: function($super, context) {
+        $super(context);
+
+        var sortedViews = this.getSortedViews();
         var len = sortedViews.length;
         for (var i = 0; i < len; i++) {
             if (!sortedViews[i].getVisible()) {
@@ -252,7 +283,12 @@ Navy.View.ViewGroup = Navy.View.subclass({
      * @return {number} 負数ならview1はview2より下, 0ならview1とview2は同じ位置, 正数ならview1はview2より上.
      */
     _compareViewByZ: function(view1, view2) {
-        return view1.getZ() - view2.getZ();
+        var res = view1.getZ() - view2.getZ();
+        if (res === 0) {
+            res = view1.getLayoutSequence() - view2.getLayoutSequence();
+        }
+
+        return res;
     },
 
     /**

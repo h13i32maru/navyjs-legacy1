@@ -86,7 +86,10 @@ Navy.Touch.Handler = Navy.Core.subclass({
         //TODO:z順でソート必要あり
         listeners.sort(function(a, b){
             var order = a.view.getOrderZ(b.view);
-            return order * -1;
+            if (order === 0) {
+                order = a.view.getLayoutSequence() - b.view.getLayoutSequence();
+            }
+            return -1 * order;
         });
 
         var len = listeners.length;
@@ -130,7 +133,10 @@ Navy.Touch.Handler = Navy.Core.subclass({
                 continue;
             }
 
-            //var rect = view.getAbsoluteRect();
+            if (!view.getRoot()) {
+                continue;
+            }
+
             var rect = view.getComputedRect();
             var x0 = rect[0];
             var y0 = rect[1];

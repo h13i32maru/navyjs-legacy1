@@ -1,0 +1,249 @@
+$bg-color: #dddddd;
+$fg-color: #ffffff;
+$hover-color: #eee;
+$active-color: #08C;
+$font: 12px "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+$color: #333;
+
+
+html, body {
+    height: 100%;
+    background-color: $bg-color;
+    font: $font;
+    color: $color;
+}
+
+@mixin box($x, $y, $width, $height){
+    position:absolute;
+    top: $y;
+    left: $x;
+    width: $width;
+    height: $height;
+}
+
+select {
+    height: 1.8em;
+    width: auto;
+    min-width: 150px;
+    margin:0;
+    vertical-align: top;
+}
+
+.n-header, .n-nav {
+    .btn-group {
+        display: inline;
+    }
+}
+
+.btn {
+    font: $font;
+}
+
+.n-header {
+    @include box(10px, 10px, auto, auto);
+}
+
+.n-content {
+    display:none;
+    .n-filelist {
+        @include box(10px, 50px, 200px, auto);
+        background-color: $fg-color;
+        margin-bottom: 10px;
+        padding: 4px;
+        overflow-y:scroll;
+
+        .n-search {
+            width: 100%;
+            padding: 4px !important;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 28px;
+            margin:0;
+        }
+
+    }
+
+    .nav.nav-list {
+        padding: 0;
+        li {
+            cursor: pointer;
+            color: $color;
+            padding: 2px 5px;
+            &:hover {
+                background-color: $hover-color;
+            }
+            &.active {
+                background-color: $active-color;
+                color: white;
+            }
+        }
+    }
+
+    .n-textarea {
+        @include box(220px, 50px, 200px, auto);
+        margin-right: 10px;
+        border:none;
+    }
+}
+
+.n-config {
+    display: block;
+}
+
+.n-image {
+    .n-filelist .nav.nav-list li{
+        display:inline-block;
+        padding: 4px;
+        img {
+            vertical-align: top;
+            max-width: 128px;
+        }
+    }
+
+    .n-filelist .n-search {
+        width: 200px;
+    }
+}
+
+.n-layout {
+    .n-layout-header {
+        @include box(230px, 42px, auto, auto);
+
+        .btn-group, .n-add-view {
+            display:inline-block;
+        }
+        .n-add-view {
+            border: dotted 1px #444;
+            padding: 4px;
+            border-radius: 4px;
+        }
+    }
+
+    .n-pane {
+        @include box(230px, 80px, auto, auto);
+        margin-right: 10px;
+        margin-bottom: 10px;
+
+        .n-prop, .n-layer, .n-source{
+            display:none;
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: $fg-color;
+            overflow-y: scroll;
+            overflow-x: scroll;
+        }
+
+        .n-prop {
+            display:block;
+            padding: 4px;
+
+            table {
+                width: 100%;
+                margin-bottom: 10px;
+                caption {
+                    cursor: pointer;
+                    text-align: left;
+                    background-color: #444444;
+                    color: white;
+                    padding: 4px;
+                    font-size: 1.1em;
+                }
+                tbody {
+                    tr {
+                        border-bottom: solid 1px #aaa;
+                        td {
+                            &:nth-child(1) {
+                                border-right: solid 1px #aaa;
+                                label {
+                                    font: $font;
+                                    width: 160px;
+                                    margin: 0;
+                                    input {
+                                        margin: 0;
+                                        margin-right: 4px;
+                                    }
+                                }
+                            }
+                            &:nth-child(2) {
+                                width: 100%;
+                                input {
+                                    width: 100%;
+                                    margin: 0;
+                                    border:none;
+                                    box-sizing: border-box;
+                                    padding: 4px 2px;
+                                }
+                            }
+                            &.n-prop-separator {
+                                background-color: $bg-color;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            ul {
+                list-style:none;
+                padding: 4px;
+                li {
+                    $label-width: 160px;
+                    padding: 4px 0;
+                    label {
+                        white-space: nowrap;
+                        overflow-x:scroll;
+                        display:block;
+                        width: $label-width;
+                        //background-color:red;
+                        margin:0;
+                        float:left;
+
+                        input {
+                            margin: 0;
+                            margin-right: 4px;
+                        }
+                    }
+                    div {
+                        margin-left: $label-width + 10px;
+                        input[type="text"] {
+                            display:block;
+                            width:100%;
+                            box-sizing: border-box;
+                            margin:0;
+                            border-color:transparent;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .n-layer {
+        li {
+            border: dotted 1px #aaaaaa;
+            border-top: none;
+
+            span:first-child {
+                display:inline-block;
+                min-width: 10em;
+            }
+
+            span:nth-child(2) {
+                margin-left: 4px;
+                color: #aaa;
+            }
+        }
+    }
+
+    .n-textarea {
+        position:static;
+    }
+
+    .n-canvas, {
+        @include box(230px, 50px, 320px, 480px);
+        max-width: 700px;
+        margin-bottom: 10px;
+        background-color: black;
+        z-index: 1000;
+    }
+}

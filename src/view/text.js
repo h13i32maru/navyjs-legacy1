@@ -24,7 +24,7 @@ Navy.View.Text = Navy.View.subclass({
      * @param {string} text テキスト.
      */
     setText: function(text) {
-        this._text = text;
+        this._extra.text = text;
         this._update();
     },
 
@@ -33,7 +33,7 @@ Navy.View.Text = Navy.View.subclass({
      * @return {string} テキスト.
      */
     getText: function() {
-        return this._text;
+        return this._extra.text;
     },
 
     /**
@@ -41,7 +41,7 @@ Navy.View.Text = Navy.View.subclass({
      * @param {string} color #000000形式.
      */
     setTextColor: function(color) {
-        this._textColor = color;
+        this._extra.text.color = color;
         Navy.Loop.requestDraw();
     },
 
@@ -50,19 +50,18 @@ Navy.View.Text = Navy.View.subclass({
      * @return {string} #000000形式.
      */
     getTextColor: function() {
-        return this._textColor;
+        return this._extra.text.color;
     },
 
     //TODO:jsdco
     setTextShadow: function(shadow) {
-        this._textShadow = shadow;
+        this._extra.text.shadow = shadow;
         Navy.Loop.requestDraw();
     },
 
     //TODO:jsdco
     getTextShadow: function() {
-        //TODO:コピーしたほうが良い?
-        return this._textShadow;
+        return this.clone(this._extra.text.shadow);
     },
 
     /**
@@ -70,7 +69,7 @@ Navy.View.Text = Navy.View.subclass({
      * @param {string} font フォント名.
      */
     setTextFont: function(font) {
-        this._textFont = font;
+        this._extra.text.font = font;
         this._update();
     },
 
@@ -79,29 +78,29 @@ Navy.View.Text = Navy.View.subclass({
      * @return {string} font名.
      */
     getTextFont: function() {
-        return this._textFont;
+        return this._extra.text.font;
     },
 
     //TODO:jsdco
     setTextWeight: function(weight) {
-        this._textWeight = weight;
+        this._extra.text.weight = weight;
         this._update();
     },
 
     //TODO:jsdoc
     getTextWeight: function() {
-        return this._textWeight;
+        return this._extra.text.weight;
     },
 
     //TODO:jsdco
     setTextStyle: function(style) {
-        this._textStyle = style;
+        this._extra.text.style = style;
         this._update();
     },
 
     //TODO:jsdco
     getTextStyle: function() {
-        return this._textStyle;
+        return this._extra.text.style;
     },
 
     /**
@@ -109,7 +108,7 @@ Navy.View.Text = Navy.View.subclass({
      * @param {string} align top|middle|bottomを指定.
      */
     setTextVerticalAlign: function(align) {
-        this._textVerticalAlign = align;
+        this._extra.text.valign = align;
         this._update();
     },
 
@@ -118,7 +117,7 @@ Navy.View.Text = Navy.View.subclass({
      * @return {string} top|middle|bottomを取得する.
      */
     getTextVerticalAlign: function() {
-        return this._textVerticalAlign;
+        return this._extra.text.valign;
     },
 
     /**
@@ -126,7 +125,7 @@ Navy.View.Text = Navy.View.subclass({
      * @param {string} align left|center|rightを指定.
      */
     setTextHorizontalAlign: function(align) {
-        this._textHorizontalAlign = align;
+        this._extra.text.halign = align;
         this._update();
     },
 
@@ -135,7 +134,7 @@ Navy.View.Text = Navy.View.subclass({
      * @return {string} left|center|rightを取得する.
      */
     getTextHorizontalAlign: function() {
-        return this._textHorizontalAlign;
+        return this._extra.text.halign;
     },
 
     /**
@@ -143,7 +142,7 @@ Navy.View.Text = Navy.View.subclass({
      * @param {number} space 行間を指定.
      */
     setTextLineSpace: function(space) {
-        this._textLineSpace = space;
+        this._extra.text.linespace = space;
         this._update();
     },
 
@@ -152,7 +151,7 @@ Navy.View.Text = Navy.View.subclass({
      * @return {number} 行間を取得.
      */
     getTextLineSpace: function() {
-        return this._textLineSpace;
+        return this._extra.text.linespace;
     },
 
     /**
@@ -160,7 +159,7 @@ Navy.View.Text = Navy.View.subclass({
      * @param {string} cutend 終端文字を指定.
      */
     setTextCutEnd: function(cutend) {
-        this._textCutEnd = cutend;
+        this._extra.text.cutend = cutend;
         this._update();
     },
 
@@ -169,7 +168,7 @@ Navy.View.Text = Navy.View.subclass({
      * @return {string} 終端文字.
      */
     getTextCutEnd: function() {
-        return this._textCutEnd;
+        return this._extra.text.cutend;
     },
 
     /**
@@ -177,7 +176,7 @@ Navy.View.Text = Navy.View.subclass({
      * @param {boolean} flag trueを指定すると折り返す.
      */
     setTextMultiLine: function(flag) {
-        this._textMultiLine = flag;
+        this._extra.text.multiline = flag;
         this._update();
     },
 
@@ -186,7 +185,7 @@ Navy.View.Text = Navy.View.subclass({
      * @return {boolean} 折り返す場合はtrueを取得する.
      */
     getTextMultiLine: function() {
-        return this._textMultiLine;
+        return this._extra.text.multiline;
     },
 
     /**
@@ -201,8 +200,7 @@ Navy.View.Text = Navy.View.subclass({
      * @override
      */
     getSize: function() {
-        //TODO:コピー
-        return this._textBoxSize;
+        return this.clone(this._textBoxSize);
     },
 
     /**
@@ -220,18 +218,18 @@ Navy.View.Text = Navy.View.subclass({
         this._context = Navy.App.getContext();
 
         if (layout.extra) {
-            this._text = layout.extra.text || '';
-            this._textColor = layout.extra.color || '#000000';
-            this._textShadow = layout.extra.shadow;
-            this._textSize = layout.extra.size || 24;
-            this._textFont = layout.extra.font || 'sans-serif';
-            this._textWeight = layout.extra.weight || 'normal';
-            this._textStyle = layout.extra.style || 'normal';
-            this._textVerticalAlign = layout.extra.valign || 'left';
-            this._textHorizontalAlign = layout.extra.halign || 'top';
-            this._textLineSpace = layout.extra.linespace || 0;
-            this._textCutEnd = layout.extra.cutend || '';
-            this._textMultiLine = ('multiline' in layout.extra ? layout.extra.multiline : true);
+            var e = layout.extra;
+            e.text = e.text || '';
+            e.color = e.color || '#000000';
+            e.size = e.size || 24;
+            e.font = e.font || 'sans-serif';
+            e.weight = e.weight || 'normal';
+            e.style = e.style || 'normal';
+            e.valign = e.valign || 'left';
+            e.halign = e.halign || 'top';
+            e.linespace = e.linespace || 0;
+            e.cutend = e.cutend || '';
+            e.multiline = ('multiline' in e ? e.multiline : true);
         }
 
         $super(layout);
@@ -266,13 +264,14 @@ Navy.View.Text = Navy.View.subclass({
      * @param {CanvasContext} context canvas 2dコンテキスト.
      */
     _prepareContext: function(context) {
+        var extra = this._extra;
         context.textBaseline = 'top';
         context.textAlign = 'left';
-        context.font = this._textStyle + ' ' + this._textWeight + ' ' + this._textSize + 'px' + ' ' + this._textFont;
-        context.fillStyle = this._convertColor(this._textColor);
+        context.font = extra.style + ' ' + extra.weight + ' ' + extra.size + 'px' + ' ' + extra.font;
+        context.fillStyle = this._convertColor(extra.color);
         
-        if (this._textShadow) {
-            this._prepareShadow(context, this._textShadow);
+        if (extra.shadow) {
+            this._prepareShadow(context, extra.shadow);
         }
     },
 
@@ -281,8 +280,9 @@ Navy.View.Text = Navy.View.subclass({
      * @return {number} 行の表示高さ.
      */
     _getLinesHeight: function() {
+        var extra = this._extra;
         //一番上の行はline spaceを持たないので1つ引いておく
-        return (this._textLines.length * (this._textSize + this._textLineSpace)) - this._textLineSpace;
+        return (this._textLines.length * (extra.size + extra.linespace)) - extra.linespace;
     },
 
     /**
@@ -310,15 +310,16 @@ Navy.View.Text = Navy.View.subclass({
     _updateMeasure: function() {
         var context = Navy.App.getContext();
         this._prepareContext(context);
-        this._textMeasureWidth = context.measureText(this._text).width;
+        this._textMeasureWidth = context.measureText(this._extra.text).width;
     },
 
     /**
      * テキストの折り返しを更新して、複数行を構成する.
      */
     _updateLines: function() {
-        var width = this._width;
-        var height = this._height;
+        var extra = this._extra;
+        var width = this._layout.size[0];
+        var height = this._layout.size[1];
         var context = this._context;
 
         this._prepareContext(context);
@@ -326,15 +327,15 @@ Navy.View.Text = Navy.View.subclass({
         //横幅可変なので、一行になる
         //マルチラインがfalseの場合も一行になる
         if (!width) {
-            var textWidth = context.measureText(this._text).width;
-            this._textLines = [{line:this._text, width: textWidth}];
+            var textWidth = context.measureText(extra.text).width;
+            this._textLines = [{line:extra.text, width: textWidth}];
             return;
         }
 
         var lines = [];
         var tmp = '';
         var line = '';
-        var words = Navy.Util.String.getWords(this._text);
+        var words = Navy.Util.String.getWords(extra.text);
         var len = words.length;
 
         //単語をつなぎあわせて、横幅を超えないところを一行としていく
@@ -377,7 +378,7 @@ Navy.View.Text = Navy.View.subclass({
         if (!this._textMultiLine && lines.length > 1) {
             var firstLine = lines[0].line;
             var len = firstLine.length;
-            var cutEnd = this._textCutEnd;
+            var cutEnd = extra.cutend;
             var line;
             var tmp = '';
             for (var i = 0; i < len; i++) {
@@ -389,7 +390,7 @@ Navy.View.Text = Navy.View.subclass({
                     break;
                 }
             }
-            line += this._textCutEnd;
+            line += extra.cutend;
             lines = [{line: line, width:context.measureText(line).width}];
 
         }
@@ -413,7 +414,7 @@ Navy.View.Text = Navy.View.subclass({
             //最後の行の末尾をcut endに置き換える
             var lastLine = lines.pop().line;
             var len = lastLine.length;
-            var cutEnd = this._textCutEnd;
+            var cutEnd = extra.cutend;
             var line;
             var tmp = '';
             for (var i = 0; i < len; i++) {
@@ -425,7 +426,7 @@ Navy.View.Text = Navy.View.subclass({
                     break;
                 }
             }
-            line += this._textCutEnd;
+            line += extra.cutend;
             lines.push({line: line, width:context.measureText(line).width});
         }
     },
@@ -434,8 +435,8 @@ Navy.View.Text = Navy.View.subclass({
      * 指定されているwidth,heightとテキストにしたがって、ボックスの大きさを更新する.
      */
     _updateSize: function() {
-        var width = this._width;
-        var height = this._height;
+        var width = this._layout.size[0];
+        var height = this._layout.size[1];
 
         if (width !== null) {
             //横固定、縦固定[width, height]
@@ -469,11 +470,12 @@ Navy.View.Text = Navy.View.subclass({
      * テキストの水平、垂直位置を更新する.
      */
     _updatePosition: function() {
+        var extra = this._extra;
         var size = this.getSize();
-        var valign = this._textVerticalAlign;
-        var halign = this._textHorizontalAlign;
-        var textSize = this._textSize;
-        var lineSpace = this._textLineSpace;
+        var valign = extra.valign;
+        var halign = extra.halign;
+        var textSize = extra.size;
+        var lineSpace = extra.linespace;
         var dx;
         var dy;
         var lines = this._textLines;
