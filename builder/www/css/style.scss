@@ -94,9 +94,15 @@ select {
     .n-filelist .nav.nav-list li{
         display:inline-block;
         padding: 4px;
+        $max-width: 128px;
+        max-width: $max-width;
         img {
             vertical-align: top;
-            max-width: 128px;
+            max-width: $max-width;
+        }
+
+        span {
+            display:block;
         }
     }
 

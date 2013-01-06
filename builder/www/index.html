@@ -10,6 +10,7 @@
 
 <script src="lib/jquery/jquery-1.8.1.min.js"></script>
 <script src="lib/jquery-plugin/fitsize.js"></script>
+<script src="lib/jquery-plugin/listfilter.js"></script>
 <script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
 <script src="lib/knockout/knockout-2.2.0.js"></script>
 <script src="lib/nclass/nclass.js"></script>
@@ -46,7 +47,7 @@
 <!-- {{{ config -->
 <div class="n-content n-config">
   <div class="n-filelist fitsize-y">
-    <input type="text" placeholder="Search" class="n-search"/>
+    <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
     <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile">
       <li data-bind="text: $data"></li>
     </ul>
@@ -58,7 +59,7 @@
 <!-- {{{ layout -->
 <div class="n-content n-layout">
   <div class="n-filelist fitsize-y">
-    <input type="text" placeholder="Search" class="n-search"/>
+    <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
     <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile">
       <li data-bind="text: $data"></li>
     </ul>
@@ -102,7 +103,7 @@
 <!-- {{{ code -->
 <div class="n-content n-code">
   <div class="n-filelist fitsize-y">
-    <input type="text" placeholder="Search" class="n-search"/>
+    <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
     <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile.bind($root)">
       <li data-bind="text: $data"></li>
     </ul>
@@ -114,9 +115,9 @@
 <!-- {{{ image -->
 <div class="n-content n-image">
   <div class="n-filelist fitsize-y fitsize-x">
-    <input type="text" placeholder="Search" class="n-search"/>
+    <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
     <ul class="nav nav-list" data-bind="foreach: filenames">
-      <li><img data-bind="attr: {src: $data}"/></li>
+      <li data-bind="attr: {'data-listfilter-text': $data}"><img data-bind="attr: {src: $data}"/><span data-bind="text: $data.replace(/.*[/]/, '')"></span></li>
     </ul>
   </div>
 </div>

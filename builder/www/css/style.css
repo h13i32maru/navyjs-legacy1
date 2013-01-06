@@ -68,10 +68,13 @@ select {
 
 .n-image .n-filelist .nav.nav-list li {
   display: inline-block;
-  padding: 4px; }
+  padding: 4px;
+  max-width: 128px; }
   .n-image .n-filelist .nav.nav-list li img {
     vertical-align: top;
     max-width: 128px; }
+  .n-image .n-filelist .nav.nav-list li span {
+    display: block; }
 .n-image .n-filelist .n-search {
   width: 200px; }
 
