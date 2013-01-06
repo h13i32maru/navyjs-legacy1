@@ -4,15 +4,36 @@ Builder.Core = nClass({
     type: '',
     $el: null,
     project: null,
-    textChanged: false,
     filename: '',
+    editor: null,
 
     initialize: function() {
         this.$el = $(this.target);
         this.filenames = ko.observableArray([]);
-        this.text = ko.observable();
         ko.applyBindings(this, this.$el[0]);
         ko.computed(this.onChangeProject.bind(this));
+
+        this.editor = this.setUpCodeMirror();
+    },
+
+    setUpCodeMirror: function() {
+        $textarea = this.$el.find('textarea');
+        if ($textarea.size() < 1) { return null; }
+
+        var top = $textarea.css('top');
+        var left = $textarea.css('left');
+        var width = $textarea.css('width');
+        var height = $textarea.css('height');
+        $textarea.hide();
+
+        var editor = CodeMirror.fromTextArea($textarea[0], {lineNumbers: true, mode: 'javascript', keyMap: 'vim'});
+        var editorElm = editor.getWrapperElement();
+        editorElm.style.top = top;
+        editorElm.style.left = left;
+        editorElm.style.width = width;
+        editorElm.style.height = height;
+
+        return editor;
     },
 
     show: function() {
@@ -38,10 +59,6 @@ Builder.Core = nClass({
         this.filenames(data);
     },
 
-    onChangeText: function(vm, ev) {
-        this.textChanged = true;
-    },
-
     readFile: function(data, ev){
         if (this.textChanged) {
             if (!confirm('Do you want to discard the changes?')) {
@@ -58,14 +75,23 @@ Builder.Core = nClass({
         this.filename = $target.text();
         var path = Builder.Util.format('/%s/%s/%s', [this.project, this.type, this.filename]);
         Builder.Util.read(path, function(data){
-            this.text(data.content);
+            this.setText(data.content);
         }.bind(this));
     },
 
     save: function() {
+        var text = this.getText();
         var path = Builder.Util.format('/%s/%s/%s', [this.project, this.type, this.filename]);
-        Builder.Util.write(path, this.text(), function(data){
+        Builder.Util.write(path, text, function(data){
             this.textChanged = false;
         }.bind(this));
+    },
+
+    getText: function() {
+        return this.editor.getValue();
+    },
+
+    setText: function(text) {
+        this.editor.setValue(text);
     }
 });

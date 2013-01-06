@@ -61,6 +61,11 @@ Builder.Layout = nClass.instance(Builder.Core, {
         this.$el.find(cssClass).show();
 
         this.updateLayer();
+
+        //非表示中のeditorにsetValueをしても何故かテキストが表示されない
+        //なので、表示が切り替わるタイミングで値を代入し直す
+        //TODO:本来はsourceに切り替わった時だけやればよい
+        this.editor.setValue(this.editor.getValue());
     },
 
     onChangeProject: function($super){
@@ -220,6 +225,8 @@ Builder.Layout = nClass.instance(Builder.Core, {
     },
 
     activeLayerByView: function(view) {
+        if (!view) { return; }
+
         var id = view.getId();
         var selector = Builder.Util.format('.n-layer li[data-view-id="%s"]', [id]);
         var $el = this.$el.find(selector);
