@@ -59,16 +59,13 @@ Builder.Core = nClass({
         this.filenames(data);
     },
 
-    readFile: function(data, ev){
-        if (this.textChanged) {
-            if (!confirm('Do you want to discard the changes?')) {
-                return;
-            }
-        }
+    onClickFile: function(vm, ev) {
+        var el = ev.srcElement;
+        this.readFile(el);
+    },
 
-        this.textChanged = false;
-
-        var $target = $(ev.srcElement);
+    readFile: function(target){
+        var $target = $(target);
         $target.siblings().removeClass('active');
         $target.addClass('active');
 

@@ -26,7 +26,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
     save: function($super) {
         var pageLayouts = Navy.Builder.getPageLayout(this.page);
-        this.text(JSON.stringify(pageLayouts, null, 4));
+        this.setText(JSON.stringify(pageLayouts, null, 4));
 
         $super();
     },
@@ -288,7 +288,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
         Navy.Builder.setLayout(view, layout, function(view){
             var pageLayouts = Navy.Builder.getPageLayout(this.page);
-            this.text(JSON.stringify(pageLayouts, null, 4));
+            this.setText(JSON.stringify(pageLayouts, null, 4));
         }.bind(this));
     },
 

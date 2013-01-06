@@ -2,6 +2,7 @@
 <html lang="ja">
 
 <head>
+<!-- {{{ script, css -->
 <meta charset="utf-8"/>
 <title>NavyBuilder</title>
 
@@ -22,6 +23,7 @@
 <script src="lib/nclass/nclass.js"></script>
 <script src="lib/navy/navy.js" data-builder="true"></script>
 <script src="builder.js"></script>
+<!-- }}} -->
 </head>
 
 <body>
@@ -54,19 +56,30 @@
 <div class="n-content n-config">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile">
+    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile">
       <li data-bind="text: $data"></li>
     </ul>
   </div>
 
-  <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
+  <div class="btn-group n-config-header">
+    <button class="btn">Source</button>
+  </div>
+
+  <div class="n-pane fitsize-x fitsize-y"> 
+    <div data-config-name="app.json" class="n-config-app" data-bind="template: {name: 'config-app-template'}"></div>
+    <div data-config-name="page.json" class="n-config-page" data-bind="template: {name: 'config-page-template'}"></div>
+
+    <div class="n-textarea-wrap">
+      <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
+    </div>
+  </div>
 </div>
 <!-- }}} -->
 <!-- {{{ layout -->
 <div class="n-content n-layout">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile">
+    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile">
       <li data-bind="text: $data"></li>
     </ul>
   </div>
@@ -110,7 +123,7 @@
 <div class="n-content n-code">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile.bind($root)">
+    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile.bind($root)">
       <li data-bind="text: $data"></li>
     </ul>
   </div>
@@ -129,7 +142,7 @@
 </div>
 <!-- }}} -->
 
-<!-- {{{template -->
+<!-- {{{prop-template-->
 <script type="text/html" id="prop-template">
 <table><tbody>
   <tr>
@@ -215,6 +228,35 @@
 </table>
 </script>
 <!-- }}} -->
+<script type="text/html" id="config-app-template">
+<table>
+<tbody data-bind="foreach: config['app.json']">
+  <tr>
+    <td><label data-bind="attr: {title: title}"><span data-bind="text: name"/></label></td>
+    <td><input type="text" data-bind="value: value"></td>
+  </tr>
+</tbody>
+</table>
+</script>
+
+<script type="text/html" id="config-page-template">
+<div data-bind="foreach: config['page.json']">
+  <table>
+  <tbody data-bind="foreach: $data">
+    <tr>
+      <td><label data-bind="attr: {title: title}"><span data-bind="text: name"/></label></td>
+      <!-- ko if: name === 'option' -->
+      <td><textarea data-bind="value: value"></textarea></td>
+      <!-- /ko -->
+
+      <!-- ko if: name !== 'option' -->
+      <td><input type="text" data-bind="value: value"></td>
+      <!-- /ko -->
+    </tr>
+  </tbody>
+  </table>
+</div>
+</script>
 </body>
 
 </html>
