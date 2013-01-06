@@ -2,22 +2,9 @@ Navy.View.Text = Navy.View.subclass({
     CLASS: 'Navy.View.Text',
 
     _context: null,
-    _text: null,
-    _textFont: null,
-    _textWeight: null,
-    _textStyle: null,
-    _textColor: null,
-    _textShadow: null,
-    _textSize: null,
-    _textLineSpace: null,
-    _textVerticalAlign: null,
-    _textHorizontalAlign: null,
     _textLines: null,
     _textMeasureWidth: null,
     _textBoxSize: null,
-    _textPosition: null,
-    _textCutEnd: null,
-    _textMultiLine: null,
 
     /**
      * テキストをセットする.
@@ -375,7 +362,7 @@ Navy.View.Text = Navy.View.subclass({
         }
 
         //複数行禁止の場合、複数行あったらカットする必要がある
-        if (!this._textMultiLine && lines.length > 1) {
+        if (!this._extra.multiline && lines.length > 1) {
             var firstLine = lines[0].line;
             var len = firstLine.length;
             var cutEnd = extra.cutend;

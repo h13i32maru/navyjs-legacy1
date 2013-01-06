@@ -2,19 +2,28 @@
 <html lang="ja">
 
 <head>
+<!-- {{{ script, css -->
 <meta charset="utf-8"/>
 <title>NavyBuilder</title>
 
 <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
 
+<script src="lib/codemirror/lib/codemirror.js"></script>
+<link rel="stylesheet" href="lib/codemirror/lib/codemirror.css">
+<script src="lib/codemirror/mode/javascript/javascript.js"></script>
+<script src="lib/codemirror/keymap/vim.js"></script>
+<script src="lib/codemirror/keymap/emacs.js"></script>
+
 <script src="lib/jquery/jquery-1.8.1.min.js"></script>
 <script src="lib/jquery-plugin/fitsize.js"></script>
+<script src="lib/jquery-plugin/listfilter.js"></script>
 <script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
 <script src="lib/knockout/knockout-2.2.0.js"></script>
 <script src="lib/nclass/nclass.js"></script>
 <script src="lib/navy/navy.js" data-builder="true"></script>
-<script src="js/builder.js"></script>
+<script src="builder.js"></script>
+<!-- }}} -->
 </head>
 
 <body>
@@ -23,7 +32,7 @@
   <select data-bind="options: projects, value: selectedProject"></select>
 
   <div class="btn-group">
-    <button class="btn icon" title="Play"><i class="icon-play"></i></button>
+    <button class="btn icon" title="Play" data-bind="click: play"><i class="icon-play"></i></button>
     <button class="btn icon" title="New"><i class="icon-plus"></i></button>
     <button class="btn icon" title="Delete"><i class="icon-trash"></i></button>
   </div>
@@ -46,20 +55,31 @@
 <!-- {{{ config -->
 <div class="n-content n-config">
   <div class="n-filelist fitsize-y">
-    <input type="text" placeholder="Search" class="n-search"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile">
+    <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
+    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile">
       <li data-bind="text: $data"></li>
     </ul>
   </div>
 
-  <textarea class="n-textarea fitsize-y fitsize-x" data-bind="value: text, event: {change: onChangeText}"></textarea>
+  <div class="btn-group n-config-header">
+    <button class="btn">Source</button>
+  </div>
+
+  <div class="n-pane fitsize-x fitsize-y"> 
+    <div data-config-name="app.json" class="n-config-app" data-bind="template: {name: 'config-app-template'}"></div>
+    <div data-config-name="page.json" class="n-config-page" data-bind="template: {name: 'config-page-template'}"></div>
+
+    <div class="n-textarea-wrap">
+      <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
+    </div>
+  </div>
 </div>
 <!-- }}} -->
 <!-- {{{ layout -->
 <div class="n-content n-layout">
   <div class="n-filelist fitsize-y">
-    <input type="text" placeholder="Search" class="n-search"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile">
+    <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
+    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile">
       <li data-bind="text: $data"></li>
     </ul>
   </div>
@@ -68,7 +88,7 @@
 
   <div class="n-layout-header">
     <div class="btn-group" data-bind="click: toggle">
-      <button class="btn active" data-toggle=".n-prop">Prop</button>
+      <button class="btn active" data-toggle=".n-prop">Property</button>
       <button class="btn" data-toggle=".n-layer">Layer</button>
       <button class="btn" data-toggle=".n-source">Source</button>
     </div>
@@ -94,7 +114,7 @@
         <li data-bind="attr: {'data-view-id': id}"><span data-bind="text: id"></span><span data-bind="text: text"></span></li>
       </ul>
     </div>
-    <textarea class="n-source n-textarea" data-bind="value: text"></textarea>
+    <div class="n-source"><textarea class="n-textarea"></textarea></div>
   </div>
 
 </div>
@@ -102,143 +122,27 @@
 <!-- {{{ code -->
 <div class="n-content n-code">
   <div class="n-filelist fitsize-y">
-    <input type="text" placeholder="Search" class="n-search"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.readFile.bind($root)">
+    <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
+    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile.bind($root)">
       <li data-bind="text: $data"></li>
     </ul>
   </div>
 
-  <textarea class="n-textarea fitsize-y fitsize-x" data-bind="value: text, event: {change: onChangeText}"></textarea>
+  <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
 </div>
 <!-- }}} -->
 <!-- {{{ image -->
 <div class="n-content n-image">
   <div class="n-filelist fitsize-y fitsize-x">
-    <input type="text" placeholder="Search" class="n-search"/>
+    <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
     <ul class="nav nav-list" data-bind="foreach: filenames">
-      <li><img data-bind="attr: {src: $data}"/></li>
+      <li data-bind="attr: {'data-listfilter-text': $data}"><img data-bind="attr: {src: $data}"/><span data-bind="text: $data.replace(/.*[/]/, '')"></span></li>
     </ul>
   </div>
 </div>
 <!-- }}} -->
 
-<!-- {{{ tab-content -->
-<div id="bs-content-tabs" class="tabbable tabs-left fill-y">
-<!--
-<ul id="bs-content-tabs-buttons" class="nav nav-tabs bs-fit-size-content-menu">
-  <li><a id="bs-content-tab-conf" href="#bs-conf-file-edit">Config</a></li>
-  <li><a id="bs-content-tab-layout" href="#bs-layout-file-edit">Layout</a></li>
-  <li><a id="bs-content-tab-code" href="#bs-code-file-edit">Code</a></li>
-  <li><a id="bs-content-tab-image" href="#bs-image-file-list">Image</a></li>
-</ul>
--->
-<div class="tab-content fill-x fill-y">
-  <!--{{{ conf-->
-  <div id="bs-conf-file-edit" class="tab-pane bs-flex fill-x fill-y">
-    <div id="bs-conf-file-list" class="well span3 bs-file-list">
-      <div class="search-box"><input type="text" placeholder="Search" class="fill-x search-query"/></div>
-      <ul class="nav nav-list">
-      </ul>
-    </div>
-    <div class="bs-edit-area fill-x">
-      <div class="navbar">
-        <div class="navbar-inner">
-          <ul class="nav">
-            <li><button class="btn icon" title="Save"><i class="icon-folder-close"></i></button></li>
-          </ul>
-        </div>
-      </div>
-      <textarea class="fill-y fill-x"></textarea>
-    </div>
-  </div>
-  <!-- }}} -->
-<!-- {{{ layout -->
-  <div id="bs-layout-file-edit" class="tab-pane bs-flex fill-x fill-y">
-
-    <div id="bs-layout-file-list" class="well span3 bs-file-list">
-      <div class="search-box"><input type="text" placeholder="Search" class="fill-x search-query"/></div>
-      <ul class="nav nav-list">
-      </ul>
-    </div>
-
-    <div id="bs-layout-canvas"></div>
-
-    <div id="bs-layout-edit" class="bs-edit-area fill-x">
-      <div class="navbar">
-        <div class="navbar-inner">
-          <ul class="nav">
-            <li><button class="btn icon" title="Save"><i class="icon-folder-close"></i></button></li>
-            <li><button class="btn icon" title="New"><i class="icon-plus"></i></button></li>
-            <li><button class="btn icon" title="Move"><i class="icon-edit"></i></button></li>
-            <li><button class="btn icon" title="Delete"><i class="icon-trash"></i></button></li>
-          </ul>
-        </div>
-      </div>
-      <div id="bs-layout-tabs" class="tabbable fill-x fill-y">
-        <ul class="nav nav-tabs">
-          <li><a href="#bs-layout-edit-prop">Porp</a></li>
-          <li><a href="#bs-layout-edit-layer">Layer</a></li>
-          <li><a href="#bs-layout-edit-source">Source</a></li>
-          <li><a href="#bs-layout-pick-lib">Lib</a></li>
-        </ul>
-        <div class="tab-content fill-y">
-          <div id="bs-layout-edit-prop" class="tab-pane visible" data-template-src="template/layout_property_table.html"></div>
-          <div id="bs-layout-edit-layer" class="tab-pane"><ul> <li>aaa</li><li>bbb</li><li>ccc</li></ul></div>
-          <div id="bs-layout-edit-source" class="tab-pane"><textarea></textarea></div>
-          <div id="bs-layout-pick-lib" class="tab-pane">
-            <ul>
-              <li data-view-class="View">View</li>
-              <li data-view-class="Image">Image</li>
-              <li data-view-class="Text">Text</li>
-              <li data-view-class="Button">Button</li>
-              <li data-view-class="ViewGroup">ViewGroup</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- }}} -->
-  <!-- {{{ code -->
-  <div id="bs-code-file-edit" class="tab-pane bs-flex fill-x fill-y">
-    <div id="bs-code-file-list" class="well span3 bs-file-list">
-      <div class="search-box"><input type="text" placeholder="Search" class="fill-x search-query"/></div>
-      <ul class="nav nav-list">
-      </ul>
-    </div>
-    <div class="bs-edit-area fill-x">
-      <div class="navbar">
-        <div class="navbar-inner">
-          <ul class="nav">
-            <li><button class="btn">Save</button></li>
-            <li><button class="btn">New</button></li>
-            <li><button class="btn">Move</button></li>
-            <li><button class="btn">Delete</button></li>
-          </ul>
-        </div>
-      </div>
-      <textarea class="fill-y fill-x"></textarea>
-    </div>
-  </div>
-  <!-- }}} -->
-  <!-- {{{ image -->
-  <div id="bs-image-file-list" class="tab-pane fill-x fill-y">
-    <div class="navbar">
-      <div class="navbar-inner">
-        <ul class="nav">
-            <li><form class="navbar-search"><input type="text" placeholder="Search" class="search-query search-box-input"></form></li>
-            <li><button class="btn">Upload</button></li>
-        </ul>
-      </div>
-    </div>
-    <ul class="bs-image-list">
-    </ul>
-  </div>
-  <!-- }}} -->
-</div>
-</div>
-<!-- }}} -->
-<!-- {{{template -->
+<!-- {{{prop-template-->
 <script type="text/html" id="prop-template">
 <table><tbody>
   <tr>
@@ -324,6 +228,35 @@
 </table>
 </script>
 <!-- }}} -->
+<script type="text/html" id="config-app-template">
+<table>
+<tbody data-bind="foreach: config['app.json']">
+  <tr>
+    <td><label data-bind="attr: {title: title}"><span data-bind="text: name"/></label></td>
+    <td><input type="text" data-bind="value: value"></td>
+  </tr>
+</tbody>
+</table>
+</script>
+
+<script type="text/html" id="config-page-template">
+<div data-bind="foreach: config['page.json']">
+  <table>
+  <tbody data-bind="foreach: $data">
+    <tr>
+      <td><label data-bind="attr: {title: title}"><span data-bind="text: name"/></label></td>
+      <!-- ko if: name === 'option' -->
+      <td><textarea data-bind="value: value"></textarea></td>
+      <!-- /ko -->
+
+      <!-- ko if: name !== 'option' -->
+      <td><input type="text" data-bind="value: value"></td>
+      <!-- /ko -->
+    </tr>
+  </tbody>
+  </table>
+</div>
+</script>
 </body>
 
 </html>

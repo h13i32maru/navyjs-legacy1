@@ -26,7 +26,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
     save: function($super) {
         var pageLayouts = Navy.Builder.getPageLayout(this.page);
-        this.text(JSON.stringify(pageLayouts, null, 4));
+        this.setText(JSON.stringify(pageLayouts, null, 4));
 
         $super();
     },
@@ -61,6 +61,11 @@ Builder.Layout = nClass.instance(Builder.Core, {
         this.$el.find(cssClass).show();
 
         this.updateLayer();
+
+        //非表示中のeditorにsetValueをしても何故かテキストが表示されない
+        //なので、表示が切り替わるタイミングで値を代入し直す
+        //TODO:本来はsourceに切り替わった時だけやればよい
+        this.editor.setValue(this.editor.getValue());
     },
 
     onChangeProject: function($super){
@@ -154,7 +159,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
             name += prop.name;
             var valueText = prop.value();
-            if (valueText === undefined) { continue; }
+            if (valueText === undefined || valueText === '') { continue; }
             var value = JSON.parse(valueText);
             Builder.Util.recursiveWrite(layout, name, value);
         }
@@ -220,6 +225,8 @@ Builder.Layout = nClass.instance(Builder.Core, {
     },
 
     activeLayerByView: function(view) {
+        if (!view) { return; }
+
         var id = view.getId();
         var selector = Builder.Util.format('.n-layer li[data-view-id="%s"]', [id]);
         var $el = this.$el.find(selector);
@@ -281,7 +288,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
         Navy.Builder.setLayout(view, layout, function(view){
             var pageLayouts = Navy.Builder.getPageLayout(this.page);
-            this.text(JSON.stringify(pageLayouts, null, 4));
+            this.setText(JSON.stringify(pageLayouts, null, 4));
         }.bind(this));
     },
 
@@ -365,7 +372,8 @@ Builder.Layout = nClass.instance(Builder.Core, {
             {name: 'size', title: 'num', value: ko.observable()},
             {name: 'valign', title: '"top | middle | bottom"', value: ko.observable()},
             {name: 'halign', title: '"left | center | right"', value: ko.observable()},
-            {name: 'cutend', title: '"str"', value: ko.observable()}
+            {name: 'cutend', title: '"str"', value: ko.observable()},
+            {name: 'multiline', title: 'true|false', value: ko.observable()}
         ]);
 
         this.propExtra.Image = ko.observableArray([
