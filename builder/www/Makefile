@@ -1,12 +1,10 @@
-TARGET	= js/builder.js
 CC		= compiler.jar
 DEBUG	= --compilation_level WHITESPACE_ONLY --formatting pretty_print --formatting print_input_delimiter
 LEVEL	= --compilation_level SIMPLE_OPTIMIZATIONS
 #WARNING	= --warning_level VERBOSE
 WARNING	= --warning_level DEFAULT
-OUT		= --js_output_file js/builder.js
+OUT		= --js_output_file builder.js
 
-#base
 JS	= --js js/index.js \
 	  --js js/util.js \
 	  --js js/core.js \

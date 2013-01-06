@@ -1,28 +1,43 @@
-// e.g ('ul').listFilter('input.search');
-// e.g ('ul').listFilter($('input.search'));
+/**
+ * author: h13i32maru
+ * usage:
+ * <input type="text" data-listfilter-target="+">
+ * <ul>
+ *  <li></li>
+ *  <li></li>
+ *  <li></li>
+ * </ul>
+ */
 (function($){
-    $.fn.listFilter = function(input) {
-        this.find('li').each(function(index, elm){
-            $(elm).attr('data-list-filter', $(elm).text().toLowerCase());
-        });
+    $(function(){ 
+        $('[data-listfilter-target]').keyup(function(ev){
+            var $this = $(this);
+            var targetSelector = $this.attr('data-listfilter-target');
+            var $target = $this.find(targetSelector);
+            var query = $this.val().toLowerCase();
 
-        var $this = this;
-        if (typeof input === 'string') {
-            var $input = $(inputSelector);
-        } else {
-            var $input = input;
-        }
-        $input.keyup(function(e){
-            var text = $input.val();
-            if (text === '') {
-                $this.find('li').show();
+            if (query === '') {
+                $target.find('li').show();
                 return;
             }
 
-            $this.find('li').hide();
-            $this.find('li[data-list-filter*="' + text + '"]').each(function(index, elm){
-                $(elm).show();
-            });
+            var $li = $target.find('li');
+            var len = $li.size();
+            var text;
+            for (var i = 0; i < len; i++) {
+                if ($li.eq(i).attr('data-listfilter-text')) {
+                    text = $li.eq(i).attr('data-listfilter-text').toLowerCase();
+                } else {
+                    text = $li.eq(i).text().toLowerCase();
+                }
+
+                if (text.indexOf(query) === -1) {
+                    $li.eq(i).hide();
+                } else {
+                    $li.eq(i).show();
+                }
+            }
         });
-    };
+    });
 })(jQuery);
+
