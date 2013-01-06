@@ -154,7 +154,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
             name += prop.name;
             var valueText = prop.value();
-            if (valueText === undefined) { continue; }
+            if (valueText === undefined || valueText === '') { continue; }
             var value = JSON.parse(valueText);
             Builder.Util.recursiveWrite(layout, name, value);
         }
