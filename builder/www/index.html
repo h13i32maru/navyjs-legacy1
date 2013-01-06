@@ -68,7 +68,7 @@
 
   <div class="n-layout-header">
     <div class="btn-group" data-bind="click: toggle">
-      <button class="btn active" data-toggle=".n-prop">Prop</button>
+      <button class="btn active" data-toggle=".n-prop">Property</button>
       <button class="btn" data-toggle=".n-layer">Layer</button>
       <button class="btn" data-toggle=".n-source">Source</button>
     </div>
@@ -122,122 +122,6 @@
 </div>
 <!-- }}} -->
 
-<!-- {{{ tab-content -->
-<div id="bs-content-tabs" class="tabbable tabs-left fill-y">
-<!--
-<ul id="bs-content-tabs-buttons" class="nav nav-tabs bs-fit-size-content-menu">
-  <li><a id="bs-content-tab-conf" href="#bs-conf-file-edit">Config</a></li>
-  <li><a id="bs-content-tab-layout" href="#bs-layout-file-edit">Layout</a></li>
-  <li><a id="bs-content-tab-code" href="#bs-code-file-edit">Code</a></li>
-  <li><a id="bs-content-tab-image" href="#bs-image-file-list">Image</a></li>
-</ul>
--->
-<div class="tab-content fill-x fill-y">
-  <!--{{{ conf-->
-  <div id="bs-conf-file-edit" class="tab-pane bs-flex fill-x fill-y">
-    <div id="bs-conf-file-list" class="well span3 bs-file-list">
-      <div class="search-box"><input type="text" placeholder="Search" class="fill-x search-query"/></div>
-      <ul class="nav nav-list">
-      </ul>
-    </div>
-    <div class="bs-edit-area fill-x">
-      <div class="navbar">
-        <div class="navbar-inner">
-          <ul class="nav">
-            <li><button class="btn icon" title="Save"><i class="icon-folder-close"></i></button></li>
-          </ul>
-        </div>
-      </div>
-      <textarea class="fill-y fill-x"></textarea>
-    </div>
-  </div>
-  <!-- }}} -->
-<!-- {{{ layout -->
-  <div id="bs-layout-file-edit" class="tab-pane bs-flex fill-x fill-y">
-
-    <div id="bs-layout-file-list" class="well span3 bs-file-list">
-      <div class="search-box"><input type="text" placeholder="Search" class="fill-x search-query"/></div>
-      <ul class="nav nav-list">
-      </ul>
-    </div>
-
-    <div id="bs-layout-canvas"></div>
-
-    <div id="bs-layout-edit" class="bs-edit-area fill-x">
-      <div class="navbar">
-        <div class="navbar-inner">
-          <ul class="nav">
-            <li><button class="btn icon" title="Save"><i class="icon-folder-close"></i></button></li>
-            <li><button class="btn icon" title="New"><i class="icon-plus"></i></button></li>
-            <li><button class="btn icon" title="Move"><i class="icon-edit"></i></button></li>
-            <li><button class="btn icon" title="Delete"><i class="icon-trash"></i></button></li>
-          </ul>
-        </div>
-      </div>
-      <div id="bs-layout-tabs" class="tabbable fill-x fill-y">
-        <ul class="nav nav-tabs">
-          <li><a href="#bs-layout-edit-prop">Porp</a></li>
-          <li><a href="#bs-layout-edit-layer">Layer</a></li>
-          <li><a href="#bs-layout-edit-source">Source</a></li>
-          <li><a href="#bs-layout-pick-lib">Lib</a></li>
-        </ul>
-        <div class="tab-content fill-y">
-          <div id="bs-layout-edit-prop" class="tab-pane visible" data-template-src="template/layout_property_table.html"></div>
-          <div id="bs-layout-edit-layer" class="tab-pane"><ul> <li>aaa</li><li>bbb</li><li>ccc</li></ul></div>
-          <div id="bs-layout-edit-source" class="tab-pane"><textarea></textarea></div>
-          <div id="bs-layout-pick-lib" class="tab-pane">
-            <ul>
-              <li data-view-class="View">View</li>
-              <li data-view-class="Image">Image</li>
-              <li data-view-class="Text">Text</li>
-              <li data-view-class="Button">Button</li>
-              <li data-view-class="ViewGroup">ViewGroup</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- }}} -->
-  <!-- {{{ code -->
-  <div id="bs-code-file-edit" class="tab-pane bs-flex fill-x fill-y">
-    <div id="bs-code-file-list" class="well span3 bs-file-list">
-      <div class="search-box"><input type="text" placeholder="Search" class="fill-x search-query"/></div>
-      <ul class="nav nav-list">
-      </ul>
-    </div>
-    <div class="bs-edit-area fill-x">
-      <div class="navbar">
-        <div class="navbar-inner">
-          <ul class="nav">
-            <li><button class="btn">Save</button></li>
-            <li><button class="btn">New</button></li>
-            <li><button class="btn">Move</button></li>
-            <li><button class="btn">Delete</button></li>
-          </ul>
-        </div>
-      </div>
-      <textarea class="fill-y fill-x"></textarea>
-    </div>
-  </div>
-  <!-- }}} -->
-  <!-- {{{ image -->
-  <div id="bs-image-file-list" class="tab-pane fill-x fill-y">
-    <div class="navbar">
-      <div class="navbar-inner">
-        <ul class="nav">
-            <li><form class="navbar-search"><input type="text" placeholder="Search" class="search-query search-box-input"></form></li>
-            <li><button class="btn">Upload</button></li>
-        </ul>
-      </div>
-    </div>
-    <ul class="bs-image-list">
-    </ul>
-  </div>
-  <!-- }}} -->
-</div>
-</div>
-<!-- }}} -->
 <!-- {{{template -->
 <script type="text/html" id="prop-template">
 <table><tbody>
