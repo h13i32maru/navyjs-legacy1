@@ -43,6 +43,8 @@ select {
       -moz-box-sizing: border-box;
       height: 28px;
       margin: 0; }
+    .n-content .n-filelist li {
+      -webkit-user-select: none; }
   .n-content .nav.nav-list {
     padding: 0; }
     .n-content .nav.nav-list li {
@@ -54,6 +56,10 @@ select {
       .n-content .nav.nav-list li.active {
         background-color: #0088cc;
         color: white; }
+      .n-content .nav.nav-list li.changed {
+        font-weight: bold; }
+        .n-content .nav.nav-list li.changed:before {
+          content: '* '; }
   .n-content .n-textarea {
     position: absolute;
     top: 50px;
@@ -91,6 +97,8 @@ select {
     overflow-y: scroll; }
     .n-config .n-pane .n-config-app, .n-config .n-pane .n-config-page, .n-config .n-pane .n-textarea-wrap {
       display: none; }
+    .n-config .n-pane .n-visible {
+      display: block !important; }
     .n-config .n-pane table {
       width: 100%;
       margin-bottom: 10px; }

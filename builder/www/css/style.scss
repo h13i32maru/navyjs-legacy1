@@ -108,6 +108,10 @@ select {
             margin:0;
         }
 
+        li {
+            -webkit-user-select: none;
+        }
+
     }
 
     .nav.nav-list {
@@ -122,6 +126,13 @@ select {
             &.active {
                 background-color: $active-color;
                 color: white;
+            }
+            &.changed {
+                font-weight: bold;
+
+                &:before {
+                    content: '* ';
+                }
             }
         }
     }
@@ -161,6 +172,10 @@ select {
 
         .n-config-app, .n-config-page, .n-textarea-wrap {
             display:none;
+        }
+
+        .n-visible {
+            display: block !important;
         }
 
         table {

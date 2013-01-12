@@ -6,22 +6,28 @@
 <meta charset="utf-8"/>
 <title>NavyBuilder</title>
 
+<!-- twitter bootstrap -->
 <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="css/style.css" rel="stylesheet">
 
-<script src="lib/codemirror/lib/codemirror.js"></script>
+<!-- codemirror -->
 <link rel="stylesheet" href="lib/codemirror/lib/codemirror.css">
+<script src="lib/codemirror/lib/codemirror.js"></script>
 <script src="lib/codemirror/mode/javascript/javascript.js"></script>
 <script src="lib/codemirror/keymap/vim.js"></script>
 <script src="lib/codemirror/keymap/emacs.js"></script>
 
+<!-- jquery -->
 <script src="lib/jquery/jquery-1.8.1.min.js"></script>
 <script src="lib/jquery-plugin/fitsize.js"></script>
 <script src="lib/jquery-plugin/listfilter.js"></script>
 <script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
+<link rel="stylesheet" href="lib/jquery-context-menu/jquery.contextMenu.css">
+<script src="lib/jquery-context-menu/jquery.contextMenu.js"></script>
+
 <script src="lib/knockout/knockout-2.2.0.js"></script>
 <script src="lib/nclass/nclass.js"></script>
 <script src="lib/navy/navy.js" data-builder="true"></script>
+<link href="css/style.css" rel="stylesheet">
 <script src="builder.js"></script>
 <!-- }}} -->
 </head>
@@ -56,8 +62,8 @@
 <div class="n-content n-config">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile">
-      <li data-bind="text: $data"></li>
+    <ul class="nav nav-list" data-bind="foreach: koFiles">
+      <li data-bind="text: $data.getFilename(), css: {active: $data.selected, changed: $data.changed}, click: $root.readFile.bind($root)"></li>
     </ul>
   </div>
 
@@ -66,13 +72,17 @@
   </div>
 
   <div class="n-pane fitsize-x fitsize-y"> 
-    <div data-config-name="app.json" class="n-config-app" data-bind="template: {name: 'config-app-template'}"></div>
-    <div data-config-name="page.json" class="n-config-page" data-bind="template: {name: 'config-page-template'}"></div>
+    <div data-config-name="app.json" class="n-config-app" data-bind="template: {name: 'config-app-template'}, css: {'n-visible': koFile() && koFile().getFilename() === 'app.json'}"></div>
+    <div data-config-name="page.json" class="n-config-page" data-bind="template: {name: 'config-page-template'}, css: {'n-visible': koFile() && koFile().getFilename() === 'page.json'}"></div>
 
     <div class="n-textarea-wrap">
       <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
     </div>
   </div>
+
+  <menu class="n-config-context-menu">
+    <command label="Save"></command>
+  </menu>
 </div>
 <!-- }}} -->
 <!-- {{{ layout -->
@@ -228,9 +238,10 @@
 </table>
 </script>
 <!-- }}} -->
+<!-- {{{ config-app-template -->
 <script type="text/html" id="config-app-template">
 <table>
-<tbody data-bind="foreach: config['app.json']">
+<tbody data-bind="foreach: config['app.json'], event: {focusout: onFocusOut}">
   <tr>
     <td><label data-bind="attr: {title: title}"><span data-bind="text: name"/></label></td>
     <td><input type="text" data-bind="value: value"></td>
@@ -238,9 +249,10 @@
 </tbody>
 </table>
 </script>
-
+<!-- }}} -->
+<!-- {{{ config-page-template -->
 <script type="text/html" id="config-page-template">
-<div data-bind="foreach: config['page.json']">
+<div data-bind="foreach: config['page.json'], event: {focusout: onFocusOut}">
   <table>
   <tbody data-bind="foreach: $data">
     <tr>
@@ -257,6 +269,7 @@
   </table>
 </div>
 </script>
+<!-- }}} -->
 </body>
 
 </html>
