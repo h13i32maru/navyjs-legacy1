@@ -5,7 +5,6 @@ $(function(){
     Navy.App.wakeup();
 
     Builder.Header.initialize();
-    Builder.Layout.initialize();
 
     //Config
     Builder.Config.initialize();
@@ -35,4 +34,43 @@ $(function(){
     //Image
     Builder.Image.initialize();
     ko.applyBindings(Builder.Image, $('.n-image')[0]);
+
+    //Layout
+    //canvas
+    var $target = $('.n-layout .n-canvas').first();
+    var appWidth = 640;
+    var appHeight = 960;
+    var cssMaxWidth = parseInt($target.css('max-width'), 10);
+    var cssWidth = parseInt($target.css('width'), 10);
+    var maxWidth = Math.min(cssMaxWidth, cssWidth);
+    var maxHeight = parseInt($target.css('height'), 10);
+    var scaleWidth = maxWidth / appWidth;
+    var scaleHeight = maxHeight / appHeight;
+    var scale = Math.min(scaleWidth, scaleHeight);
+    var width = Math.floor(scale * appWidth);
+    var height = Math.floor(scale * appHeight);
+    $('.n-layout').find('.n-pane, .btn-group').css('margin-left', (width + 10) + 'px');
+    $.fitsize();
+    $target.css({width: width + 'px', height: height + 'px'});
+    Navy.Builder.setCanvasParentElement($target[0]);
+    //end
+
+    //layer
+    $('.n-layout .n-layer ul').sortable({
+        start: function(ev, ui) {
+            var $el = $(ui.helper[0]);
+            var id = $el.attr('data-view-id');
+            var layer = Builder.Layout.findLayer(id);
+            Builder.Layout.selectLayer(layer);
+        },
+        stop: function(ev, ui){
+            var ids = $.map($(this).find('li'), function(elm){ return $(elm).attr('data-view-id'); });
+            Builder.Layout.orderLayers(ids);
+        }
+    });
+    //end
+
+    Builder.Layout.initialize();
+    ko.applyBindings(Builder.Layout, $('.n-layout')[0]);
+
 });

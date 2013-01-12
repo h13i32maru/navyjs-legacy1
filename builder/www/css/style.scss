@@ -259,7 +259,12 @@ select {
             padding: 4px;
 
 
-            table { @include property-table; }
+            table {
+                @include property-table;
+                &[class^="n-prop-extra"]{ 
+                    display:none;
+                }
+            }
             
             ul {
                 list-style:none;

@@ -18,11 +18,12 @@
 
 <!-- jquery -->
 <script src="lib/jquery/jquery-1.8.1.min.js"></script>
-<script src="lib/jquery-plugin/fitsize.js"></script>
-<script src="lib/jquery-plugin/listfilter.js"></script>
 <script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
 <link rel="stylesheet" href="lib/jquery-context-menu/jquery.contextMenu.css">
 <script src="lib/jquery-context-menu/jquery.contextMenu.js"></script>
+<script src="lib/jquery-plugin/fitsize.js"></script>
+<script src="lib/jquery-plugin/listfilter.js"></script>
+<script src="lib/jquery-plugin/toggle.js"></script>
 
 <script src="lib/knockout/knockout-2.2.0.js"></script>
 <script src="lib/nclass/nclass.js"></script>
@@ -88,31 +89,25 @@
 </div>
 <!-- }}} -->
 <!-- {{{ layout -->
-<div class="n-content n-layout">
+<div class="n-content n-layout" data-bind="css: {'n-visible': koVisible}">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile">
-      <li data-bind="text: $data"></li>
+    <ul class="nav nav-list" data-bind="foreach: koFiles">
+      <li data-bind="text: $data.getFilename(), click: $root.onClickFile.bind($root)"></li>
     </ul>
   </div>
 
   <div class="n-canvas fitsize-x fitsize-y"></div>
 
   <div class="n-layout-header">
-    <div class="btn-group" data-bind="click: toggle">
-      <button class="btn active" data-toggle=".n-prop">Property</button>
-      <button class="btn" data-toggle=".n-layer">Layer</button>
-      <button class="btn" data-toggle=".n-source">Source</button>
+    <div class="btn-group toggle">
+      <button class="btn active" data-toggle=".n-layout .n-prop">Property</button>
+      <button class="btn" data-toggle=".n-layout .n-layer">Layer</button>
+      <button class="btn" data-toggle=".n-layout .n-source">Source</button>
     </div>
 
     <div class="n-add-view">
-      <select>
-        <option value="View">View</option>
-        <option value="Image">Image</option>
-        <option value="Text">Text</option>
-        <option value="Button">Button</option>
-        <option value="ViewGroup">ViewGroup</option>
-      </select>
+      <select data-bind="value: selectedNewViewClassName, options: ['View', 'Image', 'Text', 'Button', 'ViewGroup']"></select>
       <button class="btn" data-bind="click: addNewView">Add</button>
     </div>
 
@@ -122,8 +117,8 @@
   <div class="n-pane fitsize-x fitsize-y"> 
     <div class="n-prop" data-bind="template: {name: 'prop-template'}"></div>
     <div class="n-layer">
-      <ul class="nav nav-list" data-bind="foreach: layers, click: selectedLayer">
-        <li data-bind="attr: {'data-view-id': id}"><span data-bind="text: id"></span><span data-bind="text: text"></span></li>
+      <ul class="nav nav-list" data-bind="foreach: layers">
+        <li data-bind="attr: {'data-view-id': id}, css: {active: selected}, click: $root.selectLayer.bind($root)"><span data-bind="text: id"></span><span data-bind="text: text"></span></li>
       </ul>
     </div>
     <div class="n-source"><textarea class="n-textarea"></textarea></div>
@@ -164,7 +159,7 @@
 </tbody></table>
 
 <table>
-<caption data-bind="click: togglePropInput">Basic</caption>
+<caption>Basic</caption>
 <tbody data-bind="foreach: propBasic, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -174,7 +169,7 @@
 </table>
 
 <table>
-<caption data-bind="click: togglePropInput">Background</caption>
+<caption>Background</caption>
 <tbody data-bind="foreach: propBackground, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -184,7 +179,7 @@
 </table>
 
 <table>
-<caption data-bind="click: togglePropInput">Border</caption>
+<caption>Border</caption>
 <tbody data-bind="foreach: propBorder, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -193,8 +188,8 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-ViewGroup">
-<caption data-bind="click: togglePropInput">Extra(ViewGroup)</caption>
+<table class="n-prop-extra-ViewGroup" data-bind="css: {'n-visible': koView() && koView().getLayout()['class'] === 'ViewGroup'}">
+<caption>Extra(ViewGroup)</caption>
 <tbody data-bind="foreach: propExtra.ViewGroup, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -203,8 +198,8 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-Text">
-<caption data-bind="click: togglePropInput">Extra(Text)</caption>
+<table class="n-prop-extra-Text" data-bind="css: {'n-visible': koView() && koView().getLayout()['class'] === 'Text'}">
+<caption>Extra(Text)</caption>
 <tbody data-bind="foreach: propExtra.Text, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -213,8 +208,8 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-Image">
-<caption data-bind="click: togglePropInput">Extra(Image)</caption>
+<table class="n-prop-extra-Image" data-bind="css: {'n-visible': koView() && koView().getLayout()['class'] === 'Image'}">
+<caption>Extra(Image)</caption>
 <tbody data-bind="foreach: propExtra.Image, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -223,8 +218,8 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-Button">
-<caption data-bind="click: togglePropInput">Extra(Button)</caption>
+<table class="n-prop-extra-Button" data-bind="css: {'n-visible': koView() && koView().getLayout()['class'] === 'Button'}">
+<caption>Extra(Button)</caption>
 <tbody data-bind="foreach: propExtra.Button, event: {keyup: onKeyUp}">
   <tr>
     <!-- ko if: $data.separator -->

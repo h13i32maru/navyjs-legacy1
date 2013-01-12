@@ -23,6 +23,9 @@ Navy.Builder = Navy.Core.instance({
         parentElement.innerHTML = '';
         this._canvasParent = parentElement;
     },
+    clearCanvas: function() {
+        this._canvasParent.innerHTML = '';
+    },
     getCanvasparentElement: function() {
         return this._canvasParent;
     },
@@ -56,7 +59,12 @@ Navy.Builder = Navy.Core.instance({
         this._moveViewListener = listener;
     },
     selectView: function(view){
+
         if (this._view){
+            //同じviewを選択した場合は何もしない
+            if (this._view.getId() === view.getId()) {
+                return;
+            }
             //リスナを削除しておく必要あり。
             var page = this._view.getPage();
             page.removeTouchListener(this._listenerId);

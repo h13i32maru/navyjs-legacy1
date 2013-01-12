@@ -224,6 +224,8 @@ select {
             padding: 4px 2px; }
         .n-layout .n-pane .n-prop table tbody tr td.n-prop-separator {
           background-color: #dddddd; }
+      .n-layout .n-pane .n-prop table[class^="n-prop-extra"] {
+        display: none; }
     .n-layout .n-pane .n-prop ul {
       list-style: none;
       padding: 4px; }
