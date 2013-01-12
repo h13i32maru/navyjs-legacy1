@@ -1,71 +1,21 @@
 Builder.Layout = nClass.instance(Builder.Core, {
     CLASS: 'Layout',
-    target: '.n-layout',
     type: 'layout',
     page: null,
-    view: null,
-    layers: null,
-    
+    selectedNewViewClassName: null,
+
+    koLayers: null,
+    koView: null,
+
     initialize: function($super){
-        this.initObservable();
         $super();
-
-        this.calcCanvasSize();
-
-        var _this = this;
-        this.$el.find('.n-layer ul').sortable({
-            start: function(ev, ui) {
-                var $el = $(ui.helper[0]);
-                _this.activeLayer($el);
-            },
-            stop: function(ev, ui){
-                _this.changeAllViewsZ();
-            }
-        });
     },
 
-    save: function($super) {
+    save: function() {
         var pageLayouts = Navy.Builder.getPageLayout(this.page);
         this.setText(JSON.stringify(pageLayouts, null, 4));
 
         $super();
-    },
-
-    calcCanvasSize: function() {
-        var $target = this.$el.find('.n-canvas').first();
-        var appWidth = 640;
-        var appHeight = 960;
-        var cssMaxWidth = parseInt($target.css('max-width'), 10);
-        var cssWidth = parseInt($target.css('width'), 10);
-        var maxWidth = Math.min(cssMaxWidth, cssWidth);
-        var maxHeight = parseInt($target.css('height'), 10);
-        var scaleWidth = maxWidth / appWidth;
-        var scaleHeight = maxHeight / appHeight;
-        var scale = Math.min(scaleWidth, scaleHeight);
-        var width = Math.floor(scale * appWidth);
-        var height = Math.floor(scale * appHeight);
-
-        this.$el.find('.n-pane, .btn-group').css('margin-left', (width + 10) + 'px');
-        $.fitsize();
-
-        $target.css({width: width + 'px', height: height + 'px'});
-    },
-
-    toggle: function(vm, ev) {
-        var $button = $(ev.srcElement);
-        $button.siblings().removeClass('active');
-        $button.addClass('active');
-
-        var cssClass = $(ev.srcElement).attr('data-toggle');
-        this.$el.find(cssClass).siblings().hide();
-        this.$el.find(cssClass).show();
-
-        this.updateLayer();
-
-        //非表示中のeditorにsetValueをしても何故かテキストが表示されない
-        //なので、表示が切り替わるタイミングで値を代入し直す
-        //TODO:本来はsourceに切り替わった時だけやればよい
-        this.editor.setValue(this.editor.getValue());
     },
 
     onChangeProject: function($super){
@@ -73,22 +23,24 @@ Builder.Layout = nClass.instance(Builder.Core, {
         if (!this.project) {
             return;
         }
-        Navy.Builder.setCanvasParentElement(this.$el.find('.n-canvas')[0]);
+        Navy.Builder.clearCanvas();
         Navy.Builder.setUrlPrefix('data/' + this.project + '/');
         Navy.Builder.setSelectedViewListener(this.onSelectedNavyView.bind(this));
         Navy.Builder.setMoveViewListener(this.onMoveNavyView.bind(this));
         Navy.Builder.init();
     },
 
-    readFile: function($super, data, ev){
+    onClickFile: function($super, data, ev){
         $super(data, ev);
 
-        this.view = null;
+        this.koView(null);
         this.clearAllPropInput();
         Navy.Builder.selectView(null);
 
-        var url = 'layout/' + this.filename;
-        this.page = Navy.Screen.showLayout(url);
+        var url = 'layout/' + this.koFile().getFilename();
+        this.page = Navy.Screen.showLayout(url, function(page){
+            this.updateLayer();
+        }.bind(this));
     },
 
     findProp: function(props, name) {
@@ -166,7 +118,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
     },
 
     onSelectedNavyView: function(view){
-        this.view = view;
+        this.koView(view);
         var layout = view.getLayout();
 
         this.propClass(JSON.stringify(layout['class']));
@@ -183,10 +135,9 @@ Builder.Layout = nClass.instance(Builder.Core, {
             propId.value(JSON.stringify(view.getId()));
         }
 
-        this.$el.find('[class^="n-prop-extra"]').hide();
-        this.$el.find('.n-prop-extra-' + layout['class']).show();
+        this.koView(view);
 
-        this.activeLayerByView(view);
+        this.selectLayer(this.findLayer(view.getId()));
     },
 
     onMoveNavyView: function(view) {
@@ -202,41 +153,33 @@ Builder.Layout = nClass.instance(Builder.Core, {
     },
 
     addNewView: function(vm, ev) {
-        var viewClassName = this.$el.find('.n-add-view select').val();
-        Navy.Builder.createViewToPage(this.page, viewClassName, 0, 0);
+        Navy.Builder.createViewToPage(this.page, this.selectedNewViewClassName, 0, 0);
     },
 
     removeView: function(vm, ev) {
-        var view = this.view;
+        var view = this.koView();
         Navy.Builder.selectView(null);
         view.removeFromParent();
     },
 
-    activeLayer: function($el) {
-        var id = $el.attr('data-view-id');
-        if (!id) {
-            return;
+    findLayer: function(id) {
+        var layers = this.koLayers();
+        for (var i = 0; i < layers.length; i++) {
+            if (layers[i].id === id) {
+                return layers[i];
+            }
         }
-        var view = this.page.findView(id);
+    },
 
+    selectLayer: function(layer) {
+        var layers = this.koLayers();
+        for (var i = 0; i < layers.length; i++) {
+            layers[i].selected(false);
+        }
+        layer.selected(true);
+
+        var view = this.page.findView(layer.id);
         Navy.Builder.selectView(view);
-
-        this.activeLayerByView(view);
-    },
-
-    activeLayerByView: function(view) {
-        if (!view) { return; }
-
-        var id = view.getId();
-        var selector = Builder.Util.format('.n-layer li[data-view-id="%s"]', [id]);
-        var $el = this.$el.find(selector);
-        $el.siblings().removeClass('active');
-        $el.addClass('active');
-    },
-
-    selectedLayer: function(vm, ev) {
-        var $el = $(ev.srcElement).parent('li').first();
-        this.activeLayer($el);
     },
 
     updateLayer: function() {
@@ -258,16 +201,12 @@ Builder.Layout = nClass.instance(Builder.Core, {
             pos = JSON.stringify(view.getPosition());
             text = Builder.Util.format('%s, size:%s, pos:%s', [_class, size, pos]);
 
-            layers.push({id: id, text: text});
+            layers.push({id: id, text: text, selected: ko.observable(false)});
         }
-        this.layers(layers);
-
-        this.activeLayerByView(this.view);
+        this.koLayers(layers);
     },
 
-    changeAllViewsZ: function() {
-        var $li = this.$el.find('.n-layer li');
-        var ids = $.map($li, function(el, index){ return $(el).attr('data-view-id'); });
+    orderLayers: function(ids) {
         var z = ids.length;
         var page = this.page;
         for (var i = 0; i < ids.length; i++) {
@@ -277,11 +216,11 @@ Builder.Layout = nClass.instance(Builder.Core, {
     },
 
     setNewLayoutToView: function() {
-        if (!this.view) {
+        if (!this.koView()) {
             return;
         }
 
-        var view = this.view;
+        var view = this.koView();
         var currentLayout = view.getLayout();
         var newLayout = this.buildLayout();
         var layout = $.extend(true, {}, currentLayout, newLayout);
@@ -307,13 +246,11 @@ Builder.Layout = nClass.instance(Builder.Core, {
         return layout;
     },
 
-    togglePropInput: function(vm, ev) {
-        var $propInput = $(ev.srcElement).next();
-        $propInput.toggle();
-    },
+    initObservable: function($super){
+        $super();
 
-    initObservable: function(){
-        this.layers = ko.observableArray([]);
+        this.koView = ko.observable();
+        this.koLayers = ko.observableArray([]);
 
         this.propClass = ko.observable();
 

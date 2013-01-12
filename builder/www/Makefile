@@ -7,6 +7,7 @@ OUT		= --js_output_file builder.js
 
 JS	= --js js/index.js \
 	  --js js/util.js \
+	  --js js/file.js \
 	  --js js/core.js \
 	  --js js/header.js \
 	  --js js/config.js \

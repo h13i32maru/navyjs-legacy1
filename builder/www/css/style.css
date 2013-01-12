@@ -24,6 +24,9 @@ select {
   width: auto;
   height: auto; }
 
+.n-visible {
+  display: block !important; }
+
 .n-content {
   display: none; }
   .n-content .n-filelist {
@@ -43,6 +46,8 @@ select {
       -moz-box-sizing: border-box;
       height: 28px;
       margin: 0; }
+    .n-content .n-filelist li {
+      -webkit-user-select: none; }
   .n-content .nav.nav-list {
     padding: 0; }
     .n-content .nav.nav-list li {
@@ -54,6 +59,10 @@ select {
       .n-content .nav.nav-list li.active {
         background-color: #0088cc;
         color: white; }
+      .n-content .nav.nav-list li.changed {
+        font-weight: bold; }
+        .n-content .nav.nav-list li.changed:before {
+          content: '* '; }
   .n-content .n-textarea {
     position: absolute;
     top: 50px;
@@ -61,80 +70,82 @@ select {
     width: 200px;
     height: auto;
     margin-right: 10px;
-    border: none; }
-    .n-content .n-textarea + .CodeMirror {
+    border: none;
+    background: white; }
+    .n-content .n-textarea .CodeMirror {
+      position: absolute;
+      width: 100%;
+      height: 100%;
       font-size: 14px;
       background-color: white; }
-      .n-content .n-textarea + .CodeMirror pre {
+      .n-content .n-textarea .CodeMirror pre {
         line-height: 18px !important;
         height: 18px !important; }
-      .n-content .n-textarea + .CodeMirror .CodeMirror-gutter.CodeMirror-linenumbers {
+      .n-content .n-textarea .CodeMirror .CodeMirror-gutter.CodeMirror-linenumbers {
         min-width: 28px; }
 
-.n-config {
-  display: block; }
-  .n-config .n-config-header {
-    position: absolute;
-    top: 50px;
-    left: 220px;
-    width: auto;
-    height: auto; }
-  .n-config .n-pane {
-    position: absolute;
-    top: 80px;
-    left: 220px;
-    width: auto;
-    height: auto;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    background-color: white;
-    overflow-y: scroll; }
-    .n-config .n-pane .n-config-app, .n-config .n-pane .n-config-page, .n-config .n-pane .n-textarea-wrap {
-      display: none; }
-    .n-config .n-pane table {
-      width: 100%;
-      margin-bottom: 10px; }
-      .n-config .n-pane table caption {
-        cursor: pointer;
-        text-align: left;
-        background-color: #444444;
-        color: white;
-        padding: 4px;
-        font-size: 1.1em; }
-      .n-config .n-pane table tbody tr {
-        border-bottom: solid 1px #aaa; }
-        .n-config .n-pane table tbody tr td:nth-child(1) {
-          border-right: solid 1px #aaa;
-          background-color: #eee; }
-          .n-config .n-pane table tbody tr td:nth-child(1) label {
-            font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-            width: 160px;
-            margin: 0; }
-            .n-config .n-pane table tbody tr td:nth-child(1) label input {
-              margin: 0;
-              margin-right: 4px; }
-        .n-config .n-pane table tbody tr td:nth-child(2) {
-          width: 100%; }
-          .n-config .n-pane table tbody tr td:nth-child(2) input {
-            width: 100%;
+.n-config .n-config-header {
+  position: absolute;
+  top: 50px;
+  left: 220px;
+  width: auto;
+  height: auto; }
+.n-config .n-pane {
+  position: absolute;
+  top: 50px;
+  left: 220px;
+  width: auto;
+  height: auto;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+  overflow-y: scroll; }
+  .n-config .n-pane .n-config-app, .n-config .n-pane .n-config-page, .n-config .n-pane .n-textarea-wrap {
+    display: none; }
+  .n-config .n-pane table {
+    width: 100%;
+    margin-bottom: 10px; }
+    .n-config .n-pane table caption {
+      cursor: pointer;
+      text-align: left;
+      background-color: #444444;
+      color: white;
+      padding: 4px;
+      font-size: 1.1em; }
+    .n-config .n-pane table tbody tr {
+      border-bottom: solid 1px #aaa; }
+      .n-config .n-pane table tbody tr td:nth-child(1) {
+        border-right: solid 1px #aaa;
+        background-color: #eee; }
+        .n-config .n-pane table tbody tr td:nth-child(1) label {
+          font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+          width: 160px;
+          margin: 0; }
+          .n-config .n-pane table tbody tr td:nth-child(1) label input {
             margin: 0;
-            border: none;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            padding: 4px 2px; }
-        .n-config .n-pane table tbody tr td.n-prop-separator {
-          background-color: #dddddd; }
-      .n-config .n-pane table tr:first-child {
-        border-top: solid 1px #aaa; }
-      .n-config .n-pane table label {
-        padding-left: 4px; }
-    .n-config .n-pane .n-textarea-wrap {
+            margin-right: 4px; }
+      .n-config .n-pane table tbody tr td:nth-child(2) {
+        width: 100%; }
+        .n-config .n-pane table tbody tr td:nth-child(2) input {
+          width: 100%;
+          margin: 0;
+          border: none;
+          box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          padding: 4px 2px; }
+      .n-config .n-pane table tbody tr td.n-prop-separator {
+        background-color: #dddddd; }
+    .n-config .n-pane table tr:first-child {
+      border-top: solid 1px #aaa; }
+    .n-config .n-pane table label {
+      padding-left: 4px; }
+  .n-config .n-pane .n-textarea-wrap {
+    width: 100%;
+    height: 100%; }
+    .n-config .n-pane .n-textarea-wrap .n-textarea {
+      position: static;
       width: 100%;
       height: 100%; }
-      .n-config .n-pane .n-textarea-wrap .n-textarea {
-        position: static;
-        width: 100%;
-        height: 100%; }
 
 .n-image .n-filelist .nav.nav-list li {
   display: inline-block;
@@ -213,6 +224,8 @@ select {
             padding: 4px 2px; }
         .n-layout .n-pane .n-prop table tbody tr td.n-prop-separator {
           background-color: #dddddd; }
+      .n-layout .n-pane .n-prop table[class^="n-prop-extra"] {
+        display: none; }
     .n-layout .n-pane .n-prop ul {
       list-style: none;
       padding: 4px; }

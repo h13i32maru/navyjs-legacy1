@@ -1,60 +1,18 @@
 Builder.Config = nClass.instance(Builder.Core, {
     CLASS: 'Config',
-    target: '.n-config',
     type: 'config',
-    config: null,
-    currentConfigName: '',
 
-    initialize: function($super) {
-        this.initObservable();
-        $super();
-    },
-
-    onReadFilenames: function($super, data) {
+    onDoneReadFile: function($super, data) {
         $super(data);
 
-        this.readFile(this.$el.find('ul li')[0]);
-    },
-
-    readFile: function($super, targetElm) {
-        $super(targetElm);
-
-        var configName = $(targetElm).text();
-        var $configElm = this.$el.find('[data-config-name="'+configName+'"]');
-        $configElm.siblings().hide();
-        $configElm.show();
-        this.currentConfigName = configName;
-    },
-
-    setText: function($super, text) {
-        $super(text);
-
+        var file = this.koFile();
+        var filename = file.getFilename();
+        var text = file.getText();
         var data = JSON.parse(text);
-        switch (this.currentConfigName) {
-        case 'app.json':
-            this.setDataForAppConfig(data);
-            break;
-        case 'page.json':
-            this.setDataForPageConfig(data);
-            break;
-        }
+        this['dataToInput_' + filename](data);
     },
 
-    getText: function($super) {
-        var data;
-        switch (this.currentConfigName) {
-        case 'app.json':
-            data = this.getDataForAppConfig();
-            break;
-        case 'page.json':
-            data = this.getDataForPageConfig();
-            break;
-        }
-
-        return JSON.stringify(data);
-    },
-
-    setDataForAppConfig: function(data) {
+    'dataToInput_app.json': function(data) {
         var config = this.config['app.json']();
         for (var i = 0; i < config.length; i++) {
             var value = data[config[i].name];
@@ -62,22 +20,7 @@ Builder.Config = nClass.instance(Builder.Core, {
         }
     },
 
-    getDataForAppConfig: function() {
-        var config = this.config['app.json']();
-        var data = {};
-
-        var name;
-        var value;
-        for (var i = 0; i < config.length; i++) {
-            name = config[i].name;
-            value = JSON.parse(config[i].value());
-            data[name] = value;
-        }
-
-        return data;
-    },
-
-    setDataForPageConfig: function(data) {
+    'dataToInput_page.json': function(data) {
         var config = [];
         for (var key in data) {
             var pageName = JSON.stringify(key);
@@ -100,7 +43,30 @@ Builder.Config = nClass.instance(Builder.Core, {
         this.config['page.json'](config);
     },
 
-    getDataForPageConfig: function() {
+    onFocusOut: function() {
+        var file = this.koFile();
+        var filename = file.getFilename();
+        var data = this['inputToData_' + filename]();
+        var text = JSON.stringify(data);
+        file.setText(text);
+    },
+
+    'inputToData_app.json': function() {
+        var config = this.config['app.json']();
+        var data = {};
+
+        var name;
+        var value;
+        for (var i = 0; i < config.length; i++) {
+            name = config[i].name;
+            value = JSON.parse(config[i].value());
+            data[name] = value;
+        }
+
+        return data;
+    },
+
+    'inputToData_page.json': function() {
         var config = this.config['page.json']();
         var data = {};
 
@@ -126,7 +92,9 @@ Builder.Config = nClass.instance(Builder.Core, {
         return data;
     },
 
-    initObservable: function() {
+    initObservable: function($super) {
+        $super();
+
         this.config = {};
 
         this.config['app.json'] = ko.observableArray([
