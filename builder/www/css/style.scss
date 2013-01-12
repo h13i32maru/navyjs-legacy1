@@ -90,6 +90,11 @@ select {
     @include box(10px, 10px, auto, auto);
 }
 
+.n-visible {
+    display: block !important;
+}
+
+
 .n-content {
     display:none;
     .n-filelist {
@@ -141,8 +146,12 @@ select {
         @include box(220px, 50px, 200px, auto);
         margin-right: 10px;
         border:none;
+        background:white;
 
-        & + .CodeMirror {
+        .CodeMirror {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             font-size: 14px;
             background-color:white;
             pre {
@@ -157,8 +166,6 @@ select {
 }
 
 .n-config {
-    display: block;
-
     .n-config-header {
         @include box(220px, 50px, auto, auto);
     }
@@ -172,10 +179,6 @@ select {
 
         .n-config-app, .n-config-page, .n-textarea-wrap {
             display:none;
-        }
-
-        .n-visible {
-            display: block !important;
         }
 
         table {

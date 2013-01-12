@@ -26,10 +26,10 @@ Builder.Core2 = nClass({
         }
 
         var path = Builder.Util.format('/%s/%s', [project, this.type]);
-        Builder.Util.read(path, this.onReadFilenames.bind(this));
+        Builder.Util.read(path, this.onDoneReadFilenames.bind(this));
     },
 
-    onReadFilenames: function(filenames) {
+    onDoneReadFilenames: function(filenames) {
         var files = [];
         var file;
         for (var i = 0; i < filenames.length; i++) {
@@ -39,7 +39,26 @@ Builder.Core2 = nClass({
         this.koFiles(files);
     },
 
-    select: function(file) {
+    onClickFile: function(file) {
+        this._readFile(file);
+    },
+
+    onDoneReadFile: function(data) {
+        var text = data.content;
+        this.koFile().setText(text);
+    },
+
+    onClickSave: function(key, ev) {
+        var filename = ev.$trigger.text();
+        var file = this._findFile(filename);
+        this._saveFile(file);
+    },
+
+    onDoneSave: function(file) {
+        file.changed(false);
+    },
+
+    _select: function(file) {
         var files = this.koFiles();
         for (var i = 0; i < files.length; i++) {
             files[i].selected(false);
@@ -49,7 +68,7 @@ Builder.Core2 = nClass({
         this.koFile(file);
     },
 
-    findFile: function(filename) {
+    _findFile: function(filename) {
         var files = this.koFiles();
         for (var i = 0; i < files.length; i++) {
             if (files[i].getFilename() === filename) {
@@ -59,37 +78,27 @@ Builder.Core2 = nClass({
         return null;
     },
 
-    readFile: function(file){
-        this.select(file);
+    _readFile: function(file){
+        this._select(file);
         
         if (file.changed()) {
             var text = file.getText();
-            this.onReadFile({content: text});
+            this.onDoneReadFile({content: text});
         } else {
             var path = Builder.Util.format('/%s/%s/%s', [this.project, this.type, file.getFilename()]);
-            Builder.Util.read(path, this.onReadFile.bind(this));
+            Builder.Util.read(path, this.onDoneReadFile.bind(this));
         }
     },
 
-    onReadFile: function(data) {
-        var text = data.content;
-        this.koFile().setText(text);
-    },
-
-    save: function(key, ev) {
-        var filename = ev.$trigger.text();
-        var file = this.findFile(filename);
+    _saveFile: function(file) {
         if (file.getText() === null) {
             return;
         }
 
+        var filename = file.getFilename();
         var text = file.getText();
         var path = Builder.Util.format('/%s/%s/%s', [this.project, this.type, filename]);
-        Builder.Util.write(path, text, this.onSaveFile.bind(this, file));
-    },
-
-    onSaveFile: function(file) {
-        file.changed(false);
+        Builder.Util.write(path, text, this.onDoneSave.bind(this, file));
     }
 });
 Builder.Core = nClass({

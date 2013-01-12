@@ -35,7 +35,12 @@ Builder.Header = nClass.instance({
 
     hideAllContents: function() {
         for (var i = 0; i < this.contents.length; i++) {
-            this.contents[i].content.hide();
+            //TODO:
+            if(this.contents[i].content.hide) {
+                this.contents[i].content.hide();
+            } else {
+                this.contents[i].content.koVisible(false);
+            }
         }
     },
 
@@ -47,7 +52,12 @@ Builder.Header = nClass.instance({
         this.hideAllContents();
         var contentName = $button.attr('data-toggle');
         this.currentContent = this.getContent(contentName);
-        this.currentContent.show();
+        //TODO:
+        if (this.currentContent.show) {
+            this.currentContent.show();
+        } else {
+            this.currentContent.koVisible(true);
+        }
     },
 
     save: function(vm, ev) {

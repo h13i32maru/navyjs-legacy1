@@ -59,11 +59,11 @@
 </div>
 <!-- }}} -->
 <!-- {{{ config -->
-<div class="n-content n-config">
+<div class="n-content n-config" data-bind="css: {'n-visible': koVisible}">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
     <ul class="nav nav-list" data-bind="foreach: koFiles">
-      <li data-bind="text: $data.getFilename(), css: {active: $data.selected, changed: $data.changed}, click: $root.readFile.bind($root)"></li>
+      <li data-bind="text: $data.getFilename(), css: {active: $data.selected, changed: $data.changed}, click: $root.onClickFile.bind($root)"></li>
     </ul>
   </div>
 
@@ -132,23 +132,23 @@
 </div>
 <!-- }}} -->
 <!-- {{{ code -->
-<div class="n-content n-code">
+<div class="n-content n-code" data-bind="css: {'n-visible': koVisible}">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile.bind($root)">
-      <li data-bind="text: $data"></li>
+    <ul class="nav nav-list" data-bind="foreach: koFiles">
+      <li data-bind="text: $data.getFilename(), css: {active: $data.selected, changed: $data.changed}, click: $root.onClickFile.bind($root)"></li>
     </ul>
   </div>
 
-  <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
+  <div class="n-textarea fitsize-y fitsize-x"></div>
 </div>
 <!-- }}} -->
 <!-- {{{ image -->
-<div class="n-content n-image">
+<div class="n-content n-image" data-bind="css: {'n-visible': koVisible}">
   <div class="n-filelist fitsize-y fitsize-x">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames">
-      <li data-bind="attr: {'data-listfilter-text': $data}"><img data-bind="attr: {src: $data}"/><span data-bind="text: $data.replace(/.*[/]/, '')"></span></li>
+    <ul class="nav nav-list" data-bind="foreach: koFiles">
+      <li data-bind="attr: {'data-listfilter-text': $data.getFilename()}"><img data-bind="attr: {src: $data.getFilename()}"/><span data-bind="text: $data.getFilename().replace(/.*[/]/, '')"></span></li>
     </ul>
   </div>
 </div>

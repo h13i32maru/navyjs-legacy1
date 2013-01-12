@@ -2,7 +2,7 @@ Builder.Config = nClass.instance(Builder.Core2, {
     CLASS: 'Config',
     type: 'config',
 
-    onReadFile: function($super, data) {
+    onDoneReadFile: function($super, data) {
         $super(data);
 
         var file = this.koFile();
