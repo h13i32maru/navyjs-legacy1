@@ -6,22 +6,29 @@
 <meta charset="utf-8"/>
 <title>NavyBuilder</title>
 
+<!-- twitter bootstrap -->
 <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="css/style.css" rel="stylesheet">
 
-<script src="lib/codemirror/lib/codemirror.js"></script>
+<!-- codemirror -->
 <link rel="stylesheet" href="lib/codemirror/lib/codemirror.css">
+<script src="lib/codemirror/lib/codemirror.js"></script>
 <script src="lib/codemirror/mode/javascript/javascript.js"></script>
 <script src="lib/codemirror/keymap/vim.js"></script>
 <script src="lib/codemirror/keymap/emacs.js"></script>
 
+<!-- jquery -->
 <script src="lib/jquery/jquery-1.8.1.min.js"></script>
+<script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
+<link rel="stylesheet" href="lib/jquery-context-menu/jquery.contextMenu.css">
+<script src="lib/jquery-context-menu/jquery.contextMenu.js"></script>
 <script src="lib/jquery-plugin/fitsize.js"></script>
 <script src="lib/jquery-plugin/listfilter.js"></script>
-<script src="lib/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
+<script src="lib/jquery-plugin/toggle.js"></script>
+
 <script src="lib/knockout/knockout-2.2.0.js"></script>
 <script src="lib/nclass/nclass.js"></script>
 <script src="lib/navy/navy.js" data-builder="true"></script>
+<link href="css/style.css" rel="stylesheet">
 <script src="builder.js"></script>
 <!-- }}} -->
 </head>
@@ -37,70 +44,63 @@
     <button class="btn icon" title="Delete"><i class="icon-trash"></i></button>
   </div>
 
-  <div class="btn-group" data-bind="click: toggle">
-    <button class="btn active" data-toggle="Config">Config</button>
-    <button class="btn" data-toggle="Layout">Layout</button>
-    <button class="btn" data-toggle="Code">Code</button>
-    <button class="btn" data-toggle="Image">Image</button>
+  <div class="btn-group toggle">
+    <button class="btn active" data-toggle=".n-config">Config</button>
+    <button class="btn" data-toggle=".n-layout">Layout</button>
+    <button class="btn" data-toggle=".n-code">Code</button>
+    <button class="btn" data-toggle=".n-image">Image</button>
   </div> 
-
-  <div class="btn-group">
-    <button class="btn" data-bind="click: save">Save</button>
-    <button class="btn">New</button>
-    <button class="btn">Move</button>
-    <button class="btn">Delete</button>
-  </div>
 </div>
 <!-- }}} -->
 <!-- {{{ config -->
 <div class="n-content n-config">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile">
-      <li data-bind="text: $data"></li>
+    <ul class="nav nav-list" data-bind="foreach: koFiles">
+      <li data-bind="text: $data.getFilename(), css: {active: $data.selected, changed: $data.changed}, click: $root.onClickFile.bind($root)"></li>
     </ul>
   </div>
 
+<!--
   <div class="btn-group n-config-header">
     <button class="btn">Source</button>
   </div>
+  -->
 
   <div class="n-pane fitsize-x fitsize-y"> 
-    <div data-config-name="app.json" class="n-config-app" data-bind="template: {name: 'config-app-template'}"></div>
-    <div data-config-name="page.json" class="n-config-page" data-bind="template: {name: 'config-page-template'}"></div>
+    <div data-config-name="app.json" class="n-config-app" data-bind="template: {name: 'config-app-template'}, css: {'n-visible': koFile().getFilename() === 'app.json'}"></div>
+    <div data-config-name="page.json" class="n-config-page" data-bind="template: {name: 'config-page-template'}, css: {'n-visible': koFile().getFilename() === 'page.json'}"></div>
 
     <div class="n-textarea-wrap">
       <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
     </div>
   </div>
+
+  <menu class="n-config-context-menu">
+    <command label="Save"></command>
+  </menu>
 </div>
 <!-- }}} -->
 <!-- {{{ layout -->
 <div class="n-content n-layout">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile">
-      <li data-bind="text: $data"></li>
+    <ul class="nav nav-list" data-bind="foreach: koFiles">
+      <li data-bind="text: $data.getFilename(), click: $root.onClickFile.bind($root)"></li>
     </ul>
   </div>
 
   <div class="n-canvas fitsize-x fitsize-y"></div>
 
   <div class="n-layout-header">
-    <div class="btn-group" data-bind="click: toggle">
-      <button class="btn active" data-toggle=".n-prop">Property</button>
-      <button class="btn" data-toggle=".n-layer">Layer</button>
-      <button class="btn" data-toggle=".n-source">Source</button>
+    <div class="btn-group toggle">
+      <button class="btn active" data-toggle=".n-layout .n-prop">Property</button>
+      <button class="btn" data-toggle=".n-layout .n-layer">Layer</button>
+      <button class="btn" data-toggle=".n-layout .n-source">Source</button>
     </div>
 
     <div class="n-add-view">
-      <select>
-        <option value="View">View</option>
-        <option value="Image">Image</option>
-        <option value="Text">Text</option>
-        <option value="Button">Button</option>
-        <option value="ViewGroup">ViewGroup</option>
-      </select>
+      <select data-bind="value: selectedNewViewClassName, options: ['View', 'Image', 'Text', 'Button', 'ViewGroup']"></select>
       <button class="btn" data-bind="click: addNewView">Add</button>
     </div>
 
@@ -110,8 +110,8 @@
   <div class="n-pane fitsize-x fitsize-y"> 
     <div class="n-prop" data-bind="template: {name: 'prop-template'}"></div>
     <div class="n-layer">
-      <ul class="nav nav-list" data-bind="foreach: layers, click: selectedLayer">
-        <li data-bind="attr: {'data-view-id': id}"><span data-bind="text: id"></span><span data-bind="text: text"></span></li>
+      <ul class="nav nav-list" data-bind="foreach: koLayers">
+        <li data-bind="attr: {'data-view-id': id}, css: {active: selected}, click: $root.selectLayer.bind($root)"><span data-bind="text: id"></span><span data-bind="text: text"></span></li>
       </ul>
     </div>
     <div class="n-source"><textarea class="n-textarea"></textarea></div>
@@ -123,20 +123,20 @@
 <div class="n-content n-code">
   <div class="n-filelist fitsize-y">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames, click: $root.onClickFile.bind($root)">
-      <li data-bind="text: $data"></li>
+    <ul class="nav nav-list" data-bind="foreach: koFiles">
+      <li data-bind="text: $data.getFilename(), css: {active: $data.selected, changed: $data.changed}, click: $root.onClickFile.bind($root)"></li>
     </ul>
   </div>
 
-  <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
+  <div class="n-textarea fitsize-y fitsize-x"></div>
 </div>
 <!-- }}} -->
 <!-- {{{ image -->
 <div class="n-content n-image">
   <div class="n-filelist fitsize-y fitsize-x">
     <input type="text" placeholder="Search" class="n-search" data-listfilter-target="+"/>
-    <ul class="nav nav-list" data-bind="foreach: filenames">
-      <li data-bind="attr: {'data-listfilter-text': $data}"><img data-bind="attr: {src: $data}"/><span data-bind="text: $data.replace(/.*[/]/, '')"></span></li>
+    <ul class="nav nav-list" data-bind="foreach: koFiles">
+      <li data-bind="attr: {'data-listfilter-text': $data.getFilename()}"><img data-bind="attr: {src: $data.getFilename()}"/><span data-bind="text: $data.getFilename().replace(/.*[/]/, '')"></span></li>
     </ul>
   </div>
 </div>
@@ -152,7 +152,7 @@
 </tbody></table>
 
 <table>
-<caption data-bind="click: togglePropInput">Basic</caption>
+<caption>Basic</caption>
 <tbody data-bind="foreach: propBasic, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -162,7 +162,7 @@
 </table>
 
 <table>
-<caption data-bind="click: togglePropInput">Background</caption>
+<caption>Background</caption>
 <tbody data-bind="foreach: propBackground, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -172,7 +172,7 @@
 </table>
 
 <table>
-<caption data-bind="click: togglePropInput">Border</caption>
+<caption>Border</caption>
 <tbody data-bind="foreach: propBorder, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -181,8 +181,8 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-ViewGroup">
-<caption data-bind="click: togglePropInput">Extra(ViewGroup)</caption>
+<table class="n-prop-extra-ViewGroup" data-bind="css: {'n-visible': koView() && koView().getLayout()['class'] === 'ViewGroup'}">
+<caption>Extra(ViewGroup)</caption>
 <tbody data-bind="foreach: propExtra.ViewGroup, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -191,8 +191,8 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-Text">
-<caption data-bind="click: togglePropInput">Extra(Text)</caption>
+<table class="n-prop-extra-Text" data-bind="css: {'n-visible': koView() && koView().getLayout()['class'] === 'Text'}">
+<caption>Extra(Text)</caption>
 <tbody data-bind="foreach: propExtra.Text, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -201,8 +201,8 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-Image">
-<caption data-bind="click: togglePropInput">Extra(Image)</caption>
+<table class="n-prop-extra-Image" data-bind="css: {'n-visible': koView() && koView().getLayout()['class'] === 'Image'}">
+<caption>Extra(Image)</caption>
 <tbody data-bind="foreach: propExtra.Image, event: {keyup: onKeyUp}">
   <tr>
     <td><label data-bind="attr: {title: title}"><input type="checkbox"/><span data-bind="text: name"/></label></td>
@@ -211,8 +211,8 @@
 </tbody>
 </table>
 
-<table class="n-prop-extra-Button">
-<caption data-bind="click: togglePropInput">Extra(Button)</caption>
+<table class="n-prop-extra-Button" data-bind="css: {'n-visible': koView() && koView().getLayout()['class'] === 'Button'}">
+<caption>Extra(Button)</caption>
 <tbody data-bind="foreach: propExtra.Button, event: {keyup: onKeyUp}">
   <tr>
     <!-- ko if: $data.separator -->
@@ -228,9 +228,10 @@
 </table>
 </script>
 <!-- }}} -->
+<!-- {{{ config-app-template -->
 <script type="text/html" id="config-app-template">
 <table>
-<tbody data-bind="foreach: config['app.json']">
+<tbody data-bind="foreach: config['app.json'], event: {focusout: onFocusOut}">
   <tr>
     <td><label data-bind="attr: {title: title}"><span data-bind="text: name"/></label></td>
     <td><input type="text" data-bind="value: value"></td>
@@ -238,9 +239,10 @@
 </tbody>
 </table>
 </script>
-
+<!-- }}} -->
+<!-- {{{ config-page-template -->
 <script type="text/html" id="config-page-template">
-<div data-bind="foreach: config['page.json']">
+<div data-bind="foreach: config['page.json'], event: {focusout: onFocusOut}">
   <table>
   <tbody data-bind="foreach: $data">
     <tr>
@@ -257,6 +259,7 @@
   </table>
 </div>
 </script>
+<!-- }}} -->
 </body>
 
 </html>

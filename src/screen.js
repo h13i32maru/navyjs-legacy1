@@ -82,7 +82,8 @@ Navy.Screen = Navy.Core.instance({
     },
 
     //TODO:jsdoc
-    showLayout: function(layoutUrl){
+    showLayout: function(layoutUrl, callback){
+        this._showLayoutCallback = callback;
         return Navy.Page.createByLayoutUrl(layoutUrl, this._showLayout.bind(this));
     },
 
@@ -91,5 +92,7 @@ Navy.Screen = Navy.Core.instance({
         Navy.Root.popPage();
         newPage.onCreate();
         Navy.Root.pushPage(newPage);
+
+        this._showLayoutCallback(newPage);
     }
 });

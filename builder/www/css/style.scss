@@ -90,6 +90,11 @@ select {
     @include box(10px, 10px, auto, auto);
 }
 
+.n-visible {
+    display: block !important;
+}
+
+
 .n-content {
     display:none;
     .n-filelist {
@@ -108,6 +113,10 @@ select {
             margin:0;
         }
 
+        li {
+            -webkit-user-select: none;
+        }
+
     }
 
     .nav.nav-list {
@@ -123,6 +132,13 @@ select {
                 background-color: $active-color;
                 color: white;
             }
+            &.changed {
+                font-weight: bold;
+
+                &:before {
+                    content: '* ';
+                }
+            }
         }
     }
 
@@ -130,8 +146,12 @@ select {
         @include box(220px, 50px, 200px, auto);
         margin-right: 10px;
         border:none;
+        background:white;
 
-        & + .CodeMirror {
+        .CodeMirror {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             font-size: 14px;
             background-color:white;
             pre {
@@ -146,14 +166,12 @@ select {
 }
 
 .n-config {
-    display: block;
-
     .n-config-header {
         @include box(220px, 50px, auto, auto);
     }
 
     .n-pane {
-        @include box(220px, 80px, auto, auto);
+        @include box(220px, 50px, auto, auto);
         margin-right: 10px;
         margin-bottom: 10px;
         background-color: $fg-color;
@@ -241,7 +259,12 @@ select {
             padding: 4px;
 
 
-            table { @include property-table; }
+            table {
+                @include property-table;
+                &[class^="n-prop-extra"]{ 
+                    display:none;
+                }
+            }
             
             ul {
                 list-style:none;

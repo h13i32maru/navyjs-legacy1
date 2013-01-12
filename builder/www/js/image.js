@@ -1,18 +1,13 @@
 Builder.Image = nClass.instance(Builder.Core, {
     CLASS: 'Image',
-    target: '.n-image',
     type: 'image',
 
-    save: function($super) {
-        //画像の保存は何もしない
-    },
-
-    onReadFilenames: function($super, data) {
+    onDoneReadFilenames: function($super, filenames) {
         var sources = [];
-        for (var i = 0; i < data.length; i++) {
-            var src = Builder.Util.format('/data/%s/%s/%s', [this.project, this.type, data[i]]);
+        for (var i = 0; i < filenames.length; i++) {
+            var src = Builder.Util.format('/data/%s/%s/%s', [this.project, this.type, filenames[i]]);
             sources.push(src);
         }
-        this.filenames(sources);
+        $super(sources);
     }
 });
