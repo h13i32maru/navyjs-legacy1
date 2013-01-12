@@ -109,7 +109,7 @@ http.createServer(function (req, res) {
         content = getStaticContent(url);
     } else {
         if (url.pathname === '/') {
-            url.pathname = './www/index.html';
+            url.pathname = './www/view/index.html';
         } else {
             url.pathname = './www/' + url.pathname;
         }

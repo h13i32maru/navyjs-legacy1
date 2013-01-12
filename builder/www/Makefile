@@ -5,15 +5,15 @@ LEVEL	= --compilation_level SIMPLE_OPTIMIZATIONS
 WARNING	= --warning_level DEFAULT
 OUT		= --js_output_file builder.js
 
-JS	= --js js/index.js \
-	  --js js/util.js \
-	  --js js/file.js \
-	  --js js/core.js \
-	  --js js/header.js \
-	  --js js/config.js \
-	  --js js/layout.js \
-	  --js js/code.js \
-	  --js js/image.js
+JS	= --js controller/index.js \
+	  --js model/util.js \
+	  --js model/file.js \
+	  --js model/core.js \
+	  --js model/header.js \
+	  --js model/config.js \
+	  --js model/layout.js \
+	  --js model/code.js \
+	  --js model/image.js
 
 all: compiler
 	java -jar $(CC) $(WARNING) $(EXTERN) $(OUT) $(LEVEL) $(JS)
