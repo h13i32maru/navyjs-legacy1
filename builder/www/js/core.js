@@ -12,7 +12,7 @@ Builder.Core2 = nClass({
     },
 
     initObservable: function() {
-        this.koFile = ko.observable();
+        this.koFile = ko.observable(new Builder.File('', null));
         this.koFiles = ko.observableArray([]);
         this.koVisible = ko.observable(false);
         ko.computed(this.onChangeProject.bind(this));

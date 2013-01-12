@@ -164,7 +164,7 @@ select {
     }
 
     .n-pane {
-        @include box(220px, 80px, auto, auto);
+        @include box(220px, 50px, auto, auto);
         margin-right: 10px;
         margin-bottom: 10px;
         background-color: $fg-color;

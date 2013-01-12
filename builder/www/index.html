@@ -67,13 +67,15 @@
     </ul>
   </div>
 
+<!--
   <div class="btn-group n-config-header">
     <button class="btn">Source</button>
   </div>
+  -->
 
   <div class="n-pane fitsize-x fitsize-y"> 
-    <div data-config-name="app.json" class="n-config-app" data-bind="template: {name: 'config-app-template'}, css: {'n-visible': koFile() && koFile().getFilename() === 'app.json'}"></div>
-    <div data-config-name="page.json" class="n-config-page" data-bind="template: {name: 'config-page-template'}, css: {'n-visible': koFile() && koFile().getFilename() === 'page.json'}"></div>
+    <div data-config-name="app.json" class="n-config-app" data-bind="template: {name: 'config-app-template'}, css: {'n-visible': koFile().getFilename() === 'app.json'}"></div>
+    <div data-config-name="page.json" class="n-config-page" data-bind="template: {name: 'config-page-template'}, css: {'n-visible': koFile().getFilename() === 'page.json'}"></div>
 
     <div class="n-textarea-wrap">
       <textarea class="n-textarea fitsize-y fitsize-x"></textarea>
