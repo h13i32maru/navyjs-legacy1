@@ -4,7 +4,9 @@ $(function(){
     $.fitsize();
     Navy.App.wakeup();
 
+    //Header
     Builder.Header.initialize();
+    ko.applyBindings(Builder.Header, $('.n-header')[0]);
 
     //Config
     Builder.Config.initialize();
@@ -14,7 +16,6 @@ $(function(){
             save: {name: 'Save', callback: function(key, ev){ Builder.Config.onClickSave(key, ev); }}
         }
     });
-    Builder.Config.koVisible(true);
     ko.applyBindings(Builder.Config, $('.n-config')[0]);
 
     //Code
@@ -72,5 +73,4 @@ $(function(){
 
     Builder.Layout.initialize();
     ko.applyBindings(Builder.Layout, $('.n-layout')[0]);
-
 });

@@ -1,4 +1,4 @@
-Builder.Image = nClass.instance(Builder.Core2, {
+Builder.Image = nClass.instance(Builder.Core, {
     CLASS: 'Image',
     type: 'image',
 

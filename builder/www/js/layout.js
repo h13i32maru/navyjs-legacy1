@@ -1,11 +1,10 @@
-Builder.Layout = nClass.instance(Builder.Core2, {
+Builder.Layout = nClass.instance(Builder.Core, {
     CLASS: 'Layout',
     type: 'layout',
     page: null,
-    view: null,
-    layers: null,
     selectedNewViewClassName: null,
 
+    koLayers: null,
     koView: null,
 
     initialize: function($super){
@@ -34,7 +33,7 @@ Builder.Layout = nClass.instance(Builder.Core2, {
     onClickFile: function($super, data, ev){
         $super(data, ev);
 
-        this.view = null;
+        this.koView(null);
         this.clearAllPropInput();
         Navy.Builder.selectView(null);
 
@@ -119,7 +118,7 @@ Builder.Layout = nClass.instance(Builder.Core2, {
     },
 
     onSelectedNavyView: function(view){
-        this.view = view;
+        this.koView(view);
         var layout = view.getLayout();
 
         this.propClass(JSON.stringify(layout['class']));
@@ -158,13 +157,13 @@ Builder.Layout = nClass.instance(Builder.Core2, {
     },
 
     removeView: function(vm, ev) {
-        var view = this.view;
+        var view = this.koView();
         Navy.Builder.selectView(null);
         view.removeFromParent();
     },
 
     findLayer: function(id) {
-        var layers = this.layers();
+        var layers = this.koLayers();
         for (var i = 0; i < layers.length; i++) {
             if (layers[i].id === id) {
                 return layers[i];
@@ -173,7 +172,7 @@ Builder.Layout = nClass.instance(Builder.Core2, {
     },
 
     selectLayer: function(layer) {
-        var layers = this.layers();
+        var layers = this.koLayers();
         for (var i = 0; i < layers.length; i++) {
             layers[i].selected(false);
         }
@@ -204,7 +203,7 @@ Builder.Layout = nClass.instance(Builder.Core2, {
 
             layers.push({id: id, text: text, selected: ko.observable(false)});
         }
-        this.layers(layers);
+        this.koLayers(layers);
     },
 
     orderLayers: function(ids) {
@@ -217,11 +216,11 @@ Builder.Layout = nClass.instance(Builder.Core2, {
     },
 
     setNewLayoutToView: function() {
-        if (!this.view) {
+        if (!this.koView()) {
             return;
         }
 
-        var view = this.view;
+        var view = this.koView();
         var currentLayout = view.getLayout();
         var newLayout = this.buildLayout();
         var layout = $.extend(true, {}, currentLayout, newLayout);
@@ -251,8 +250,7 @@ Builder.Layout = nClass.instance(Builder.Core2, {
         $super();
 
         this.koView = ko.observable();
-
-        this.layers = ko.observableArray([]);
+        this.koLayers = ko.observableArray([]);
 
         this.propClass = ko.observable();
 

@@ -10,4 +10,6 @@ $(function(){
         $(selector).show();
         $this.addClass('active');
     });
+
+    $('.toggle .active').click();
 });

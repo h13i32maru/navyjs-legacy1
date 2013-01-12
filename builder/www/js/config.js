@@ -1,4 +1,4 @@
-Builder.Config = nClass.instance(Builder.Core2, {
+Builder.Config = nClass.instance(Builder.Core, {
     CLASS: 'Config',
     type: 'config',
 

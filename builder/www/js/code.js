@@ -1,4 +1,4 @@
-Builder.Code = nClass.instance(Builder.Core2, {
+Builder.Code = nClass.instance(Builder.Core, {
     CLASS: 'Code',
     type: 'code',
     makeEditor: null,
