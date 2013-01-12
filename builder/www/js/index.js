@@ -27,12 +27,25 @@ $(function(){
     $.contextMenu({
         selector: '.n-code .n-filelist li',
         items: {
-            save: {name: 'Save', callback: function(key, ev){ Builder.Code.onClickSave(key, ev); }}
+            save: {name: 'Save', callback: function(key, ev){ Builder.Code.onClickSave(key, ev); }},
+            remove: {name: 'Remove'},
+            move: {name: 'Move'},
+            seperator1: '----',
+            'new': {name: 'New'}
         }
     });
     ko.applyBindings(Builder.Code, $('.n-code')[0]);
 
     //Image
+    $.contextMenu({
+        selector: '.n-image .n-filelist li',
+        items: {
+            remove: {name: 'Remove'},
+            move: {name: 'Move'},
+            seperator1: '----',
+            'new': {name: 'New'}
+        }
+    });
     Builder.Image.initialize();
     ko.applyBindings(Builder.Image, $('.n-image')[0]);
 
@@ -71,6 +84,16 @@ $(function(){
     });
     //end
 
+    $.contextMenu({
+        selector: '.n-layout .n-filelist li',
+        items: {
+            save: {name: 'Save'},
+            remove: {name: 'Remove'},
+            move: {name: 'Move'},
+            seperator1: '----',
+            'new': {name: 'New'}
+        }
+    });
     Builder.Layout.initialize();
     ko.applyBindings(Builder.Layout, $('.n-layout')[0]);
 });
