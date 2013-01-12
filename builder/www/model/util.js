@@ -1,4 +1,4 @@
-Builder.Util = nClass({
+Builder.Util = nClass.instance({
     read: function(path, callback) {
         var params = {method: 'get', path: path};
         $.getJSON('/data', params, callback);
@@ -79,5 +79,3 @@ Builder.Util = nClass({
         obj[keys[i]] = value;
     }
 });
-
-Builder.Util = new Builder.Util();

@@ -59,13 +59,13 @@ Navy.Builder = Navy.Core.instance({
         this._moveViewListener = listener;
     },
     selectView: function(view){
+        //同じviewを選択した場合は何もしない
+        if (view && this._view && this._view.getId() === view.getId()) {
+            return;
+        }
 
+        //リスナを削除しておく必要あり。
         if (this._view){
-            //同じviewを選択した場合は何もしない
-            if (this._view.getId() === view.getId()) {
-                return;
-            }
-            //リスナを削除しておく必要あり。
             var page = this._view.getPage();
             page.removeTouchListener(this._listenerId);
         }
