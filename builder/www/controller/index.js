@@ -86,6 +86,7 @@ $(function(){
 
     $.contextMenu({
         selector: '.n-layout .n-filelist li',
+        zIndex: 9999,
         items: {
             save: {name: 'Save'},
             remove: {name: 'Remove'},
@@ -94,6 +95,45 @@ $(function(){
             'new': {name: 'New'}
         }
     });
+
+    $.contextMenu({
+        selector: '.n-layout .n-canvas',
+        zIndex: 9999,
+        events: {
+            catchEvent: function(ev) {
+                //イベント取得時にその座標にあるviewを選択状態にする
+                var x = ev.clientX - $(this).position().left;
+                var y = ev.clientY - $(this).position().top;
+                var dummyEvent = {
+                    type: null,
+                    layerX: x,
+                    layerY: y,
+                    timeStamp: ev.timeStamp
+                };
+
+                dummyEvent.type = 'mousedown';
+                Builder.Layout.page.onTouch(dummyEvent);
+
+                dummyEvent.type = 'mouseup';
+                Builder.Layout.page.onTouch(dummyEvent);
+            }
+        },
+        items: {
+            remove: {name: 'Remove'},
+            seperator1: '----',
+            'add': {
+                name: 'Add',
+                items: {
+                    'view': {'name': 'View'},
+                    'view-group': {'name': 'ViewGroup'},
+                    'image': {'name': 'Image'},
+                    'text': {'name': 'Text'},
+                    'button': {'name': 'Button'}
+                }
+            }
+        }
+    });
+
     Builder.Layout.initialize();
     ko.applyBindings(Builder.Layout, $('.n-layout')[0]);
 });

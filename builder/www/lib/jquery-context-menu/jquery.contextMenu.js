@@ -208,6 +208,10 @@ var // currently active contextMenu trigger
         // contextmenu show dispatcher
         contextmenu: function(e) {
             var $this = $(this);
+
+            if (e.data.events.catchEvent) {
+                e.data.events.catchEvent.call($this, e);
+            }
             
             // disable actual context-menu
             e.preventDefault();
@@ -349,6 +353,10 @@ var // currently active contextMenu trigger
                 
             e.preventDefault();
             e.stopImmediatePropagation();
+
+            if (root.events.catchEvent) {
+                root.events.catchEvent.call(root.$trigger, e);
+            }
             
             setTimeout(function() {
                 var $window, hideshow, possibleTarget;
