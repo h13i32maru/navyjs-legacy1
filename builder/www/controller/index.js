@@ -99,6 +99,7 @@ $(function(){
     $.contextMenu({
         selector: '.n-layout .n-canvas',
         zIndex: 9999,
+        autoHide: true,
         events: {
             catchEvent: function(ev) {
                 //イベント取得時にその座標にあるviewを選択状態にする
