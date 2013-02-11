@@ -25,5 +25,9 @@ Builder.File = nClass({
 
     getText: function() {
         return this.text;
+    },
+
+    toString: function() {
+        return this.text;
     }
 });

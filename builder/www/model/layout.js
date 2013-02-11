@@ -11,6 +11,15 @@ Builder.Layout = nClass.instance(Builder.Core, {
         $super();
     },
 
+    onClickSave: function($super, key, ev) {
+        var filename = ev.$trigger.text();
+        var file = this._findFile(filename);
+        var pageLayouts = Navy.Builder.getPageLayout(this.page);
+        var json = JSON.stringify(pageLayouts, null, 4);
+        file.setText(json);
+        $super(key, ev);
+    },
+
     save: function() {
         var pageLayouts = Navy.Builder.getPageLayout(this.page);
         //this.setText(JSON.stringify(pageLayouts, null, 4));

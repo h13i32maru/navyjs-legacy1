@@ -13,7 +13,8 @@ $(function(){
     $.contextMenu({
         selector: '.n-config .n-filelist li',
         items: {
-            save: {name: 'Save', callback: function(key, ev){ Builder.Config.onClickSave(key, ev); }}
+            save: {name: 'Save', callback: function(key, ev){ Builder.Config.onClickSave(key, ev); }},
+            json: {name: 'JSON', callback: function(key, ev){ $('.n-textarea-wrap').dialog({modal: true, dialogClass: 'n-json-dialog'}); }}
         }
     });
     ko.applyBindings(Builder.Config, $('.n-config')[0]);
@@ -88,7 +89,7 @@ $(function(){
         selector: '.n-layout .n-filelist li',
         zIndex: 9999,
         items: {
-            save: {name: 'Save'},
+            save: {name: 'Save', callback: function(key, ev){ Builder.Layout.onClickSave(key, ev); }},
             remove: {name: 'Remove'},
             move: {name: 'Move'},
             seperator1: '----',

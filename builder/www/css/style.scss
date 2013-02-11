@@ -177,7 +177,7 @@ select {
         background-color: $fg-color;
         overflow-y: scroll;
 
-        .n-config-app, .n-config-page, .n-textarea-wrap {
+        .n-config-app, .n-config-page {
             display:none;
         }
 
@@ -190,16 +190,32 @@ select {
                 padding-left: 4px;
             }
         }
+    }
 
-        .n-textarea-wrap {
+    .n-textarea-wrap {
+        display:none;
+        width: 100%;
+        height: 100%;
+        .n-textarea {
+            position: static;
             width: 100%;
             height: 100%;
-            .n-textarea {
-                position: static;
-                width: 100%;
-                height: 100%;
-            }
         }
+    }
+}
+
+.n-json-dialog {
+    width: 90% !important;
+    height: 90% !important;
+
+    .n-textarea-wrap {
+        height: 90% !important;
+        width: 90% !important;
+    }
+
+    textarea {
+        width: 90%;
+        height: 90%;
     }
 }
 

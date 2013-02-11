@@ -100,7 +100,7 @@ select {
   margin-bottom: 10px;
   background-color: white;
   overflow-y: scroll; }
-  .n-config .n-pane .n-config-app, .n-config .n-pane .n-config-page, .n-config .n-pane .n-textarea-wrap {
+  .n-config .n-pane .n-config-app, .n-config .n-pane .n-config-page {
     display: none; }
   .n-config .n-pane table {
     width: 100%;
@@ -139,13 +139,24 @@ select {
       border-top: solid 1px #aaa; }
     .n-config .n-pane table label {
       padding-left: 4px; }
-  .n-config .n-pane .n-textarea-wrap {
+.n-config .n-textarea-wrap {
+  display: none;
+  width: 100%;
+  height: 100%; }
+  .n-config .n-textarea-wrap .n-textarea {
+    position: static;
     width: 100%;
     height: 100%; }
-    .n-config .n-pane .n-textarea-wrap .n-textarea {
-      position: static;
-      width: 100%;
-      height: 100%; }
+
+.n-json-dialog {
+  width: 90% !important;
+  height: 90% !important; }
+  .n-json-dialog .n-textarea-wrap {
+    height: 90% !important;
+    width: 90% !important; }
+  .n-json-dialog textarea {
+    width: 90%;
+    height: 90%; }
 
 .n-image .n-filelist .nav.nav-list li {
   display: inline-block;
