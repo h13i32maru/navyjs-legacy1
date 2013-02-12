@@ -163,6 +163,7 @@ Builder.Layout = nClass.instance(Builder.Core, {
 
     addNewView: function(vm, ev) {
         Navy.Builder.createViewToPage(this.page, this.selectedNewViewClassName, 0, 0);
+        this.updateLayer();
     },
 
     removeView: function(vm, ev) {
