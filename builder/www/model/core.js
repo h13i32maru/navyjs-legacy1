@@ -3,6 +3,7 @@ Builder.Core = nClass({
     type: '',
     project: null,
 
+    koRawText: null,
     koFile: null,
     koFiles: null,
 
@@ -11,6 +12,7 @@ Builder.Core = nClass({
     },
 
     initObservable: function() {
+        this.koRawText = ko.observable('');
         this.koFile = ko.observable(new Builder.File('', null));
         this.koFiles = ko.observableArray([]);
         ko.computed(this.onChangeProject.bind(this));
@@ -43,7 +45,11 @@ Builder.Core = nClass({
 
     onDoneReadFile: function(data) {
         var text = data.content;
-        this.koFile().setText(text);
+        var file = this.koFile();
+        file.setText(text);
+        this.koFile(file);
+
+        this.koRawText(text);
     },
 
     onClickSave: function(key, ev) {
@@ -54,6 +60,12 @@ Builder.Core = nClass({
 
     onDoneSave: function(file) {
         file.changed(false);
+    },
+
+    onClickSaveRawText: function(ev) {
+      var file = this.koFile();
+      file.setText(this.koRawText());
+      this._saveFile(file);
     },
 
     _select: function(file) {

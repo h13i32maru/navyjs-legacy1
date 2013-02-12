@@ -73,7 +73,10 @@
   </menu>
 
   <div class="n-textarea-wrap">
-    <textarea class="n-textarea fitsize-y fitsize-x" data-bind="value: koFile()"></textarea>
+    <textarea class="n-textarea fitsize-y fitsize-x" data-bind="value: koRawText"></textarea>
+    <div>
+      <button data-bind="click: onClickSaveRawText">Save</button>
+    </div>
   </div>
 </div>
 <!-- }}} -->

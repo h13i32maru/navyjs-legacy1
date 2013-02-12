@@ -47,8 +47,9 @@ Builder.Config = nClass.instance(Builder.Core, {
         var file = this.koFile();
         var filename = file.getFilename();
         var data = this['inputToData_' + filename]();
-        var text = JSON.stringify(data);
+        var text = JSON.stringify(data, null, 2);
         file.setText(text);
+        this.koFile(file);
     },
 
     'inputToData_app.json': function() {
